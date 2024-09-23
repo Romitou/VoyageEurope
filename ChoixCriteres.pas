@@ -3,12 +3,13 @@ unit choixCriteres;
 interface
 uses types;
 
-procedure choixPays(var pays1, pays2: TPays);
-procedure choixPreferences(var prefUser: Array of TPref);
+procedure choixPays(var depart, arrivee: String; Choix: TCriteres);
+procedure choixPreferences(var prefUser: Array of TPref; Choix : TCriteres);
+procedure choixDuree(var temps: Integer; Choix: TCriteres);
 
 implementation
 
-procedure choixPays(var depart, arrivee: String; Choix : TCriteres);
+procedure choixPays(var depart, arrivee: String; Choix: TCriteres);
 begin 
     writeln('Dans quel pays commence votre voyage ?');
     readln(depart);
@@ -24,8 +25,8 @@ begin
   j:=0;
   n:=1;
   writeln('Veuillez choisir vos préférences pour les activités de votre voyage. (selectionner au moins 2 préférences en écrivant leur numéro associé)');
-  for i := 1 to (ord(high(TPref))) do 
-    writeln(i: (TPref(i-1)));
+  for i := 1 to (ord(high(TPref))) do
+    write(i, TPref(i-1));
   writeln('Tapez : 0 , quand vous aurez terminé votre saisie');
   while ((n<3) or (j<>0)) and (n<(ord(high(TPref)))) do
   begin
@@ -41,5 +42,12 @@ begin
   end;
   for p:=1 to n-1 do 
     Choix.categorie[p]:=prefUser[p];
+end;
+
+procedure choixDuree(var temps: Integer; Choix: TCriteres);
+begin
+  writeln('Quelle durée souhaitez-vous pour votre voyage ?');
+  readln(temps);
+  Choix.duree:=temps;
 end;
 end.
