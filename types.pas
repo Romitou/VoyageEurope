@@ -19,11 +19,14 @@ type TPays = record
     climat: Array[TMois] of Integer;
 end;
 
+type TEurope = Array of TPays;
+
 type TCriteres = record
     paysDepart: TPays;
     paysArrivee: TPays;
     categorie: Array of TPref;
-    mois: TMois;
+    duree: Integer;
+    periode: TMois;
 end;
 
 type TEtape = record
