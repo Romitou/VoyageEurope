@@ -3,20 +3,31 @@ unit choixCriteres;
 interface
 uses types;
 
-procedure choixPays(var depart, arrivee: String; Choix: TCriteres);
+procedure choixPays(var depart, arrivee: String; Choix: TCriteres; ListePays: TEurope);
 procedure choixPreferences(var prefUser: Array of TPref; Choix : TCriteres);
 procedure choixDuree(var temps: Integer; Choix: TCriteres);
 
 implementation
 
-procedure choixPays(var depart, arrivee: String; Choix: TCriteres);
+procedure choixPays(var depart, arrivee: String; Choix: TCriteres; ListePays: TEurope);
+var i: Integer;
 begin 
     writeln('Dans quel pays commence votre voyage ?');
     readln(depart);
     Choix.paysDepart.nom:=depart;
+    for i :=1 to (ord(high(ListePays))) do
+    begin
+      if Choix.paysDepart.nom=ListePays[i].nom then
+        Choix.paysDepart:=ListePays[i];
+    end;
     writeln('Quel pays souhaitez-vous absolument traverser durant votre voyage ?');
     readln(arrivee);
     Choix.paysArrivee.nom:=arrivee;
+    for i :=1 to (ord(high(ListePays))) do
+    begin
+      if Choix.paysArrivee.nom=ListePays[i].nom then
+        Choix.paysArrivee:=ListePays[i];
+    end;
 end;
 
 procedure choixPreferences(var prefUser: Array of TPref; Choix : TCriteres);
