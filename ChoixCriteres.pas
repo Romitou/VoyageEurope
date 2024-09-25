@@ -3,34 +3,44 @@ unit choixCriteres;
 interface
 uses types;
 
-procedure choixPays(var depart, arrivee: String; Choix: TCriteres; ListePays: TEurope);
-procedure choixPreferences(var prefUser: Array of TPref; Choix : TCriteres);
-procedure choixDuree(var temps: Integer; Choix: TCriteres);
+procedure choixPays(var depart, arrivee: String; choix: TCriteres; listePays: TEurope);
+procedure choixPreferences(var prefUser: Array of TPref; choix : TCriteres);
+procedure choixDuree(var temps: Integer; choix: TCriteres);
+procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; trouve: Boolean);
 
 implementation
 
-procedure choixPays(var depart, arrivee: String; Choix: TCriteres; ListePays: TEurope);
-var i: Integer;
+procedure choixPays(var depart, arrivee: String; choix: TCriteres; listePays: TEurope);
+var trouve: Boolean;
 begin 
+  trouve:=false;
+  repeat
     writeln('Dans quel pays commence votre voyage ?');
     readln(depart);
-    Choix.paysDepart.nom:=depart;
-    for i :=1 to (ord(high(ListePays))) do
-    begin
-      if Choix.paysDepart.nom=ListePays[i].nom then
-        Choix.paysDepart:=ListePays[i];
-    end;
+    associerPays(depart, listePays, choix.paysDepart, trouve)
+  until (trouve=true);
+  trouve:=false;
+  repeat
     writeln('Quel pays souhaitez-vous absolument traverser durant votre voyage ?');
     readln(arrivee);
-    Choix.paysArrivee.nom:=arrivee;
-    for i :=1 to (ord(high(ListePays))) do
+    associerPays(arrivee, listePays, choix.paysArrivee, trouve)
+  until (trouve=true); 
+end;
+
+procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; trouve: Boolean);
+var i: Integer;
+begin
+    trouve := false;
+    for i :=1 to (length(listePays)) do
     begin
-      if Choix.paysArrivee.nom=ListePays[i].nom then
-        Choix.paysArrivee:=ListePays[i];
+      if nomPays=listePays[i].nom then
+        pays := listePays[i];
+        trouve := true;
+        break;
     end;
 end;
 
-procedure choixPreferences(var prefUser: Array of TPref; Choix : TCriteres);
+procedure choixPreferences(var prefUser: Array of TPref; choix : TCriteres);
 var i, j, n, p: Integer;
 begin
   j:=0;
@@ -52,13 +62,13 @@ begin
     end;
   end;
   for p:=1 to n-1 do 
-    Choix.categorie[p]:=prefUser[p];
+    choix.categorie[p]:=prefUser[p];
 end;
 
-procedure choixDuree(var temps: Integer; Choix: TCriteres);
+procedure choixDuree(var temps: Integer; choix: TCriteres);
 begin
   writeln('Quelle durée souhaitez-vous pour votre voyage ?');
   readln(temps);
-  Choix.duree:=temps;
+  choix.duree:=temps;
 end;
 end.
