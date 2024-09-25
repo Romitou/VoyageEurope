@@ -7,6 +7,7 @@ procedure choixPays(var depart, arrivee: String; choix: TCriteres; listePays: TE
 procedure choixPreferences(var prefUser: Array of TPref; choix : TCriteres);
 procedure choixDuree(var temps: Integer; choix: TCriteres);
 procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; trouve: Boolean);
+procedure choixPeriode(var mois: TMois; choix: TCriteres);
 
 implementation
 
@@ -71,4 +72,17 @@ begin
   readln(temps);
   choix.duree:=temps;
 end;
+
+procedure choixPeriode(var mois: TMois; choix: TCriteres);
+var i: Integer;
+begin
+  writeln('Le climat du pays principal de votre voyage est le suivant :');
+  for i:=1 to length(choix.paysArrivee.climat) do
+    writeln(TMois(i), ' : ', choix.paysArrivee.climat[TMois(i)], '°C');
+  writeln(' ');
+  writeln('Au vu de ces températures, durant quel de l''année souhaitez-vous effectuer votre voyage ?');
+  readln(mois);
+  choix.periode:=mois;
+end;
+
 end.
