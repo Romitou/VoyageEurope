@@ -31,7 +31,7 @@ end;
 
 type TEtape = record
     jour: Integer;
-    activite: TActivite;
+    activite: Array of TActivite;
 end;
 
 type TVoyage = record
