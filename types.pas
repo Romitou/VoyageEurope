@@ -41,5 +41,7 @@ type TVoyage = record
     kmTotal: Integer;
 end;
 
+type TStringArray = Array of String;
+
 implementation
 end.
