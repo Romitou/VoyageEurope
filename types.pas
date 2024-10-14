@@ -46,5 +46,12 @@ end;
 
 type TStringArray = Array of String;
 
+type TDijstraResult = record
+    error: Boolean;
+    startPays: String;
+    endPays: String;
+    distance: Integer;
+end; 
+
 implementation
 end.
