@@ -17,6 +17,8 @@ type TPays = record
     activites: Array of TActivite;
     nomFrontieres: Array of String;
     climat: Array[TMois] of Integer;
+    longitude: Real;
+    latitude: Real;
 end;
 
 type TEurope = Array of TPays;
@@ -27,6 +29,7 @@ type TCriteres = record
     categorie: Array of TPref;
     duree: Integer;
     periode: TMois;
+    climat: Real;
 end;
 
 type TEtape = record
