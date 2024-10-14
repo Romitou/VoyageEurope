@@ -8,7 +8,7 @@ procedure choixPreferences(var choix: TCriteres);
 procedure choixDuree(var choix: TCriteres);
 procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; trouve: Boolean);
 procedure choixPeriode(var choix: TCriteres);
-procedure choixCriteres(var choix: TCriteres; listePays: TEurope);
+procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 
 
 implementation
@@ -93,7 +93,7 @@ begin
   choix.periode:=mois;
 end;
 
-procedure choixCriteres(var choix: TCriteres; listePays: TEurope);
+procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 begin
   choixPays(choix, listePays);
   choixPreferences(choix);
