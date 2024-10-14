@@ -3,17 +3,18 @@ unit choixCriteres;
 interface
 uses types;
 
-procedure choixPays(var depart, arrivee: String; choix: TCriteres; listePays: TEurope);
-procedure choixPreferences(var prefUser: Array of TPref; choix : TCriteres);
-procedure choixDuree(var temps: Integer; choix: TCriteres);
+procedure choixPays(var choix: TCriteres; listePays: TEurope);
+procedure choixPreferences(var choix: TCriteres);
+procedure choixDuree(var choix: TCriteres);
 procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; trouve: Boolean);
-procedure choixPeriode(var mois: TMois; choix: TCriteres);
-procedure choixCriteres(var choix: TCriteres; depart, arrivee: String; listePays: TEurope; temps: Integer; prefUser: Array of TPref; mois: TMois);
+procedure choixPeriode(var choix: TCriteres);
+procedure choixCriteres(var choix: TCriteres; listePays: TEurope);
 
 
 implementation
 
-procedure choixPays(var depart, arrivee: String; choix: TCriteres; listePays: TEurope);
+procedure choixPays(var choix: TCriteres; listePays: TEurope);
+var depart, arrivee: String; 
 var trouve: Boolean;
 begin 
   trouve:=false;
@@ -43,9 +44,11 @@ begin
     end;
 end;
 
-procedure choixPreferences(var prefUser: Array of TPref; choix : TCriteres);
+procedure choixPreferences(var choix: TCriteres);
+var prefUser: Array of TPref;
 var i, j, n, p: Integer;
 begin
+  setlength(prefUser, 0);
   j:=0;
   n:=1;
   writeln('Veuillez choisir vos préférences pour les activités de votre voyage. (selectionner au moins 2 préférences en écrivant leur numéro associé)');
@@ -60,6 +63,7 @@ begin
     until ((j>=0) and (j<6));
     if j>0 then
     begin
+      setlength(prefUser, n);
       prefUser[n]:=TPref(j);
       n:=n+1; 
     end;
@@ -68,14 +72,16 @@ begin
     choix.categorie[p]:=prefUser[p];
 end;
 
-procedure choixDuree(var temps: Integer; choix: TCriteres);
+procedure choixDuree(var choix: TCriteres);
+var temps: Integer;
 begin
   writeln('Quelle durée souhaitez-vous pour votre voyage ?');
   readln(temps);
   choix.duree:=temps;
 end;
 
-procedure choixPeriode(var mois: TMois; choix: TCriteres);
+procedure choixPeriode(var choix: TCriteres);
+var mois: TMois;
 var i: Integer;
 begin
   writeln('Le climat du pays principal de votre voyage est le suivant :');
@@ -87,12 +93,12 @@ begin
   choix.periode:=mois;
 end;
 
-procedure choixCriteres(var choix: TCriteres; depart, arrivee: String; listePays: TEurope; temps: Integer; prefUser: Array of TPref; mois: TMois);
+procedure choixCriteres(var choix: TCriteres; listePays: TEurope);
 begin
-  choixPays(depart, arrivee, choix, listePays);
-  choixPreferences(prefUser, choix);
-  choixDuree(temps, choix);
-  choixPeriode(mois, choix);
+  choixPays(choix, listePays);
+  choixPreferences(choix);
+  choixDuree(choix);
+  choixPeriode(choix);
 end;
 
 end.
