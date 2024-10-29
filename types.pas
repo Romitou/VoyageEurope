@@ -40,8 +40,8 @@ end;
 type TVoyage = record
     intineraire: Array of TPays;
     planning: Array of TEtape;
-    coutTotal: Integer;
-    kmTotal: Integer;
+    coutTotal: Real;
+    kmTotal: Real;
 end;
 
 type TStringArray = Array of String;
