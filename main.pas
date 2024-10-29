@@ -5,10 +5,19 @@ var europe,paysValables: Array [1..2] of TPays;
 var criteres: TCriteres;
 i:Integer;
 begin
+   
     //europe := chargerPays();
     //demanderCriteres(criteres, europe);
-    writeln('riotiogr');
+ 
     //initialisation pour test
+    setlength(europe[1].activites,2);
+    setlength(europe[2].activites,2);
+    setlength(europe[1].activites[1].categorie,2);
+    setlength(europe[1].activites[2].categorie,2);
+    setlength(europe[2].activites[1].categorie,3);
+    setlength(europe[2].activites[2].categorie,1);
+    setlength(criteres.categorie,2);
+
     europe[1].nom := 'France';
     writeln('2');
     europe[1].capitale:= 'Paris';
@@ -23,7 +32,6 @@ begin
     europe[1].activites[2].categorie[1]:=lieuUnique;
     europe[1].activites[2].categorie[2]:=musee;
     europe[1].activites[2].cout:=17;
-    writeln('3');
     europe[2].nom := 'Espagne';
     europe[2].capitale := 'Madrid';
     europe[2].activites[1].nom:='Act1';
@@ -34,12 +42,13 @@ begin
     europe[2].activites[2].nom:='Act2';
     europe[2].activites[2].categorie[1]:=sport;
     europe[2].activites[2].cout:=17;
-   
+   writeln('nvri');
     //initialisation d'une partie des critères
     criteres.periode:=janvier;
     criteres.climat:=15;
     criteres.categorie[1]:=monument;
     criteres.categorie[2]:=lieuUnique;
+    writeln('vrnuini');
     //test pour tridespays
     //paysValables:=triDesPays(criteres;europe);
     //for i:=1 to length(paysValables) do 
