@@ -2,7 +2,7 @@ unit triDesPays;
 
 interface
 uses types;
-function paysValables(criteres:TCriteres; pays:Array of TPays):TEurope;
+function triDesPays(criteres:TCriteres; lesPays:TEurope):TEurope;
 function matchActivite(pays:Tpays;pref:Array of TPref):Boolean;
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
 function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
@@ -10,12 +10,20 @@ function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
 implementation
 
 function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
-var i:Integer;
+var i,j:Integer; trouve:Boolean;
 begin
-    
+    matchPreference:=True;
+    for i:=1 to length(pref) do
+        begin
+        trouve:=False;
+        for j:=1 to length(uneAct.categorie) do
+            if (pref[i]=uneAct.categorie[j]) and matchPreference then
+                trouve:=True;
+        matchPreference:=trouve;
+        end;
 end;
 
-function matchClimat(climat:Integer;unPays:Tpays;periode:TMois):Boolean;
+function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
 begin
     matchClimat:=false;
     if unPays.climat[periode]>climat then
@@ -35,24 +43,24 @@ begin
         
 end;
 
-function paysValables(criteres:TCriteres; pays:Array of TPays):TEurope;
+function triDesPays(criteres:TCriteres; lesPays:TEurope):TEurope;
 var i,j:integer; paysVal:TEurope;
 begin
     setlength(paysVal,1);
 
     j:=1;
-    for i:=1 to length(pays) do
+    for i:=1 to length(lesPays) do
         begin
 
-        if (matchClimat(criteres.climat,pays[i],criteres.periode)) and (matchActivite(pays[i],criteres.categorie)) then
+        if (matchClimat(criteres.climat,lesPays[i],criteres.periode)) and (matchActivite(lesPays[i],criteres.categorie)) then
             begin
             setlength(paysVal,length(paysVal)+1);
-            TEurope[j]:=pays[i];
+            paysVal[j]:=lesPays[i];
             j:=j+1;
             end;
             
         end;
-    paysValables:=paysVal;
+    triDesPays:=paysVal;
 end; 
 
 
