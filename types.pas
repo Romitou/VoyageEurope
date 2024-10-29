@@ -1,21 +1,23 @@
 unit types;
 
 interface
+uses sysutils;
 
 type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novemebre, Decembre);
 type TPref = (sport, monument, musee, lieuUnique, divers);
 
 type TActivite = record
     nom: String;
-    categorie: Array of TPref;
+    categories: Array of TPref;
     cout: Real;
 end;
+type TActivites = Array of TActivite;
 
 type TPays = record
     nom: String;
     capitale: String;
     activites: Array of TActivite;
-    nomFrontieres: Array of String;
+    nomFrontieres: TStringArray;
     climat: Array[TMois] of Integer;
     longitude: Real;
     latitude: Real;
@@ -44,7 +46,26 @@ type TVoyage = record
     kmTotal: Real;
 end;
 
-type TStringArray = Array of String;
+// Chargement des données
+type TFilePays = record
+    nom: String;
+    capitale: String;
+    nomFrontieres: TStringArray;
+    climat: Array[TMois] of Integer;
+    longitude: Real;
+    latitude: Real;
+end;
+type TArrayFilePays = Array of TFilePays;
+
+type TFileActivite = record
+    nom: String;
+    pays: String;
+    categories: Array of TPref;
+    cout: Real;
+end;
+type TArrayFileActivite = Array of TFileActivite;
+
+// Dijkstra
 
 type TDijstraResult = record
     error: Boolean;

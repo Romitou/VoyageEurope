@@ -16,8 +16,8 @@ begin
     for i:=1 to length(pref) do
         begin
         trouve:=False;
-        for j:=1 to length(uneAct.categorie) do
-            if (pref[i]=uneAct.categorie[j]) and matchPreference then
+        for j:=1 to length(uneAct.categories) do
+            if (pref[i]=uneAct.categories[j]) and matchPreference then
                 trouve:=True;
         matchPreference:=trouve;
         end;
