@@ -40,7 +40,7 @@ type TEtape = record
 end;
 
 type TVoyage = record
-    intineraire: Array of TPays;
+    itineraire: Array of TPays;
     planning: Array of TEtape;
     coutTotal: Real;
     kmTotal: Real;
