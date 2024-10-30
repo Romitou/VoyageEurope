@@ -3,7 +3,7 @@ unit types;
 interface
 uses sysutils;
 
-type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novemebre, Decembre);
+type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novembre, Decembre);
 type TPref = (sport, monument, musee, lieuUnique, divers);
 
 type TActivite = record
