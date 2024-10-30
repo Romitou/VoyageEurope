@@ -2,7 +2,7 @@ unit triDesPays;
 
 interface
 uses types;
-function triDesPays(criteres:TCriteres; lesPays:TEurope):TEurope;
+function filtrerPays(criteres: TCriteres; europe: TEurope): TEurope;
 function matchActivite(pays:Tpays;pref:Array of TPref):Boolean;
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
 function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
@@ -13,12 +13,13 @@ function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
 var i,j:Integer; trouve:Boolean;
 begin
     matchPreference:=True;
-    for i:=1 to length(pref) do
+    for i:=1 to length(pref)-1 do
         begin
         trouve:=False;
         for j:=1 to length(uneAct.categories) do
             if (pref[i]=uneAct.categories[j]) and matchPreference then
                 trouve:=True;
+ 
         matchPreference:=trouve;
         end;
 end;
@@ -26,7 +27,7 @@ end;
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
 begin
     matchClimat:=false;
-    if unPays.climat[periode]>climat then
+    if unPays.climat[periode]>=climat then
         matchClimat:=True;
 end;
 
@@ -43,25 +44,27 @@ begin
         
 end;
 
-function triDesPays(criteres:TCriteres; lesPays:TEurope):TEurope;
+
+function filtrerPays(criteres:TCriteres; europe:TEurope):TEurope;
 var i,j:integer; paysVal:TEurope;
 begin
     setlength(paysVal,1);
 
     j:=1;
-    for i:=1 to length(lesPays) do
+    for i:=1 to length(europe) do
         begin
 
-        if (matchClimat(criteres.climat,lesPays[i],criteres.periode)) and (matchActivite(lesPays[i],criteres.categorie)) then
+        if (matchClimat(criteres.climat,europe[i],criteres.periode)) and (matchActivite(europe[i],criteres.categorie)) then
             begin
             setlength(paysVal,length(paysVal)+1);
-            paysVal[j]:=lesPays[i];
+            paysVal[j]:=europe[i];
             j:=j+1;
             end;
             
         end;
-    triDesPays:=paysVal;
+    filtrerPays:=paysVal;
 end; 
+
 
 
 end.
