@@ -4,9 +4,51 @@ interface
 uses types, sysutils;
 
 function chargerEurope(): TEurope;
-procedure sauvegarderPays(europe: TEurope);
+// procedure sauvegarderPays(europe: TEurope);
 
 implementation
+
+function splitStringQuotes(value: string; delimiter: string): TStringArray;
+var
+    resultArray: TStringArray;
+    i, startPos, delimLength: Integer;
+    inQuotes: Boolean;
+    currentSegment: string;
+begin
+    i := 0;
+    startPos := 1;
+    delimLength := Length(delimiter);
+    SetLength(resultArray, 0);
+    inQuotes := False;
+    currentSegment := '';
+
+    while startPos <= Length(value) do
+    begin
+        if value[startPos] = '"' then
+        begin
+            inQuotes := not inQuotes;
+        end
+        else if (not inQuotes) and (Copy(value, startPos, delimLength) = delimiter) then
+        begin
+            SetLength(resultArray, i + 1);
+            resultArray[i] := currentSegment;
+            Inc(i);
+            currentSegment := '';
+            Inc(startPos, delimLength - 1);
+        end
+        else
+        begin
+            currentSegment := currentSegment + value[startPos];
+        end;
+
+        Inc(startPos);
+    end;
+
+    SetLength(resultArray, i + 1);
+    resultArray[i] := currentSegment;
+
+    splitStringQuotes := resultArray;
+end;
 
 function splitString(value: string; delimiter: string): TStringArray;
 var resultArray: TStringArray;
@@ -39,27 +81,27 @@ begin
 end;
 
 
-function serialiserPays(pays: TPays): string;
-var i: Integer;
-begin
-    serialiserPays := '';
-    serialiserPays += pays.nom + ',' + pays.capitale + ',';
-    for i := 0 to length(pays.nomFrontieres) - 1 do
-    begin
-        serialiserPays += pays.nomFrontieres[i];
-        if (i <> length(pays.nomFrontieres) - 1) then
-            serialiserPays += '|';
-    end;
-    writeln('done');
-end;
+// function serialiserPays(pays: TPays): string;
+// var i: Integer;
+// begin
+//     serialiserPays := '';
+//     serialiserPays += pays.nom + ',' + pays.capitale + ',';
+//     for i := 0 to length(pays.nomFrontieres) - 1 do
+//     begin
+//         serialiserPays += pays.nomFrontieres[i];
+//         if (i <> length(pays.nomFrontieres) - 1) then
+//             serialiserPays += '|';
+//     end;
+//     writeln('done');
+// end;
 
 function deserialiserPays(valeur: String): TFilePays;
 var split: TStringArray;
 begin
-    split := splitString(valeur, ',');
+    split := splitStringQuotes(valeur, ',');
     deserialiserPays.nom := split[0];
     deserialiserPays.capitale := split[1];
-    deserialiserPays.nomFrontieres := splitString(split[2], '|');
+    deserialiserPays.nomFrontieres := splitString(split[3], ',');
 end;
 
 function deserialiserActivite(valeur: String): TFileActivite;
@@ -67,14 +109,15 @@ var split: TStringArray;
 var categories: TStringArray;
 var i: Integer;
 begin
-    split := splitString(valeur, ',');
+    split := splitStringQuotes(valeur, ',');
     deserialiserActivite.nom := split[0];
     deserialiserActivite.pays := split[1];
     deserialiserActivite.cout := StrToFloat(split[2]);
-    categories := splitString(split[3], '|');
+    categories := splitString(split[3], ',');
     setlength(deserialiserActivite.categories, length(categories));
     for i := 0 to length(categories) - 1 do
     begin
+        writeln(categories[i]);
         readStr(categories[i], deserialiserActivite.categories[i])
     end;
 end;
@@ -159,6 +202,9 @@ begin
         pays.nom := listePays[i].nom;
         pays.capitale := listePays[i].capitale;
         pays.nomFrontieres := listePays[i].nomFrontieres;
+        setlength(pays.activites, 0);
+
+        writeln(length(pays.activites));
 
         for j := 0 to length(listeActivites) - 1 do
         begin
@@ -176,9 +222,13 @@ begin
         europe[i] := pays;
     end;
 
-    write(length(europe), ' pays ont été chargés : ');
+    writeln(length(europe), ' pays ont été chargés : ');
     for i := 0 to length(europe) - 1 do
-        write(europe[i].nom, ' (', length(europe[i].activites), ' activités)', ', ');
+    begin
+        writeln(europe[i].nom, ' (', length(europe[i].activites), ' activités) :');
+        for j := 0 to length(europe[i].activites) - 1 do
+            writeln('- ', europe[i].activites[j].nom);
+    end;
     writeln();
 
     chargerEurope := europe;
@@ -186,22 +236,22 @@ begin
 end;
 
 
-procedure sauvegarderPays(europe: TEurope);
-var
-  fichierPays: Text;
-  i: Integer;
-begin
-  assign(fichierPays, 'data/pays.csv');
-  rewrite(fichierPays);
+// procedure sauvegarderPays(europe: TEurope);
+// var
+//   fichierPays: Text;
+//   i: Integer;
+// begin
+//   assign(fichierPays, 'data/pays.csv');
+//   rewrite(fichierPays);
   
-  writeln(length(europe));
-  for i := 0 to length(europe) - 1 do
-  begin
-    writeln(fichierPays, serialiserPays(europe[i]));
-    writeln('ok ', i);
-  end;
+//   writeln(length(europe));
+//   for i := 0 to length(europe) - 1 do
+//   begin
+//     writeln(fichierPays, serialiserPays(europe[i]));
+//     writeln('ok ', i);
+//   end;
   
-  close(fichierPays);
-end;
+//   close(fichierPays);
+// end;
 
 end.

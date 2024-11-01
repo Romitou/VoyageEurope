@@ -1,2 +1,2 @@
-Nom,Pays,Coût,Catégories
-Croisière sur la Seine,France,14,lieuUnique|divers
+name_fr,country_name,cost,tags
+Croisière sur la Seine,France,14,"lieuUnique,divers"
