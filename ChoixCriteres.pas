@@ -1,12 +1,12 @@
 unit choixCriteres;
 
 interface
-uses types;
+uses types, sysutils;
 
 procedure choixPays(var choix: TCriteres; listePays: TEurope);
 procedure choixPreferences(var choix: TCriteres);
 procedure choixDuree(var choix: TCriteres);
-procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; trouve: Boolean);
+procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
 procedure choixPeriode(var choix: TCriteres);
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 
@@ -22,45 +22,53 @@ begin
     writeln('Dans quel pays commence votre voyage ?');
     readln(depart);
     associerPays(depart, listePays, choix.paysDepart, trouve)
-  until (trouve=true);
+  until (trouve);
   trouve:=false;
   repeat
     writeln('Quel pays souhaitez-vous absolument traverser durant votre voyage ?');
     readln(arrivee);
     associerPays(arrivee, listePays, choix.paysArrivee, trouve)
-  until (trouve=true); 
+  until (trouve); 
 end;
 
-procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; trouve: Boolean);
+procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
 var i: Integer;
 begin
     trouve := false;
     for i :=1 to (length(listePays)) do
     begin
-      if nomPays=listePays[i].nom then
+      if CompareText(nomPays, listePays[i].nom) = 0 then
+      begin
         pays := listePays[i];
         trouve := true;
         break;
+      end;
     end;
 end;
 
 procedure choixPreferences(var choix: TCriteres);
 var prefUser: Array of TPref;
+var prefLength: Integer;
 var i, j, n, p: Integer;
 begin
   setlength(prefUser, 0);
   j:=0;
   n:=1;
-  writeln('Veuillez choisir vos préférences pour les activités de votre voyage. (selectionner au moins 2 préférences en écrivant leur numéro associé)');
-  for i := 1 to (ord(high(TPref))) do
-    write(i, TPref(i-1));
-  writeln('Tapez : 0 , quand vous aurez terminé votre saisie');
-  while ((n<3) or (j<>0)) and (n<(ord(high(TPref)))) do
+  prefLength := ord(high(TPref));
+  writeln(prefLength); 
+
+  writeln('Veuillez choisir vos préférences pour les activités de votre voyage.');
+  writeln('Sélectionner au moins 2 préférences en écrivant leurs numéros associés.');
+  for i := 1 to prefLength do
+    writeln('[', i, '] ', TPref(i-1));
+  writeln('Tapez 0 quand vous aurez terminé votre saisie.');
+
+  while ((n<3) or (j<>0)) and (n<prefLength) do
   begin
     repeat
-      writeln('Veuillez saisir un chiffre associé à une préférénce');
+      writeln('Veuillez saisir un chiffre associé à une préférence.');
       readln(j);
-    until ((j>=0) and (j<6));
+    until ((j>=0) and (j<=prefLength));
     if j>0 then
     begin
       setlength(prefUser, n);
@@ -68,6 +76,7 @@ begin
       n:=n+1; 
     end;
   end;
+  setlength(choix.categorie, n);
   for p:=1 to n-1 do 
     choix.categorie[p]:=prefUser[p];
 end;
@@ -81,16 +90,16 @@ begin
 end;
 
 procedure choixPeriode(var choix: TCriteres);
-var mois: TMois;
-var i: Integer;
+// var mois: TMois;
+// var i: Integer;
 begin
-  writeln('Le climat du pays principal de votre voyage est le suivant :');
-  for i:=1 to length(choix.paysArrivee.climat) do
-    writeln(TMois(i), ' : ', choix.paysArrivee.climat[TMois(i)], '°C');
-  writeln(' ');
-  writeln('Au vu de ces températures, durant quel mois de l''année souhaitez-vous effectuer votre voyage ?');
-  readln(mois);
-  choix.periode:=mois;
+  // writeln('Le climat du pays principal de votre voyage est le suivant :');
+  // for i:=1 to length(choix.paysArrivee.climat) do
+  //   writeln(TMois(i), ' : ', choix.paysArrivee.climat[TMois(i)], '°C');
+  // writeln(' ');
+  // writeln('Au vu de ces températures, durant quel mois de l''année souhaitez-vous effectuer votre voyage ?');
+  // readln(mois);
+  // choix.periode:=mois;
 end;
 
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
@@ -98,7 +107,7 @@ begin
   choixPays(choix, listePays);
   choixPreferences(choix);
   choixDuree(choix);
-  choixPeriode(choix);
+  // choixPeriode(choix);
 end;
 
 end.
