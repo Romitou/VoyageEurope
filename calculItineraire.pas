@@ -1,7 +1,8 @@
 unit calculItineraire;
 
 interface
-uses types;
+uses types, sysutils;
+function Dijkstra(startPays: String; endPays: String; listePays: TEurope): TDijkstraResult;
 
 
 implementation
@@ -18,70 +19,83 @@ begin
   trouverIndexPays := -1;
 end;
 
-function Dijkstra(startPays: String; endPays: String; listePays: TEurope): TDijstraResult;
+function Dijkstra(startPays: String; endPays: String; listePays: TEurope): TDijkstraResult;
 var
   i, j, k, u, minDist, currentIndex: Integer;
-  voisins: Array of String;
+  voisins: TStringArray;
   distances: Array of Integer;
   visited: Array of Boolean;
 begin
-    setlength(distances, length(listePays));
-    setlength(visited, length(listePays));
-    for i := 0 to length(listePays) - 1 do
+  SetLength(distances, Length(listePays));
+  SetLength(visited, Length(listePays));
+  
+  for i := 0 to Length(listePays) - 1 do
+  begin
+    distances[i] := 1000;
+    visited[i] := false;
+  end;
+
+  currentIndex := trouverIndexPays(startPays, listePays);
+  if currentIndex = -1 then
+  begin
+    Dijkstra.error := true;
+    Dijkstra.message := 'Le pays de départ est introuvable.';
+    Exit(Dijkstra);
+  end;
+
+  distances[currentIndex] := 0;
+
+  for i := 0 to Length(listePays) - 1 do
+  begin
+    minDist := 1000;
+    u := -1;
+
+    for j := 0 to Length(listePays) - 1 do
     begin
-        distances[i] := 1000;
-        visited[i] := false;
+      if (not visited[j]) and (distances[j] < minDist) then
+      begin
+        minDist := distances[j];
+        u := j;
+      end;
     end;
 
-    currentIndex := trouverIndexPays(startPays, listePays);
-    if currentIndex = -1 then
+    if u = -1 then
+      Break;
+
+    visited[u] := true;
+
+    voisins := listePays[u].nomFrontieres;
+    for k := 0 to Length(voisins) - 1 do
     begin
-        writeln('Le pays de départ est introuvable.');
+      currentIndex := trouverIndexPays(voisins[k], listePays);
+      if (currentIndex <> -1) and (not visited[currentIndex]) then
+      begin
+        if distances[u] + 1 < distances[currentIndex] then
+          distances[currentIndex] := distances[u] + 1;
+      end;
     end;
+  end;
 
-    Distances[currentIndex + 1] := 0;
+  currentIndex := trouverIndexPays(endPays, listePays);
+  if currentIndex = -1 then
+  begin
+    Dijkstra.error := true;
+    Dijkstra.message := 'Le pays de destination est introuvable.';
+    Exit(Dijkstra);
+  end;
 
-    for i := 0 to length(listePays) - 1 do
-    begin
-        minDist := 1000;
-        u := -1;
-        for j := 1 to length(listePays) - 1 do
-        begin
-            if (not visited[j]) and (distances[j] < minDist) then
-            begin
-                minDist := distances[j];
-                u := j;
-            end;
-
-            if u = -1 then
-               break;
-
-            visited[u] := true;
-
-            voisins := listePays[u].nomFrontieres;
-            for k := 0 to length(voisins) - 1 do
-            begin
-                currentIndex := trouverIndexPays(voisins[k], listePays);
-                if (currentIndex <> -1) and (not Visited[currentIndex + 1]) then
-                begin
-                    if Distances[u] + 1 < Distances[currentIndex + 1] then
-                        Distances[currentIndex + 1] := Distances[u] + 1;
-                end;
-            end;
-        end;
-    end;
-
-    currentIndex := trouverIndexPays(endPays, listePays);
-    if currentIndex = -1 then
-    begin
-        writeln('Le pays de destination est introuvable.');
-        Exit;
-    end;
-
-    if Distances[currentIndex + 1] = 1000 then
-        writeln('Il n''y a pas de chemin vers ', endPays)
-    else
-        writeln('Le chemin le plus court vers ', endPays, ' est de ', Distances[currentIndex + 1], ' frontière(s).');
+  if distances[currentIndex] = 1000 then
+  begin
+    Dijkstra.error := true;
+    Dijkstra.message := 'Aucun chemin possible.';
+  end
+  else
+  begin
+    Dijkstra.error := false;
+    Dijkstra.startPays := startPays;
+    Dijkstra.endPays := endPays;
+    Dijkstra.distance := distances[currentIndex];
+  end;
 end;
 
 end.
