@@ -50,7 +50,8 @@ end;
 type TFilePays = record
     nom: String;
     capitale: String;
-    nomFrontieres: TStringArray;
+    code: String;
+    codeFrontieres: TStringArray;
     climat: Array[TMois] of Integer;
     longitude: Real;
     latitude: Real;
@@ -67,11 +68,13 @@ type TArrayFileActivite = Array of TFileActivite;
 
 // Dijkstra
 
-type TDijstraResult = record
+type TDijkstraResult = record
     error: Boolean;
+    message: String;
     startPays: String;
     endPays: String;
     distance: Integer;
+    chemin: TStringArray;
 end; 
 
 implementation

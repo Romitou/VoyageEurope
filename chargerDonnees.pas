@@ -101,7 +101,8 @@ begin
     split := splitStringQuotes(valeur, ',');
     deserialiserPays.nom := split[0];
     deserialiserPays.capitale := split[1];
-    deserialiserPays.nomFrontieres := splitString(split[3], ',');
+    deserialiserPays.code := split[2];
+    deserialiserPays.codeFrontieres := splitString(split[3], ',');
 end;
 
 function deserialiserActivite(valeur: String): TFileActivite;
@@ -189,7 +190,7 @@ var listePays: TArrayFilePays;
     pays: TPays;
     activite: TActivite;
     europe: TEurope;
-    i, j: Integer;
+    i, j, k: Integer;
 begin
     listePays := chargerPays();
     listeActivites := chargerActivites();
@@ -201,18 +202,33 @@ begin
 
         pays.nom := listePays[i].nom;
         pays.capitale := listePays[i].capitale;
-        pays.nomFrontieres := listePays[i].nomFrontieres;
+
+        writeln(pays.nom);
+        for j := 0 to length(listePays[i].codeFrontieres) - 1 do
+        begin
+            for k := 0 to length(listePays) - 1 do
+            begin
+                if listePays[i].codeFrontieres[j] = listePays[k].code then
+                begin
+                    writeln(listePays[k].nom);
+                    setlength(pays.nomFrontieres, length(pays.nomFrontieres) + 1);
+                    pays.nomFrontieres[length(pays.nomFrontieres) - 1] := listePays[k].nom;
+                end;
+            end;
+        end;
+        writeln();
+
         setlength(pays.activites, 0);
 
         writeln(length(pays.activites));
 
-        for j := 0 to length(listeActivites) - 1 do
+        for k := 0 to length(listeActivites) - 1 do
         begin
-            if listeActivites[j].pays = pays.nom then
+            if listeActivites[k].pays = pays.nom then
             begin
-                activite.nom := listeActivites[j].nom;
-                activite.categories := listeActivites[j].categories;
-                activite.cout := listeActivites[j].cout;
+                activite.nom := listeActivites[k].nom;
+                activite.categories := listeActivites[k].categories;
+                activite.cout := listeActivites[k].cout;
 
                 setlength(pays.activites, length(pays.activites) + 1);
                 pays.activites[length(pays.activites) - 1] := activite;
