@@ -27,6 +27,6 @@ begin
     if not(verifDuree(itineraire,criteres)) then
         voyage.message:='Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.';
     voyage:=genererActivitePays(itineraire,criteres);
-
+    genererVoyage:=voyage;
 end;
 end.

@@ -16,13 +16,12 @@ function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
 var i,j:Integer; trouve:Boolean;
 begin
     matchPreference:=True;
-    for i:=1 to length(pref)-1 do
+    for i:=0 to length(pref)-1 do
         begin
         trouve:=False;
         for j:=0 to length(uneAct.categories)-1 do
             if (pref[i]=uneAct.categories[j]) and matchPreference then
                 trouve:=True;
- 
         matchPreference:=trouve;
         end;
 end;
@@ -39,7 +38,7 @@ var i,nombreActValide:Integer;
 begin
     matchActivite:=False;
     nombreActValide:=0;
-    for i:=1 to length(pays.activites) do 
+    for i:=0 to length(pays.activites)-1 do 
             if matchPreference(pays.activites[i],pref) then
                 nombreActValide:=nombreActValide+1;
     if nombreActValide>1 then
@@ -51,8 +50,8 @@ end;
 function filtrerPays(criteres:TCriteres; europe:TEurope):TEurope;
 var i,j:integer; paysVal:TEurope;
 begin
-    setlength(paysVal,1);
-    j:=1;
+    setlength(paysVal,0);
+    j:=0;
     for i:=0 to length(europe)-1 do
         begin
         if (matchClimat(criteres.climat,europe[i],criteres.periode)) and (matchActivite(europe[i],criteres.categorie)) then
@@ -71,7 +70,7 @@ var jour,i,nbAct,nbActParJour: Integer;
 begin
     nbActParJour:=2;
     genererActivitePays.itineraire:=itineraire;
-    calculDistance(genererActivitePays);
+    calculDistanceTotal(genererActivitePays);
     coutTotal(genererActivitePays);
     for jour:=0 to length(itineraire)-1 do 
         begin
