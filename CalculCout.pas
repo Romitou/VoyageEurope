@@ -1,20 +1,30 @@
 unit calculCout;
 
 interface
-uses types;
+uses types, math;
 
-procedure calculDistance(var voyage: TVoyage);
+function calculDuneDistance(lat1, lon1, lat2, lon2: Real; i:Integer): Real;
+procedure calculDistanceTotal(var voyage: TVoyage);
 procedure coutTotal(var voyage: TVoyage);
 
 implementation
 
-procedure calculDistance(var voyage: TVoyage);
+function calculDuneDistance(lat1, lon1, lat2, lon2: Real; i: Integer): Real;
+const r= 6371; //km
+const p= (Pi/180);
+var a : Real;
+begin 
+  a:=(1/2)-((Cos((lat2-lat1)*p))/2)+Cos(lat1*p)*Cos(lat2*p)*((1-Cos((lon2-lon1)*p))/2);
+  calculDuneDistance:=2*r*ArcSin(Sqrt(a)); 
+end;
+
+procedure calculDistanceTotal(var voyage: TVoyage);
 var i : Integer; j, distance : Real;
 begin
   distance:= 0;
   for i := 1 to (length(voyage.itineraire)-1) do
   begin
-    j:=sqrt(sqr((voyage.itineraire[i+1].latitude)-(voyage.itineraire[i].latitude))+sqr((voyage.itineraire[i+1].longitude)-(voyage.itineraire[i].longitude)));
+    j:=calculDuneDistance(voyage.itineraire[i].latitude, voyage.itineraire[i].longitude, voyage.itineraire[i+1].latitude, voyage.itineraire[i+1].longitude, i);
     distance:=distance+j;
   end;
   voyage.kmTotal:=distance;
