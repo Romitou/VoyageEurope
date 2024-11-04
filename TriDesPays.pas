@@ -7,6 +7,8 @@ function matchActivite(pays:Tpays;pref:Array of TPref):Boolean;
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
 function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
 function genererActivitePays(itineraire:TEurope;criteres:TCriteres):Tvoyage;
+function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
+function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
 
 implementation
 
@@ -87,6 +89,25 @@ begin
         end;
 end;
 
+function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
+begin
+    verfiDuree:=length(itineraire)>=criteres.duree;
+end;
 
+function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
+var i,j,k:Integer;
+begin
+    k:=0
+    setlength(suppressionPaysVisite,1);
+    for i:=0 to length(paysValables)-1 do
+        for j:=0 to length(itineraire)-1 do 
+            if not(j=length(itineraire)-1) and not(j=0) and paysValables[i]=itineraire[j] then
+                begin
+                suppressionPaysVisite[k]:=paysValables[i]
+                k:=k+1
+                setlength(suppressionPaysVisite,k);
+                end;
+
+end;
 
 end.
