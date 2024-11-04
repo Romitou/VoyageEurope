@@ -50,6 +50,7 @@ type TVoyage = record
     planning: Array of TEtape;
     coutTotal: Real;
     kmTotal: Real;
+    message:String;
 end;
 
 // Chargement des données
