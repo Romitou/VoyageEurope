@@ -4,7 +4,13 @@ interface
 uses sysutils;
 
 type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novembre, Decembre);
-type TPref = (sport, monument, musee, lieuUnique, divers);
+type TPref = (Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, 
+    BienEtre, Sport, AventureAquatique, FestivalsEtEvenements,Romantique, EnFamille, EntreAmis, Solo, Luxe, Budget, EcoResponsable, 
+    Immersif, Authentique, RoadTrip, VoyageEnTrain,CourtTerme, JourneeComplete, MultiJours, Relaxant, Actif, Intensif, Modere, 
+    Debutant,Histoire, ArtisanatLocal, Photographie, ObservationFaune, Agritourisme, 
+    Mystere, CinemaEtTelevision, ReligieuxEtSpirituel,Enfants, MobiliteReduite, TouteAnnee, ActiviteSaisonniere, Climatisation, 
+    TemperatureDouce, Guide, NonGuide,Hiver, Printemps, Ete, Automne, TouteSaison, SaisonFestivals);
+
 
 type TActivite = record
     nom: String;
