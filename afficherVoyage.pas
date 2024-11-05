@@ -2,70 +2,75 @@ unit afficherVoyage;
 
 interface
 uses types;
-procedure afficherVoyage(voyage:TVoyage);
+procedure afficher(voyage:TVoyage;criteres:TCriteres);
 procedure afficherUneEtape(uneEtape:TEtape);
 procedure afficherUneAct(uneAct:TActivite);
-procedure afficherInfos(voyage:TVoyage);
+procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
 
 implementation
 
 
-procedure afficherVoyage(voyage:TVoyage);
+procedure afficher(voyage:TVoyage;criteres:TCriteres);
 var jour,i:Integer;
 begin
     
-    afficherInfos(voyage);
-    for jour:=1 to length(voyage.intineraire) do
-        begin
+    afficherInfos(voyage,criteres);
 
-        for i:=1 to length(voyage.planning) do
-            if (voyage.planning[i].jour=jour) then
+    for jour:=0 to length(voyage.itineraire)-1 do
+        begin
+        for i:=0 to length(voyage.planning)-1 do
+            if (voyage.planning[i].jour=jour+1) then
                 begin
 
-                writeln('Jour',jour,' :');
-                if jour=1 then
-                    writeln('= Journée sur votre pays de départ :',voyage.intineraire[jour].capitale,'')
-                else if jour=length(voyage.intineraire) then
-                    writeln('= Dernière journée sur votre pays de départ',voyage.intineraire[jour].capitale,'.')
-                else
-                    writeln('= Voyage en tain depuis ',voyage.intineraire[i-1].capitale,' jusqu''à ',voyage.intineraire[i].capitale,'.');
+                writeln('Jour ',jour+1,' :');
 
-                writeln('= Arrivée en ',voyage.intineraire[jour].nom,' (',voyage.intineraire[jour].nom,').');
+                if jour=0 then
+                    writeln('= Journée sur votre pays de départ :',voyage.itineraire[jour].nom,'')
+                else if jour=length(voyage.itineraire)-1 then
+                    writeln('= Dernière journée sur votre pays de départ',voyage.itineraire[jour].nom,'.')
+                else
+                    writeln('= Voyage en tain depuis ',voyage.itineraire[i-1].capitale,' jusqu''à ',voyage.itineraire[i].capitale,'.');
+                writeln('= Arrivée en ',voyage.itineraire[jour].nom,' (',voyage.itineraire[jour].capitale,').');
 
                 afficherUneEtape(voyage.planning[i]);
 
                 end;
 
         writeln();
-        writeln('transition pour l''etape suivante');
-        writeln();
-
+      
         end;
 end;
 
-procedure afficherInfos(voyage:TVoyage);
+procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
 begin
     writeln('Détails du voyage');
-    writeln('La durée du séjour est de ',length(voyage.intineraire),' jours.');
+    writeln();
+    writeln('La durée du séjour est de ',length(voyage.itineraire),' jours.');
+    writeln();
     writeln('Le coût total est de ',voyage.coutTotal,'.');
-    writeln('Vous aller parcourir une distance de ',voyage.kmTotal, 'en train à travers toute l''Europe, destination ');
-    writeln('informations seulement renseignées dans les critères?')
+    writeln();
+    writeln('Vous aller parcourir une distance de ',voyage.kmTotal, 'en train à travers toute l''Europe, destination ',criteres.paysArrivee.nom);
+    writeln();
 end;
 
 
 procedure afficherUneEtape(uneEtape:TEtape);
 var i:Integer;
 begin
-    
-    for i:=1 to 2 do
-        writeln('> Activités :');
+ 
+    for i:=0 to 1 do
+        begin
+        write('> Activités :');         
         afficherUneAct(uneEtape.activite[i]);
+        writeln();
+        end;
+
 end;
 
 
 procedure afficherUneAct(uneAct:TActivite);
 begin
-    write(', ',uneAct.nom,' ');
+    write(' ',uneAct.nom);
 end;
 
 

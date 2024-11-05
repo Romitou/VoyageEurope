@@ -1,8 +1,9 @@
 program main;
-uses types, chargerDonnees, ChoixCriteres,triDesPays;
+uses types,chargerDonnees,ChoixCriteres,triDesPays,afficherVoyage;
 
-var europe:TEurope;
+var europe,paysVal,itineraire:TEurope;
 criteres: TCriteres;
+voyage:TVoyage;
 i:Integer;
 begin
 //France
@@ -15,7 +16,7 @@ europe[0].activites[0].nom:='Tour Eiffel';
 
 setlength(europe[0].activites[0].categories,3);
 europe[0].activites[0].categories[0]:=Histoire;
-europe[0].activites[0].categories[1]:=Culture;
+europe[0].activites[0].categories[1]:=Histoire;
 europe[0].activites[0].categories[2]:=Histoire;
 
 europe[0].activites[1].nom:='Louvre';
@@ -78,7 +79,7 @@ europe[1].climat[Juin] := 17;
 europe[1].climat[Juillet] := 19;
 europe[1].climat[Aout] := 18;
 europe[1].climat[Septembre] := 14;
-europe[1].climat[Octobre] := 1;
+europe[1].climat[Octobre] := 10;
 europe[1].climat[Novembre] := 5;
 europe[1].climat[Decembre] := 2;
 
@@ -125,17 +126,45 @@ setlength(criteres.categorie,2);
 criteres.categorie[0]:=Histoire;
 criteres.categorie[1]:=Culture;
 criteres.periode:=Octobre;
-criteres.climat:=10;    
+criteres.climat:=10;  
+criteres.duree:=1;  
 
 
 writeln('matchpref',matchPreference(europe[2].activites[2],criteres.categorie));
 writeln('matchact',matchActivite(europe[2],criteres.categorie));
 writeln('matchclimat',matchClimat(criteres.climat,europe[2],criteres.periode));
-writeln(length(filtrerPays(criteres,europe)));
-writeln(length(europe));
+
+writeln('pays filtres');
 for i:=0 to length(filtrerPays(criteres,europe))-1 do
     writeln(filtrerPays(criteres,europe)[i].nom);
 
-    
+paysVal:=filtrerPays(criteres,europe);
+setlength(itineraire,2);
+itineraire[0]:=europe[0];
+itineraire[1]:=europe[1];
+voyage:=genererActivitePays(itineraire,criteres);
+
+writeln('itineraire voyage');
+for i:=0 to length(voyage.itineraire)-1 do
+    begin
+        writeln(voyage.itineraire[i].nom);
+    end;
+
+writeln('planning');
+for i:=0 to length(voyage.planning)-1 do
+    begin
+        writeln(voyage.planning[i].activite[0].nom);
+        writeln(voyage.planning[i].activite[1].nom);
+    end;
+
+writeln('verifDuree',verifDuree(itineraire,criteres));
+
+writeln('suppression des payss');
+writeln(length(suppressionPaysVisite(paysVal,itineraire)));
+for i:=0 to length(suppressionPaysVisite(paysVal,itineraire))-1 do
+    begin
+        writeln(suppressionPaysVisite(paysVal,itineraire)[i].nom);
+    end;
+
 
 end.

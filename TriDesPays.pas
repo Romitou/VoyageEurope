@@ -69,13 +69,17 @@ function genererActivitePays(itineraire:TEurope;criteres:TCriteres):Tvoyage;
 var jour,i,nbAct,nbActParJour: Integer;
 begin
     nbActParJour:=2;
+
+    setlength(genererActivitePays.planning,length(itineraire));
     genererActivitePays.itineraire:=itineraire;
-    calculDistanceTotal(genererActivitePays);
-    coutTotal(genererActivitePays);
+
+    //Normalement bon mais erreur à l'exécution, probablement un problème dans calcul cout
+    //calculDistanceTotal(genererActivitePays);
+    //coutTotal(genererActivitePays);
+    
     for jour:=0 to length(itineraire)-1 do 
         begin
             nbAct:=0;
-
             genererActivitePays.planning[jour].jour:=jour;
             setlength(genererActivitePays.planning[jour].activite,nbActParJour);
 
@@ -88,26 +92,38 @@ begin
         end;
 end;
 
+function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
+var i,j,k:Integer;
+tab:TEurope;
+trouve:Boolean;
+begin
+    k:=0;
+    setlength(tab,1);
+
+    for i:=0 to length(paysValables)-1 do
+        begin
+        trouve:=False;
+        for j:=0 to length(itineraire)-1 do
+            //not(j=length(itineraire)-1) and not(j=0) and
+            if  (paysValables[i].nom=itineraire[j].nom) then
+                trouve:=True;
+
+        if not(trouve) then
+            begin
+            tab[k]:=paysValables[i];
+            k:=k+1;
+            setlength(tab,k); 
+            end;
+
+        end;
+    suppressionPaysVisite:=tab;
+end;
+
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
 begin
     verifDuree:=length(itineraire)>=criteres.duree;
 end;
 
-function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
-var i,j,k:Integer;
-tab:TEurope;
-begin
-    k:=0;
-    setlength(tab,1);
-    for i:=0 to length(paysValables)-1 do
-        for j:=0 to length(itineraire)-1 do 
-            if not(j=length(itineraire)-1) and not(j=0) and (paysValables[i].nom=itineraire[j].nom) then
-                begin
-                tab[k]:=paysValables[i];
-                k:=k+1;
-                setlength(tab,k);
-                end;
-    suppressionPaysVisite:=tab;
-end;
+
 
 end.
