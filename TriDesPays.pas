@@ -2,13 +2,19 @@ unit triDesPays;
 
 interface
 uses types,calculCout;
+//tri des pays
 function filtrerPays(criteres: TCriteres; europe: TEurope): TEurope;
 function matchActivite(pays:Tpays;pref:Array of TPref):Boolean;
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
 function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
+//generer voyage
 function genererActivitePays(itineraire:TEurope;criteres:TCriteres):Tvoyage;
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
 function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
+//scores
+function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
+function scoreClimat(climat:Real;unPays:Tpays;periode:TMois):Real;
+function scoreActivitePays(pays:TPays;pref:Array of TPref;nbActParJour:Integer):Real;
 
 implementation
 
@@ -124,6 +130,39 @@ begin
     verifDuree:=length(itineraire)>=criteres.duree;
 end;
 
+function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
+var i,j,nbPrefVerifiee:Integer;
+begin
+    nbPrefVerifiee:=0;
+    for i:=0 to length(pref)-1 do
+        for j:=0 to length(activite.categories)-1 do
+            if (pref[i]=activite.categories[j])  then
+                nbPrefVerifiee:=nbPrefVerifiee+1;
+    scoreActivite:=nbPrefVerifiee/length(pref);
+end;
 
+function scoreClimat(climat:Real;unPays:Tpays;periode:TMois):Real;
+begin
+    if unPays.climat[periode]>=climat then
+        scoreClimat:=1
+    else
+        scoreClimat:=1-Abs(climat-unPays.climat[periode])/climat;
+end;
+
+function scoreActivitePays(pays:TPays;pref:Array of TPref;nbActParJour:Integer):Real;
+var i,j:Integer;
+score:Array of Real;
+begin
+    setlength(score,nbActParJour);
+    if length(pays.activites)>nbActParJour then
+        begin    
+            for j:=0 to nbActParJour-1 do
+
+                for i:=0 to length(pays.activites)-1 do
+                //repeter nbactjour fois uhe recherche de max parmi tous les scores de toutes les activités, et en vérifiant à chaque fois que ca n'est pas une activité déjà choisie
+        end
+    else    
+
+end;
 
 end.
