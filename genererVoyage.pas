@@ -1,7 +1,7 @@
 unit genererVoyage;
 
 interface
-uses types,TriDesPays,calculItineraire;
+uses types,TriDesPays,calculItineraire, calculCout;
 
 function genererVoyage(criteres: TCriteres; europe: TEurope): TVoyage;
 
@@ -12,7 +12,7 @@ var listePaysValables,alle,retour,itineraire:TEurope;
 voyage:TVoyage;
 i:Integer;
 begin
-    listePaysValables:=paysfiltrerPays(criteres,europe);
+    listePaysValables:=filtrerPays(criteres,europe);
     alle:=calculItineraire(criteres.paysDepart,criteres.paysArrivee,listePaysValables);
     listePaysValables:=suppressionPaysVisite(listePaysValables,alle);
     retour:=calculItineraire(criteres.paysArrivee,criteres.paysDepart,listePaysValables);
@@ -26,7 +26,9 @@ begin
     //ajouter champ message dans TVoyage et l'afficher plus tard
     if not(verifDuree(itineraire,criteres)) then
         voyage.message:='Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.';
-    voyage:=genererActivitePays(itineraire,criteres);
+    voyage.planning:=genererActivitePays(itineraire,criteres);
+    calculDistanceTotal(voyage);
+    coutTotal(voyage);
     genererVoyage:=voyage;
 end;
 end.
