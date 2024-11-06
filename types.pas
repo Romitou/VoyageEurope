@@ -25,6 +25,7 @@ type TPays = record
     activites: Array of TActivite;
     nomFrontieres: TStringArray;
     climat: Array[TMois] of Integer;
+    score: Real;
     longitude: Real;
     latitude: Real;
 end;
