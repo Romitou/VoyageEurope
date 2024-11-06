@@ -1,7 +1,7 @@
 unit triDesPays;
 
 interface
-uses types,CalculCout;
+uses types;
 //tri des pays
 function filtrerPays(criteres: TCriteres; europe: TEurope): TEurope;
 function matchActivite(pays:Tpays;pref:Array of TPref):Boolean;
