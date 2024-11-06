@@ -73,29 +73,28 @@ end;
 
 function genererActivitePays(itineraire:TEurope;criteres:TCriteres):Tvoyage;
 var jour,i,nbAct,nbActParJour: Integer;
+var voyage: TVoyage;
 begin
     nbActParJour:=2;
 
-    setlength(genererActivitePays.planning,length(itineraire));
-    genererActivitePays.itineraire:=itineraire;
-
-    //Normalement bon mais erreur à l'exécution, probablement un problème dans calcul cout
-    //calculDistanceTotal(genererActivitePays);
-    //coutTotal(genererActivitePays);
+    setlength(voyage.planning,length(itineraire));
+    voyage.itineraire:=itineraire;
     
     for jour:=0 to length(itineraire)-1 do 
         begin
             nbAct:=0;
-            genererActivitePays.planning[jour].jour:=jour;
-            setlength(genererActivitePays.planning[jour].activite,nbActParJour);
+            voyage.planning[jour].jour:=jour;
+            setlength(voyage.planning[jour].activite,nbActParJour);
 
             for i:=0 to length(itineraire[jour].activites)-1 do 
                 if matchPreference(itineraire[jour].activites[i],criteres.categorie) and (nbAct<2) then
                     begin
-                        genererActivitePays.planning[jour].activite[nbAct]:= itineraire[jour].activites[i];
+                        voyage.planning[jour].activite[nbAct]:= itineraire[jour].activites[i];
                         nbAct:=nbAct+1;
                     end;
         end;
+
+    genererActivitePays := voyage;
 end;
 
 function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
