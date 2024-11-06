@@ -28,21 +28,23 @@ begin
     distance:=distance+j;
   end;
   voyage.kmTotal:=distance;
+  writeln('La distance total du voyage est de :', voyage.kmTotal);
 end;
 
 procedure coutTotal(var voyage: TVoyage);
 var i, j : Integer; a, cout : Real;
 begin
   cout:=voyage.kmTotal;
-  for i := 1 to length(voyage.planning) do
+  for i := 0 to (length(voyage.planning)-1) do
   begin
-    for j := 1 to length(voyage.planning[i].activite) do
+    for j := 0 to (length(voyage.planning[i].activite)-1) do
       begin
         a:= voyage.planning[i].activite[j].cout;
         cout:=cout+a;
       end; 
   end; 
-  voyage.coutTotal:=cout
+  voyage.coutTotal:=cout;
+  writeln('Le cout total du voyage est de :', voyage.coutTotal)
 end;
 
 end.
