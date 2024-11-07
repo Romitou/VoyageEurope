@@ -18,8 +18,6 @@ type
     TPrecedentDict = array of TNoeud;
 
 
-function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
-function trouverIndexPays(nom: String; europe: TEurope): Integer;
 procedure shortestPath(listeAdjacence: TAdjacenceListe; nbNoeuds: Integer; noeudDepart, noeudFin: TNoeud; var chemin: TNoeudList; var distance: TDistance);
 
 implementation
@@ -110,39 +108,6 @@ begin
         SetLength(chemin, 0);
         distance := INFINITY;
     end;
-end;
-
-function trouverIndexPays(nom: String; europe: TEurope): Integer;
-var
-    i: Integer;
-begin
-    for i := 0 to high(europe) do
-        if europe[i].nom = nom then
-            Exit(i);
-    Exit(-1);
-end;
-
-function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
-var
-    listeAdjacence: TAdjacenceListe;
-    i, j, voisinIndex: Integer;
-begin
-    SetLength(listeAdjacence, Length(europe));
-    for i := 0 to length(europe) - 1 do
-    begin
-        SetLength(listeAdjacence[i], Length(europe[i].nomFrontieres));
-        for j := 0 to length(europe[i].nomFrontieres) - 1 do
-        begin
-            // writeln('nom frontiere : ', europe[i].nomFrontieres[j]);
-            voisinIndex := trouverIndexPays(europe[i].nomFrontieres[j], europe);
-            if voisinIndex <> -1 then
-            begin
-                listeAdjacence[i][j].voisin := voisinIndex;
-                listeAdjacence[i][j].distance := 1;
-            end;
-        end;
-    end;
-    convertirEuropeAdjacence := listeAdjacence;
 end;
 
 end.
