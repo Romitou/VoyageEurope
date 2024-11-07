@@ -15,9 +15,9 @@ setlength(europe[0].activites,3);
 europe[0].activites[0].nom:='Tour Eiffel';
 
 setlength(europe[0].activites[0].categories,3);
-europe[0].activites[0].categories[0]:=Histoire;
-europe[0].activites[0].categories[1]:=Histoire;
-europe[0].activites[0].categories[2]:=Histoire;
+europe[0].activites[0].categories[0]:=Culture;
+europe[0].activites[0].categories[1]:=Hiver;
+europe[0].activites[0].categories[2]:=Culture;
 
 europe[0].activites[1].nom:='Louvre';
 setlength(europe[0].activites[1].categories,3);
@@ -28,8 +28,8 @@ europe[0].activites[1].categories[2]:=JourneeComplete;
 europe[0].activites[2].nom:='Arc de Trimphe';
 setlength(europe[0].activites[2].categories,3);
 europe[0].activites[2].categories[0]:=Culture;
-europe[0].activites[2].categories[1]:=EnFamille;
-europe[0].activites[2].categories[2]:=Histoire;
+europe[0].activites[2].categories[1]:=Histoire;
+europe[0].activites[2].categories[2]:=Aventure;
 
 
 europe[0].climat[Janvier]:=15;
@@ -122,15 +122,16 @@ europe[2].climat[Novembre] := 13;
 europe[2].climat[Decembre] := 10;
 
 //Critères
-setlength(criteres.categorie,2);
+setlength(criteres.categorie,3);
 criteres.categorie[0]:=Histoire;
 criteres.categorie[1]:=Culture;
+criteres.categorie[3]:=Aventure;
 criteres.periode:=Octobre;
 criteres.climat:=10;  
 criteres.duree:=1;  
 
 
-writeln('matchpref',matchPreference(europe[2].activites[2],criteres.categorie));
+{writeln('matchpref',matchPreference(europe[2].activites[2],criteres.categorie));
 writeln('matchact',matchActivite(europe[2],criteres.categorie));
 writeln('matchclimat',matchClimat(criteres.climat,europe[2],criteres.periode));
 
@@ -159,12 +160,17 @@ for i:=0 to length(voyage.planning)-1 do
 
 writeln('verifDuree',verifDuree(itineraire,criteres));
 
-writeln('suppression des payss');
+writeln('filtre pays');
 writeln(length(suppressionPaysVisite(paysVal,itineraire)));
 for i:=0 to length(suppressionPaysVisite(paysVal,itineraire))-1 do
     begin
         writeln(suppressionPaysVisite(paysVal,itineraire)[i].nom);
     end;
 
+writeln(scoreClimat(criteres.climat,europe[0],criteres.periode));
+writeln(scoreActivite(europe[0].activites[0],criteres.categorie));
+writeln(scoreActivite(europe[0].activites[1],criteres.categorie));
+writeln(scoreActivite(europe[0].activites[2],criteres.categorie));
+writeln(scoreActivitePays(europe[0],criteres.categorie,2));}
 
 end.
