@@ -74,16 +74,5 @@ type TFileActivite = record
 end;
 type TArrayFileActivite = Array of TFileActivite;
 
-// Dijkstra
-
-type TDijkstraResult = record
-    error: Boolean;
-    message: String;
-    startPays: String;
-    endPays: String;
-    distance: Integer;
-    chemin: TStringArray;
-end; 
-
 implementation
 end.

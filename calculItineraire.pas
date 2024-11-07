@@ -1,101 +1,68 @@
 unit calculItineraire;
 
 interface
-uses types, sysutils;
-function Dijkstra(startPays: String; endPays: String; listePays: TEurope): TDijkstraResult;
+uses types, dijkstra;
 
+function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
+function trouverIndexPays(nom: String; europe: TEurope): Integer;
+function calculerItineraire(paysValables: TEurope; criteres: TCriteres): TEurope;
 
 implementation
 
-function trouverIndexPays(nom: String; listePays: TEurope): Integer;
-var i: Integer;
+function calculerItineraire(paysValables: TEurope; criteres: TCriteres): TEurope;
+var adjacence: TAdjacenceListe;
+var chemin: TNoeudList;
+var distance: TDistance;
+var i, indexPays: Integer;
+var noeudDepart, noeudFin: Integer;
+var cheminPays: TEurope;
 begin
-  for i := 0 to length(listePays) - 1 do
-    if listePays[i].nom = nom then
+    adjacence := convertirEuropeAdjacence(paysValables);
+    noeudDepart := trouverIndexPays(criteres.paysDepart.nom, paysValables);
+    noeudFin := trouverIndexPays(criteres.paysArrivee.nom, paysValables);
+    shortestPath(adjacence, length(adjacence), noeudDepart, noeudFin, chemin, distance);
+
+    setlength(cheminPays, length(chemin));
+    for i := 0 to length(chemin) - 1 do
     begin
-      trouverIndexPays := i;
-      Exit;
+        indexPays := chemin[i];
+        cheminPays[i] := paysValables[indexPays];
     end;
-  trouverIndexPays := -1;
+
+    calculerItineraire := cheminPays;
 end;
 
-function Dijkstra(startPays: String; endPays: String; listePays: TEurope): TDijkstraResult;
+function trouverIndexPays(nom: String; europe: TEurope): Integer;
 var
-  i, j, k, u, minDist, currentIndex: Integer;
-  voisins: TStringArray;
-  distances: Array of Integer;
-  visited: Array of Boolean;
+    i: Integer;
 begin
-  SetLength(distances, Length(listePays));
-  SetLength(visited, Length(listePays));
-  
-  for i := 0 to Length(listePays) - 1 do
-  begin
-    distances[i] := 1000;
-    visited[i] := false;
-  end;
+    for i := 0 to high(europe) do
+        if europe[i].nom = nom then
+            Exit(i);
+    Exit(-1);
+end;
 
-  currentIndex := trouverIndexPays(startPays, listePays);
-  if currentIndex = -1 then
-  begin
-    Dijkstra.error := true;
-    Dijkstra.message := 'Le pays de départ est introuvable.';
-    Exit(Dijkstra);
-  end;
-
-  distances[currentIndex] := 0;
-
-  for i := 0 to Length(listePays) - 1 do
-  begin
-    minDist := 1000;
-    u := -1;
-
-    for j := 0 to Length(listePays) - 1 do
+function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
+var
+    listeAdjacence: TAdjacenceListe;
+    i, j, voisinIndex: Integer;
+begin
+    SetLength(listeAdjacence, Length(europe));
+    for i := 0 to length(europe) - 1 do
     begin
-      if (not visited[j]) and (distances[j] < minDist) then
-      begin
-        minDist := distances[j];
-        u := j;
-      end;
+        SetLength(listeAdjacence[i], Length(europe[i].nomFrontieres));
+        for j := 0 to length(europe[i].nomFrontieres) - 1 do
+        begin
+            // writeln('nom frontiere : ', europe[i].nomFrontieres[j]);
+            voisinIndex := trouverIndexPays(europe[i].nomFrontieres[j], europe);
+            if voisinIndex <> -1 then
+            begin
+                listeAdjacence[i][j].voisin := voisinIndex;
+                listeAdjacence[i][j].distance := 1;
+            end;
+        end;
     end;
-
-    if u = -1 then
-      Break;
-
-    visited[u] := true;
-
-    voisins := listePays[u].nomFrontieres;
-    for k := 0 to Length(voisins) - 1 do
-    begin
-      currentIndex := trouverIndexPays(voisins[k], listePays);
-      if (currentIndex <> -1) and (not visited[currentIndex]) then
-      begin
-        if distances[u] + 1 < distances[currentIndex] then
-          distances[currentIndex] := distances[u] + 1;
-      end;
-    end;
-  end;
-
-  currentIndex := trouverIndexPays(endPays, listePays);
-  if currentIndex = -1 then
-  begin
-    Dijkstra.error := true;
-    Dijkstra.message := 'Le pays de destination est introuvable.';
-    Exit(Dijkstra);
-  end;
-
-  if distances[currentIndex] = 1000 then
-  begin
-    Dijkstra.error := true;
-    Dijkstra.message := 'Aucun chemin possible.';
-  end
-  else
-  begin
-    Dijkstra.error := false;
-    Dijkstra.startPays := startPays;
-    Dijkstra.endPays := endPays;
-    Dijkstra.distance := distances[currentIndex];
-  end;
+    convertirEuropeAdjacence := listeAdjacence;
 end;
 
 end.

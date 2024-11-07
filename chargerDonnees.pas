@@ -202,8 +202,8 @@ begin
 
         pays.nom := listePays[i].nom;
         pays.capitale := listePays[i].capitale;
+        setlength(pays.nomFrontieres, 0);
 
-        writeln(pays.nom);
         for j := 0 to length(listePays[i].codeFrontieres) - 1 do
         begin
             for k := 0 to length(listePays) - 1 do
@@ -216,11 +216,8 @@ begin
                 end;
             end;
         end;
-        writeln();
 
         setlength(pays.activites, 0);
-
-        writeln(length(pays.activites));
 
         for k := 0 to length(listeActivites) - 1 do
         begin
