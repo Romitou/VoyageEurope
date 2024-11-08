@@ -63,7 +63,7 @@ begin
     writeln('[', i, '] ', TPref(i-1));
   writeln('Tapez 0 quand vous aurez terminé votre saisie.');
 
-  while ((n<3) or (j<>0)) and (n<3) do
+  while ((n<3) or (j<>0)) or (n<3) do
   begin
     repeat
       writeln('Veuillez saisir un chiffre associé à une préférence.');
