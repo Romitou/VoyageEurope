@@ -1,21 +1,22 @@
 unit genererVoyage;
 
 interface
-uses types,TriDesPays,dijkstra,calculCout;
+uses types,TriDesPays,calculItineraire,calculCout;
 
-function genererVoyage(criteres: TCriteres; europe: TEurope): TVoyage;
+function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 
 implementation
 
-function genererVoyage(criteres: TCriteres; europe: TEurope): TVoyage;
+function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 var listePaysValables,alle,retour,itineraire:TEurope;
 voyage:TVoyage;
 i:Integer;
 begin
+
     listePaysValables:=filtrerPays(criteres,europe);
-    alle:=calculItineraire(criteres.paysDepart,criteres.paysArrivee,listePaysValables);
+    alle:=calculerItineraire(listePaysValables,criteres);
     listePaysValables:=suppressionPaysVisite(listePaysValables,alle);
-    retour:=calculItineraire(criteres.paysArrivee,criteres.paysDepart,listePaysValables);
+    retour:=calculerItineraire(listePaysValables,criteres);
     setlength(itineraire,(length(alle)+length(retour)));
     for i:=0 to length(alle)-1 do
         voyage.itineraire[i]:=alle[i];
@@ -29,6 +30,6 @@ begin
     genererActivitePays(itineraire,criteres);
     calculDistanceTotal(voyage);
     coutTotal(voyage);
-    genererVoyage:=voyage;
+    generer:=voyage;
 end;
 end.
