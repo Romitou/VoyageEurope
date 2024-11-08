@@ -1,13 +1,14 @@
 program main;
-uses types, chargerDonnees, ChoixCriteres,TriDesPays,calculItineraire;
+uses types,chargerDonnees,ChoixCriteres,genererVoyage,afficherVoyage;
 
-var europe:TEurope;
+var europe: TEurope;
 var criteres: TCriteres;
-var paysValables: TEurope;
-var i: Integer;
+var voyage: TVoyage;
 begin
-    europe :=chargerEurope();
-    demanderCriteres(criteres, europe);
-    paysValables := calculerItineraire(europe, criteres);
-    for i := 0 to length(paysValables) - 1 do writeln(paysValables[i].nom);
+    europe:=chargerEurope();
+    demanderCriteres(criteres,europe);
+    WriteLn('test');
+    generer(criteres,europe);
+    WriteLn('test');
+    afficher(voyage,criteres);
 end.
