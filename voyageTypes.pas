@@ -34,7 +34,7 @@ type TEurope = Array of TPays;
 type TCriteres = record
     paysDepart: TPays;
     paysArrivee: TPays;
-    categorie: Array of TPref;
+    categories: Array of TPref;
     duree: Integer;
     periode: TMois;
     climat: Real;

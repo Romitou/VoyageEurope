@@ -91,7 +91,7 @@ begin
             setlength(voyage.planning[jour].activite,nbActParJour);
 
             for i:=0 to length(itineraire[jour].activites)-1 do 
-                if matchPreference(itineraire[jour].activites[i],criteres.categorie) and (nbAct<2) then
+                if matchPreference(itineraire[jour].activites[i],criteres.categories) and (nbAct<2) then
                     begin
                         voyage.planning[jour].activite[nbAct]:= itineraire[jour].activites[i];
                         nbAct:=nbAct+1;

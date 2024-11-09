@@ -76,9 +76,9 @@ begin
       n:=n+1; 
     end;
   end;
-  setlength(choix.categorie, n);
+  setlength(choix.categories, n);
   for p:=1 to n-1 do 
-    choix.categorie[p]:=prefUser[p];
+    choix.categories[p]:=prefUser[p];
 end;
 
 procedure choixDuree(var choix: TCriteres);
