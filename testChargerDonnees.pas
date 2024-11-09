@@ -1,9 +1,11 @@
 program main;
-uses voyageTypes, chargerDonnees, ChoixCriteres;
+
+uses voyageTypes, chargerDonnees, choixCriteres;
 
 var europe: TEurope;
-var pays: TPays;
-var i: Integer;
+    pays: TPays;
+    i: Integer;
+
 begin
     europe := chargerPays();
     for i := 0 to length(europe) - 1 do

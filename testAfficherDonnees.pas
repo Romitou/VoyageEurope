@@ -1,10 +1,12 @@
 program main;
-uses voyageTypes,chargerDonnees,ChoixCriteres,triDesPays,afficherVoyage;
+
+uses voyageTypes, chargerDonnees, choixCriteres, triDesPays, afficherVoyage;
 
 var criteres: TCriteres;
-voyage:TVoyage;
-europe:TEurope;
-i:Integer;
+    voyage: TVoyage;
+    europe: TEurope;
+    i: Integer;
+
 begin
 setlength(europe,3);
 europe[0].nom:='France';

@@ -11,7 +11,6 @@ type TPref = (Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, S
     Mystere, CinemaEtTelevision, ReligieuxEtSpirituel,Enfants, MobiliteReduite, TouteAnnee, ActiviteSaisonniere, Climatisation, 
     TemperatureDouce, Guide, NonGuide,Hiver, Printemps, Ete, Automne, TouteSaison, SaisonFestivals);
 
-
 type TActivite = record
     nom: String;
     categories: Array of TPref;

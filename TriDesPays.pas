@@ -2,6 +2,10 @@ unit triDesPays;
 
 interface
 uses voyageTypes;
+
+// TODO: est-ce que tout est utilisé / exporté ?
+// Retirer les fonctions inutilisées à la fin
+
 //tri des pays
 function filtrerPays(criteres: TCriteres; europe: TEurope): TEurope;
 function matchActivite(pays:Tpays;pref:Array of TPref):Boolean;

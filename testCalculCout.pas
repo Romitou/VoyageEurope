@@ -1,10 +1,10 @@
 program testCalculCout;
 
-uses voyageTypes,chargerDonnees,ChoixCriteres,triDesPays,calculCout;
+uses voyageTypes, chargerDonnees, choixCriteres, triDesPays, calculCout;
 
 var criteres: TCriteres;
-voyage:TVoyage;
-europe:TEurope;
+    voyage: TVoyage;
+    europe: TEurope;
 
 begin
     setlength(europe,3);

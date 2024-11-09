@@ -1,10 +1,12 @@
 program main;
-uses voyageTypes,chargerDonnees,ChoixCriteres,triDesPays,afficherVoyage;
 
-var europe,paysVal,itineraire:TEurope;
-criteres: TCriteres;
-voyage:TVoyage;
-i:Integer;
+uses voyageTypes, chargerDonnees, choixCriteres, triDesPays, afficherVoyage;
+
+var europe, paysVal, itineraire: TEurope;
+    criteres: TCriteres;
+    voyage: TVoyage;
+    i: Integer;
+
 begin
 //France
 setlength(europe,3);

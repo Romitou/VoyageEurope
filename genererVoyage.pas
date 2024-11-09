@@ -1,7 +1,7 @@
 unit genererVoyage;
 
 interface
-uses voyageTypes,TriDesPays,calculItineraire,CalculCout;
+uses voyageTypes, triDesPays, calculItineraire, calculCout;
 
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 
@@ -9,8 +9,8 @@ implementation
 
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 var listePaysValables,aller,retour,itineraire:TEurope;
-voyage:TVoyage;
-i:Integer;
+    voyage:TVoyage;
+    i:Integer;
 begin
 
     listePaysValables:=filtrerPays(criteres,europe);
