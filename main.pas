@@ -7,8 +7,6 @@ var voyage: TVoyage;
 begin
     europe:=chargerEurope();
     demanderCriteres(criteres,europe);
-    WriteLn('test');
-    generer(criteres,europe);
-    WriteLn('test');
+    voyage := generer(criteres,europe);
     afficher(voyage,criteres);
 end.
