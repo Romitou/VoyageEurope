@@ -1,3 +1,5 @@
+{$H+}
+
 unit chargerDonnees;
 
 interface
@@ -113,8 +115,8 @@ begin
     split := splitStringQuotes(valeur, ',');
     deserialiserActivite.nom := split[0];
     deserialiserActivite.pays := split[1];
-    deserialiserActivite.cout := StrToFloat(split[2]);
-    categories := splitString(split[3], ',');
+    deserialiserActivite.cout := StrToFloat(split[3]);
+    categories := splitString(split[5], ',');
     setlength(deserialiserActivite.categories, length(categories));
     for i := 0 to length(categories) - 1 do
     begin
@@ -159,20 +161,28 @@ var fichierActivites: Text;
 var ligne: String;
 var tempActivites: TArrayFileActivite;
 var i: Integer;
+var c: Char;
 begin
     setlength(tempActivites, 0);
     assign(fichierActivites, 'data/activites.csv');
     reset(fichierActivites);
     i := 0;
+    ligne := '';
     while not eof(fichierActivites) do
     begin
-        readln(fichierActivites, ligne);
-        if i <> 0 then
+        read(fichierActivites, c);
+        if c = #10 then
         begin
-            setlength(tempActivites, length(tempActivites) + 1);
-            tempActivites[length(tempActivites) - 1] := deserialiserActivite(ligne);
-        end;
-        i := i + 1;
+            if i <> 0 then
+            begin
+                setlength(tempActivites, length(tempActivites) + 1);
+                tempActivites[length(tempActivites) - 1] := deserialiserActivite(ligne);
+            end;
+            i := i + 1;
+            ligne := '';
+        end
+        else
+            ligne := ligne + c;
     end;
     close(fichierActivites);
 
