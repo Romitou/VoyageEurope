@@ -1,7 +1,7 @@
 unit genererVoyage;
 
 interface
-uses types,TriDesPays,calculItineraire,calculCout;
+uses types,TriDesPays,calculItineraire,CalculCout;
 
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 
