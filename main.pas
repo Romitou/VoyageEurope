@@ -1,5 +1,5 @@
 program main;
-uses types,chargerDonnees,ChoixCriteres,genererVoyage,afficherVoyage;
+uses voyageTypes,chargerDonnees,ChoixCriteres,genererVoyage,afficherVoyage;
 
 var europe: TEurope;
 var criteres: TCriteres;

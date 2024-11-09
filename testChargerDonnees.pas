@@ -1,5 +1,5 @@
 program main;
-uses types, chargerDonnees, ChoixCriteres;
+uses voyageTypes, chargerDonnees, ChoixCriteres;
 
 var europe: TEurope;
 var pays: TPays;

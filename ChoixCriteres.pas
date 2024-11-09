@@ -1,7 +1,7 @@
 unit choixCriteres;
 
 interface
-uses types, sysutils;
+uses voyageTypes, sysutils;
 
 procedure choixPays(var choix: TCriteres; listePays: TEurope);
 procedure choixPreferences(var choix: TCriteres);

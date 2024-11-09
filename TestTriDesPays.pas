@@ -1,5 +1,5 @@
 program main;
-uses types,chargerDonnees,ChoixCriteres,triDesPays,afficherVoyage;
+uses voyageTypes,chargerDonnees,ChoixCriteres,triDesPays,afficherVoyage;
 
 var europe,paysVal,itineraire:TEurope;
 criteres: TCriteres;

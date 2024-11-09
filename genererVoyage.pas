@@ -1,7 +1,7 @@
 unit genererVoyage;
 
 interface
-uses types,TriDesPays,calculItineraire,CalculCout;
+uses voyageTypes,TriDesPays,calculItineraire,CalculCout;
 
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 
@@ -14,6 +14,7 @@ i:Integer;
 begin
 
     listePaysValables:=filtrerPays(criteres,europe);
+    // TODO: Gérer si listePaysValables est vide => les algorithmes ne fonctionneront pas
     aller:=calculerItineraire(listePaysValables,criteres);
     listePaysValables:=suppressionPaysVisite(listePaysValables,aller);
     retour:=calculerItineraire(listePaysValables,criteres);

@@ -1,7 +1,7 @@
 unit afficherVoyage;
 
 interface
-uses types;
+uses voyageTypes;
 procedure afficher(voyage:TVoyage;criteres:TCriteres);
 procedure afficherUneEtape(uneEtape:TEtape);
 procedure afficherUneAct(uneAct:TActivite);

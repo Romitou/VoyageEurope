@@ -1,6 +1,6 @@
 program testCalculCout;
 
-uses types,chargerDonnees,ChoixCriteres,triDesPays,calculCout;
+uses voyageTypes,chargerDonnees,ChoixCriteres,triDesPays,calculCout;
 
 var criteres: TCriteres;
 voyage:TVoyage;

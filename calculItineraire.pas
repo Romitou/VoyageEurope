@@ -1,7 +1,7 @@
 unit calculItineraire;
 
 interface
-uses types, dijkstra;
+uses voyageTypes, dijkstra;
 
 function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
@@ -19,8 +19,11 @@ var cheminPays: TEurope;
 begin
     adjacence := convertirEuropeAdjacence(paysValables);
     noeudDepart := trouverIndexPays(criteres.paysDepart.nom, paysValables);
+    writeln('noeudDepart call');
     noeudFin := trouverIndexPays(criteres.paysArrivee.nom, paysValables);
+    writeln('noeudFin call');
     shortestPath(adjacence, length(adjacence), noeudDepart, noeudFin, chemin, distance);
+    writeln('shortestPath call');
 
     setlength(cheminPays, length(chemin));
     for i := 0 to length(chemin) - 1 do

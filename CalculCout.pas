@@ -1,7 +1,7 @@
 unit calculCout;
 
 interface
-uses types, math;
+uses voyageTypes, math;
 
 function calculDuneDistance(lat1, lon1, lat2, lon2: Real; i:Integer): Real;
 procedure calculDistanceTotal(var voyage: TVoyage);

@@ -1,7 +1,7 @@
 unit chargerDonnees;
 
 interface
-uses types, sysutils;
+uses voyageTypes, sysutils;
 
 function chargerEurope(): TEurope;
 // procedure sauvegarderPays(europe: TEurope);
