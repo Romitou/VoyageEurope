@@ -22,17 +22,16 @@ function scoreActivitePays(pays:TPays;pref:Array of TPref;nbActParJour:Integer):
 
 implementation
 
-function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
-var i,j:Integer; trouve:Boolean;
+function matchPreference(uneAct: TActivite; pref: Array of TPref): Boolean;
+var i,j:Integer;
 begin
-    matchPreference:=True;
+    matchPreference := false;
     for i:=0 to length(pref)-1 do
-        begin
-        trouve:=False;
         for j:=0 to length(uneAct.categories)-1 do
-            if (pref[i]=uneAct.categories[j]) and matchPreference then
-                trouve:=True;
-        matchPreference:=trouve;
+            if pref[i] = uneAct.categories[j] then
+            begin
+                matchPreference := true;
+                exit;
         end;
 end;
 
