@@ -47,38 +47,37 @@ begin
 end;
 
 procedure choixPreferences(var choix: TCriteres);
-var prefUser: Array of TPref;
-var prefLength: Integer;
-var i, j, n, p: Integer;
+var
+  prefUser: array of TPref;
+  prefLength, i, j, n: Integer;
 begin
   setlength(prefUser, 0);
-  j:=0;
-  n:=1;
-  prefLength := ord(high(TPref));
-  writeln(prefLength); 
+  n := 0;
+  prefLength := ord(high(TPref)) + 1;
 
   writeln('Veuillez choisir vos préférences pour les activités de votre voyage.');
-  writeln('Sélectionner au moins 2 préférences en écrivant leurs numéros associés.');
+  writeln('Sélectionnez au moins 2 préférences en entrant leurs numéros associés.');
   for i := 1 to prefLength do
-    writeln('[', i, '] ', TPref(i-1));
+    writeln('[', i, '] ', TPref(i - 1));
   writeln('Tapez 0 quand vous aurez terminé votre saisie.');
 
-  while ((n<3) or (j<>0)) or (n<3) do
-  begin
+  repeat
     repeat
-      writeln('Veuillez saisir un chiffre associé à une préférence.');
+      writeln('Veuillez saisir un chiffre associé à une préférence :');
       readln(j);
-    until ((j>=0) and (j<=prefLength));
-    if j>0 then
+    until (j >= 0) and (j <= prefLength);
+
+    if (j > 0) then
     begin
-      setlength(prefUser, n);
-      prefUser[n]:=TPref(j);
-      n:=n+1; 
+      setlength(prefUser, n + 1);
+      prefUser[n] := TPref(j - 1);
+      n := n + 1;
     end;
-  end;
+  until (j = 0) and (n >= 2);
+
   setlength(choix.categories, n);
-  for p:=1 to n-1 do 
-    choix.categories[p]:=prefUser[p];
+  for i := 0 to n - 1 do
+    choix.categories[i] := prefUser[i];
 end;
 
 procedure choixDuree(var choix: TCriteres);
