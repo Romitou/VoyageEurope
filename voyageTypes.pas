@@ -45,12 +45,15 @@ type TEtape = record
     activite: Array of TActivite;
 end;
 
+type TEtapes = Array of TEtape;
+
 type TVoyage = record
     itineraire: Array of TPays;
-    planning: Array of TEtape;
+    planning: TEtapes;
     coutTotal: Real;
     kmTotal: Real;
-    message:String;
+    erreur: Boolean;
+    message: String;
 end;
 
 // Chargement des données

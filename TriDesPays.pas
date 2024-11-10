@@ -12,7 +12,7 @@ function matchActivite(pays:Tpays;pref:Array of TPref):Boolean;
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
 function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
 //generer voyage
-function genererActivitePays(itineraire:TEurope;criteres:TCriteres):Tvoyage;
+function genererActivitePays(itineraire: TEurope; criteres: TCriteres): TEtapes;
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
 function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
 //scores
@@ -75,30 +75,28 @@ begin
     filtrerPays:=paysVal;
 end; 
 
-function genererActivitePays(itineraire:TEurope;criteres:TCriteres):Tvoyage;
+function genererActivitePays(itineraire: TEurope; criteres: TCriteres): TEtapes;
 var jour,i,nbAct,nbActParJour: Integer;
-var voyage: TVoyage;
+var etapes: TEtapes;
 begin
-    nbActParJour:=2;
-
-    setlength(voyage.planning,length(itineraire));
-    voyage.itineraire:=itineraire;
+    nbActParJour := 2;
+    setlength(etapes, length(itineraire));
     
-    for jour:=0 to length(itineraire)-1 do 
-        begin
-            nbAct:=0;
-            voyage.planning[jour].jour:=jour;
-            setlength(voyage.planning[jour].activite,nbActParJour);
+    for jour := 0 to length(itineraire) - 1 do 
+    begin
+        nbAct := 0;
+        etapes[jour].jour:=jour;
+        setlength(etapes[jour].activite,nbActParJour);
 
-            for i:=0 to length(itineraire[jour].activites)-1 do 
-                if matchPreference(itineraire[jour].activites[i],criteres.categories) and (nbAct<2) then
-                    begin
-                        voyage.planning[jour].activite[nbAct]:= itineraire[jour].activites[i];
-                        nbAct:=nbAct+1;
-                    end;
-        end;
+        for i:=0 to length(itineraire[jour].activites)-1 do 
+            if matchPreference(itineraire[jour].activites[i],criteres.categories) and (nbAct<2) then
+                begin
+                    etapes[jour].activite[nbAct]:= itineraire[jour].activites[i];
+                    nbAct:=nbAct+1;
+                end;
+    end;
 
-    genererActivitePays := voyage;
+    genererActivitePays := etapes;
 end;
 
 function suppressionPaysVisite(paysValables: TEurope; itineraire: TEurope): TEurope;
