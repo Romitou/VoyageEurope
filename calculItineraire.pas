@@ -19,11 +19,8 @@ var cheminPays: TEurope;
 begin
     adjacence := convertirEuropeAdjacence(paysValables);
     noeudDepart := trouverIndexPays(criteres.paysDepart.nom, paysValables);
-    writeln('noeudDepart call');
     noeudFin := trouverIndexPays(criteres.paysArrivee.nom, paysValables);
-    writeln('noeudFin call');
     shortestPath(adjacence, length(adjacence), noeudDepart, noeudFin, chemin, distance);
-    writeln('shortestPath call');
 
     setlength(cheminPays, length(chemin));
     for i := 0 to length(chemin) - 1 do
@@ -31,7 +28,7 @@ begin
         indexPays := chemin[i];
         cheminPays[i] := paysValables[indexPays];
     end;
-
+    
     calculerItineraire := cheminPays;
 end;
 
