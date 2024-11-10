@@ -101,31 +101,35 @@ begin
     genererActivitePays := voyage;
 end;
 
-function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
+function suppressionPaysVisite(paysValables: TEurope; itineraire: TEurope): TEurope;
 var i,j,k:Integer;
 tab:TEurope;
 trouve:Boolean;
 begin
-    k:=0;
-    setlength(tab,1);
+    k := 0;
+    setlength(tab, 0);
 
-    for i:=0 to length(paysValables)-1 do
+    for i := 0 to length(paysValables) - 1 do
+    begin
+        trouve := False;
+        for j := 0 to length(itineraire) - 1 do
         begin
-        trouve:=False;
-        for j:=0 to length(itineraire)-1 do
-            //not(j=length(itineraire)-1) and not(j=0) and
-            if  (paysValables[i].nom=itineraire[j].nom) then
-                trouve:=True;
-
-        if not(trouve) then
+            if paysValables[i].nom = itineraire[j].nom then
             begin
-            tab[k]:=paysValables[i];
-            k:=k+1;
-            setlength(tab,k); 
+                trouve := True;
+                Break;
             end;
-
         end;
-    suppressionPaysVisite:=tab;
+
+        if not trouve then
+        begin
+            setlength(tab, k + 1);
+            tab[k] := paysValables[i];
+            k := k + 1;
+        end;
+    end;
+    
+    suppressionPaysVisite := tab;
 end;
 
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
