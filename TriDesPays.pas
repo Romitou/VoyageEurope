@@ -112,7 +112,7 @@ begin
     for i := 0 to length(paysValables) - 1 do
     begin
         trouve := False;
-        for j := 0 to length(itineraire) - 1 do
+        for j := 1 to length(itineraire) - 2 do
         begin
             if paysValables[i].nom = itineraire[j].nom then
             begin
