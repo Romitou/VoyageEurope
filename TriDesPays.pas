@@ -134,7 +134,7 @@ end;
 
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
 begin
-    verifDuree:=length(itineraire)>=criteres.duree;
+    verifDuree:=length(itineraire)<=criteres.duree;
 end;
 
 function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
