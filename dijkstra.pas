@@ -34,10 +34,6 @@ begin
     SetLength(distanceDepart, nbNoeuds);
     SetLength(noeudPrecedent, nbNoeuds);
     
-    writeln('nbNoeuds:', nbNoeuds);
-    writeln('noeudDepart:',noeudDepart);
-    writeln('noeudFin:',noeudFin);
-
     for i := 0 to nbNoeuds - 1 do
     begin
         noeudsInitial[i] := i;
@@ -105,7 +101,6 @@ begin
     begin
         SetLength(chemin, Length(chemin) + 1);
         chemin[high(chemin)] := noeudDepart;
-        writeln('noeudFin: ', noeudFin);
         distance := distanceDepart[noeudFin];
     end
     else
