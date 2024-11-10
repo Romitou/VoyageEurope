@@ -63,7 +63,8 @@ begin
     j:=0;
     for i:=0 to length(europe)-1 do
         begin
-        if (matchClimat(criteres.climat,europe[i],criteres.periode)) and (matchActivite(europe[i],criteres.categorie)) then
+        //if (matchClimat(criteres.climat,europe[i],criteres.periode)) and (matchActivite(europe[i],criteres.categorie)) then
+        if (matchActivite(europe[i],criteres.categories)) then
             begin
                 setlength(paysVal,length(paysVal)+1);
                 paysVal[j]:=europe[i];
