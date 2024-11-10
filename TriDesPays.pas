@@ -32,7 +32,7 @@ begin
             begin
                 matchPreference := true;
                 exit;
-        end;
+            end;
 end;
 
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
