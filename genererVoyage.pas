@@ -52,7 +52,11 @@ begin
         voyage.itineraire[length(aller)+i]:=retour[i];
     //ajouter champ message dans TVoyage et l'afficher plus tard
     if not(verifDuree(voyage.itineraire,criteres)) then
-        writeln('Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.');
+    begin
+        voyage.erreur := true;
+        voyage.message := 'Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.';
+        exit;
+    end;
     genererActivitePays(voyage.itineraire,criteres);
     calculDistanceTotal(voyage);
     coutTotal(voyage);
