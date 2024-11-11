@@ -105,6 +105,7 @@ begin
     end
     else
     begin
+        writeln('AAAAAAAAAAAAAAAA');
         SetLength(chemin, 0);
         distance := INFINITY;
     end;

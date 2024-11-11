@@ -1,7 +1,7 @@
 unit triDesPays;
 
 interface
-uses voyageTypes;
+uses voyageTypes, calculItineraire;
 
 // TODO: est-ce que tout est utilisé / exporté ?
 // Retirer les fonctions inutilisées à la fin
@@ -14,7 +14,7 @@ function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
 //generer voyage
 function genererActivitePays(itineraire: TEurope; criteres: TCriteres): TEtapes;
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
-function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
+function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope): TEurope;
 //scores
 function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
 function scoreClimat(climat:Real;unPays:Tpays;periode:TMois):Real;
@@ -99,35 +99,51 @@ begin
     genererActivitePays := etapes;
 end;
 
-function suppressionPaysVisite(paysValables: TEurope; itineraire: TEurope): TEurope;
-var i,j,k:Integer;
-tab:TEurope;
-trouve:Boolean;
+// On doit prendre en compte que certains pays ne peuvent pas être supprimés malgré le fait
+// qu'ils sont inclus dans l'itinéraire aller. En effet, on doit s'assurer que l'algorithme
+// de Dijkstra continue à fonctionner et trouver une solution à la suppression de chaque
+// pays. Exemple : trajet France - Portugal => l'Espagne ne doit pas être supprimé !
+function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope): TEurope;
+var
+    i, j, k, l, m: Integer;
+    paysValides, tmpValides: TEurope;
+    chemin: TEurope;
 begin
-    k := 0;
-    setlength(tab, 0);
+    paysValides := inputPays;
 
-    for i := 0 to length(paysValables) - 1 do
+    for i := 0 to length(inputPays) - 1 do
     begin
-        trouve := False;
         for j := 1 to length(itineraire) - 2 do
         begin
-            if paysValables[i].nom = itineraire[j].nom then
+            if paysValides[i].nom = itineraire[j].nom then
             begin
-                trouve := True;
+                setlength(tmpValides, 0);
+                for k := 0 to length(paysValides) - 1 do
+                begin
+                    if paysValides[k].nom <> paysValides[i].nom then
+                    begin
+                        setlength(tmpValides, length(tmpValides) + 1);
+                        tmpValides[length(tmpValides) - 1] := paysValides[k];
+                    end;
+                end;
+
+                for l := 0 to length(tmpValides) - 1 do writeln(tmpValides[l].nom);
+                chemin := calculerItineraire(tmpValides, itineraire[0], itineraire[length(itineraire) - 1]);
+                for l := 0 to length(chemin) - 1 do
+                begin
+                    writeln('chemin[l].nom ', chemin[l].nom);
+                end;
+                if length(calculerItineraire(tmpValides, itineraire[0], itineraire[length(itineraire) - 1])) > 0 then
+                begin
+                    paysValides := tmpValides;
+                end;
+
                 Break;
             end;
         end;
-
-        if not trouve then
-        begin
-            setlength(tab, k + 1);
-            tab[k] := paysValables[i];
-            k := k + 1;
-        end;
     end;
-    
-    suppressionPaysVisite := tab;
+
+    suppressionPaysVisite := paysValides;
 end;
 
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;

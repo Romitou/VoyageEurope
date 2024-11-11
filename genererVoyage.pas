@@ -24,7 +24,7 @@ begin
     // ** Génération itinéraire aller **
     //
     writeln('Calcul de l''itinéraire aller...');
-    aller:=calculerItineraire(listePaysValables,criteres);
+    aller:=calculerItineraire(listePaysValables, criteres.paysDepart, criteres.paysArrivee);
     writeln('Itinéraire aller généré :');
     for i:=0 to length(aller)-1 do writeln('- ', aller[i].nom);
 
@@ -34,12 +34,13 @@ begin
     writeln('Suppression des pays visités (', length(listePaysValables), ' pays)...');
     listePaysValables:=suppressionPaysVisite(listePaysValables,aller);
     writeln('Pays visités supprimés (', length(listePaysValables), ' pays restants).');
+    for i:=0 to length(listePaysValables)-1 do writeln('- ', listePaysValables[i].nom);
 
     //
     // ** Génération itinéraire retour **
     //
     writeln('Calcul de l''itinéraire retour...');
-    retour:=calculerItineraire(listePaysValables,criteres);
+    retour:=calculerItineraire(listePaysValables, criteres.paysDepart, criteres.paysArrivee);
     writeln('Itinéraire retour généré :');
     for i:=0 to length(retour)-1 do writeln('- ', retour[i].nom);
 
