@@ -98,13 +98,16 @@ end;
 // end;
 
 function deserialiserPays(valeur: String): TFilePays;
-var split: TStringArray;
+var split, latlngString: TStringArray;
 begin
     split := splitStringQuotes(valeur, ',');
     deserialiserPays.nom := split[0];
     deserialiserPays.capitale := split[1];
     deserialiserPays.code := split[2];
     deserialiserPays.codeFrontieres := splitString(split[3], ',');
+    latlngString := splitString(split[5], ',');
+    deserialiserPays.latitude := StrToFloat(latlngString[0]);
+    deserialiserPays.longitude := StrToFloat(latlngString[1]);
 end;
 
 function deserialiserActivite(valeur: String): TFileActivite;
@@ -211,6 +214,8 @@ begin
 
         pays.nom := listePays[i].nom;
         pays.capitale := listePays[i].capitale;
+        pays.longitude := listePays[i].longitude;
+        pays.latitude := listePays[i].latitude;
         setlength(pays.nomFrontieres, 0);
 
         for j := 0 to length(listePays[i].codeFrontieres) - 1 do
