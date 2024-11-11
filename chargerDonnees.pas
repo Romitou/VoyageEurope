@@ -120,7 +120,6 @@ begin
     setlength(deserialiserActivite.categories, length(categories));
     for i := 0 to length(categories) - 1 do
     begin
-        writeln(categories[i]);
         readStr(categories[i], deserialiserActivite.categories[i])
     end;
 end;
@@ -220,7 +219,6 @@ begin
             begin
                 if listePays[i].codeFrontieres[j] = listePays[k].code then
                 begin
-                    writeln(listePays[k].nom);
                     setlength(pays.nomFrontieres, length(pays.nomFrontieres) + 1);
                     pays.nomFrontieres[length(pays.nomFrontieres) - 1] := listePays[k].nom;
                 end;
