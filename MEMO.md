@@ -1,3 +1,4 @@
+- ça serait cool de passer toutes les procédures et fonctions qui ont un paramètre "trouve" en utilisant les pointeurs, ça rendrait le cool clean et c'est pas sorcier (EXEMPLE DANS testItineraire.pas pour illustration)
 - important à mettre dans le rapport : le renommage de types en voyageTypes => conflit avec les types de pascal ce qui empêchait l'import de certaines librairies
 - il est important de respecter le camelCase dans le nommage des fichiers et unités afin que tout le monde puisse le compiler sans problème et avoir une convention. si jamais ça compile pas de votre côté il faut supprimer tous les fichiers compilés type .o .ppu
 - dans choixCritères, il faut vérifier que l'input de l'utilisateur corresponde bien à une préférence. si non alors afficher une saisie incorrecte
