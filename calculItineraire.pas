@@ -20,10 +20,8 @@ begin
     adjacence := convertirEuropeAdjacence(paysValables);
     noeudDepart := trouverIndexPays(paysDepart.nom, paysValables);
     noeudFin := trouverIndexPays(paysArrivee.nom, paysValables);
-    writeln('length(adjacence):',length(adjacence),'noeudDepart:',noeudDepart,'noeudFin:',noeudFin);
+    // writeln('length(adjacence):',length(adjacence),'noeudDepart:',noeudDepart,'noeudFin:',noeudFin);
     shortestPath(adjacence, length(adjacence), noeudDepart, noeudFin, chemin, distance);
-    writeln(distance);
-    writeln(length(chemin));
 
     setlength(cheminPays, length(chemin));
     for i := 0 to length(chemin) - 1 do
@@ -31,8 +29,6 @@ begin
         // destructuration obligatoire
         indexPays := chemin[i];
         cheminPays[i] := paysValables[indexPays];
-        writeln('i', i);
-        writeln('cheminPays[i]', cheminPays[i].nom);
     end;
     
     calculerItineraire := cheminPays;

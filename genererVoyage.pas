@@ -34,7 +34,7 @@ begin
     writeln('Suppression des pays visités (', length(listePaysValables), ' pays)...');
     listePaysValables:=suppressionPaysVisite(listePaysValables,aller);
     writeln('Pays visités supprimés (', length(listePaysValables), ' pays restants).');
-    for i:=0 to length(listePaysValables)-1 do writeln('- ', listePaysValables[i].nom);
+    // for i:=0 to length(listePaysValables)-1 do writeln('- ', listePaysValables[i].nom);
 
     //
     // ** Génération itinéraire retour **
