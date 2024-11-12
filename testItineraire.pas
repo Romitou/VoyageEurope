@@ -60,7 +60,7 @@ var
     resultat: TItineraireResult;
 
 begin
-    setlength(testCases, 19);
+    setlength(testCases, 20);
     testCases[0] := creerTestCase('France -> Allemagne', 'France -> Allemagne');
     testCases[1] := creerTestCase('Belgique -> Italie', 'Belgique -> Allemagne -> Autriche -> Italie');
     testCases[2] := creerTestCase('Espagne -> Suisse', 'Espagne -> France -> Suisse');
@@ -81,6 +81,8 @@ begin
     testCases[17] := creerTestCase('Suède -> Lettonie', 'Suède -> Estonie -> Lettonie');
     testCases[18] := creerTestCase('Grèce -> Espagne', 'Aucun chemin trouvé');
     testCases[19] := creerTestCase('Danemark -> Portugal', 'Danemark -> Allemagne -> France -> Espagne -> Portugal');
+    //
+    testCases[20] := creerTestCase('Royaume-Uni -> France', 'ERREUR');
 
     europe := chargerEurope();
 
