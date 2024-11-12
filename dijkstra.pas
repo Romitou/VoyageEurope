@@ -22,6 +22,21 @@ procedure shortestPath(listeAdjacence: TAdjacenceListe; nbNoeuds: Integer; noeud
 
 implementation
 
+procedure afficherAdjacence(listeAdjacence: TAdjacenceListe);
+var
+    i, j: Integer;
+begin
+    for i := 0 to High(listeAdjacence) do
+    begin
+        Writeln('Noeud ', i, ': ');
+        for j := 0 to High(listeAdjacence[i]) do
+        begin
+            Writeln(' -> (Voisin: ', listeAdjacence[i][j].voisin, ', Distance: ', listeAdjacence[i][j].distance, ')');
+        end;
+        Writeln;
+    end;
+end;
+
 procedure shortestPath(listeAdjacence: TAdjacenceListe; nbNoeuds: Integer; noeudDepart, noeudFin: TNoeud; var chemin: TNoeudList; var distance: TDistance);
 var
     noeudsInitial: TNoeudList;
@@ -30,6 +45,7 @@ var
     noeudActuel, voisin, i, j, minDistNoeud: TNoeud;
     nouveauChemin, minDist: TDistance;
 begin
+    // afficherAdjacence(listeAdjacence);
     SetLength(noeudsInitial, nbNoeuds);
     SetLength(distanceDepart, nbNoeuds);
     SetLength(noeudPrecedent, nbNoeuds);
