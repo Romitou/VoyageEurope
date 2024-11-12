@@ -105,9 +105,8 @@ end;
 // pays. Exemple : trajet France - Portugal => l'Espagne ne doit pas être supprimé !
 function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope): TEurope;
 var
-    i, j, k, l, m: Integer;
+    i, j, k: Integer;
     paysValides, tmpValides: TEurope;
-    chemin: TEurope;
 begin
     paysValides := inputPays;
 
@@ -126,14 +125,8 @@ begin
                         tmpValides[length(tmpValides) - 1] := paysValides[k];
                     end;
                 end;
-
-                for l := 0 to length(tmpValides) - 1 do writeln(tmpValides[l].nom);
-                chemin := calculerItineraire(tmpValides, itineraire[0], itineraire[length(itineraire) - 1]);
-                for l := 0 to length(chemin) - 1 do
-                begin
-                    writeln('chemin[l].nom ', chemin[l].nom);
-                end;
-                if length(calculerItineraire(tmpValides, itineraire[0], itineraire[length(itineraire) - 1])) > 0 then
+                
+                if not calculerItineraire(tmpValides, itineraire[0], itineraire[length(itineraire) - 1]).erreur then
                 begin
                     paysValides := tmpValides;
                 end;
