@@ -51,20 +51,21 @@ end;
 function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
 var
     listeAdjacence: TAdjacenceListe;
-    i, j, voisinIndex: Integer;
+    i, j, n, voisinIndex: Integer;
 begin
     SetLength(listeAdjacence, Length(europe));
     for i := 0 to length(europe) - 1 do
     begin
-        SetLength(listeAdjacence[i], Length(europe[i].nomFrontieres));
+        SetLength(listeAdjacence[i], 0);
         for j := 0 to length(europe[i].nomFrontieres) - 1 do
         begin
-            // writeln('nom frontiere : ', europe[i].nomFrontieres[j]);
             voisinIndex := trouverIndexPays(europe[i].nomFrontieres[j], europe);
             if voisinIndex <> -1 then
             begin
-                listeAdjacence[i][j].voisin := voisinIndex;
-                listeAdjacence[i][j].distance := 1;
+                n := length(listeAdjacence[i]);
+                SetLength(listeAdjacence[i], n + 1);
+                listeAdjacence[i][n].voisin := voisinIndex;
+                listeAdjacence[i][n].distance := 1;
             end;
         end;
     end;
