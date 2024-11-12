@@ -1,14 +1,13 @@
 program main;
-uses voyageTypes,chargerDonnees,ChoixCriteres,genererVoyage,afficherVoyage;
+
+uses voyageTypes, chargerDonnees, choixCriteres, genererVoyage, afficherVoyage;
 
 var europe: TEurope;
 var criteres: TCriteres;
 var voyage: TVoyage;
 begin
     europe:=chargerEurope();
-    WriteLn('test');
     demanderCriteres(criteres,europe);
-    generer(criteres,europe);
-    WriteLn('test');
+    voyage := generer(criteres,europe);
     afficher(voyage,criteres);
 end.
