@@ -56,6 +56,12 @@ type TVoyage = record
     message: String;
 end;
 
+type TItineraireResult = record
+    itineraire: Array of TPays;
+    erreur: Boolean;
+    message: String;
+end;
+
 // Chargement des données
 type TFilePays = record
     nom: String;

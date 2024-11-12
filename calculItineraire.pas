@@ -1,37 +1,74 @@
 unit calculItineraire;
 
 interface
-uses voyageTypes, dijkstra;
+uses voyageTypes, dijkstra, utils;
 
 function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
-function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays): TEurope;
+function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays): TItineraireResult;
 
 implementation
 
-function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays): TEurope;
+function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays): TItineraireResult;
 var adjacence: TAdjacenceListe;
 var chemin: TNoeudList;
 var distance: TDistance;
 var i, indexPays: Integer;
 var noeudDepart, noeudFin: Integer;
 var cheminPays: TEurope;
+var resultat: TItineraireResult;
 begin
+    setlength(resultat.itineraire, 0);
+    resultat.erreur := true;
+
     adjacence := convertirEuropeAdjacence(paysValables);
+    if length(adjacence) < 2 then
+    begin
+        resultat.message := 'Pas assez d''adjacences n''ont été générées.';
+        exit;
+    end;
+
     noeudDepart := trouverIndexPays(paysDepart.nom, paysValables);
+    if noeudDepart = -1 then
+    begin
+        resultat.message := 'Impossible de trouver le pays de départ "' + paysDepart.nom + '".';
+        exit;
+    end;
+
     noeudFin := trouverIndexPays(paysArrivee.nom, paysValables);
+    if noeudFin = -1 then
+    begin
+        resultat.message := 'Impossible de trouver le pays d''arrivée "' + paysArrivee.nom + '".';
+        exit;
+    end;
+
     // writeln('length(adjacence):',length(adjacence),'noeudDepart:',noeudDepart,'noeudFin:',noeudFin);
-    shortestPath(adjacence, length(adjacence), noeudDepart, noeudFin, chemin, distance);
+    shortestPath(adjacence, length(adjacence), noeudFin, noeudDepart, chemin, distance);
+
+    if distance <= 0 then
+    begin
+        resultat.message := 'Dijkstra a renvoyé une distance invalide.';
+        exit;
+    end;
+
+    if (distance = INFINITY) or (length(chemin) = 0) then
+    begin
+        resultat.message := 'Aucun chemin n''a été trouvé entre "' + paysDepart.nom + '" et "' + paysArrivee.nom + '".';
+        exit;
+    end;
 
     setlength(cheminPays, length(chemin));
     for i := 0 to length(chemin) - 1 do
     begin
-        // destructuration obligatoire
+        // TODO: expliquer destructuration obligatoire 
         indexPays := chemin[i];
         cheminPays[i] := paysValables[indexPays];
     end;
+
+    resultat.erreur := false;
+    resultat.itineraire := cheminPays;
     
-    calculerItineraire := cheminPays;
+    calculerItineraire := resultat;
 end;
 
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
