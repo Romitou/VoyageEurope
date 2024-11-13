@@ -106,6 +106,7 @@ begin
     deserialiserPays.code := split[2];
     deserialiserPays.codeFrontieres := splitString(split[3], ',');
     latlngString := splitString(split[5], ',');
+    DecimalSeparator := '.';
     deserialiserPays.latitude := StrToFloat(latlngString[0]);
     deserialiserPays.longitude := StrToFloat(latlngString[1]);
 end;
@@ -118,6 +119,7 @@ begin
     split := splitStringQuotes(valeur, ',');
     deserialiserActivite.nom := split[0];
     deserialiserActivite.pays := split[1];
+    DecimalSeparator := '.';
     deserialiserActivite.cout := StrToFloat(split[3]);
     categories := splitString(split[5], ',');
     setlength(deserialiserActivite.categories, length(categories));
