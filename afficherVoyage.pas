@@ -46,7 +46,7 @@ procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
 begin
     writeln('Détails du voyage');
     writeln();
-    writeln('La durée du séjour est de ',length(voyage.itineraire),' jours.');
+    writeln('La durée du séjour est de ',length(voyage.itineraire)-1,' jours.');
     writeln();
     writeln('Le coût total est de ',voyage.coutTotal,'.');
     writeln();
