@@ -5,7 +5,8 @@ uses voyageTypes;
 
 function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
 function scoreClimat(climat:Real;unPays:Tpays;periode:TMois):Real;
-function scoreActivitePays(pays:TPays;pref:Array of TPref;nbActParJour:Integer):Real;
+procedure scoreActivitePays(pays:TPays;pref:Array of TPref;nbActParJour:Integer);
+procedure paysVisites(inputPays: TEurope);
 
 implementation
 
@@ -36,12 +37,13 @@ begin
         scoreClimat:=1-Abs(climat-unPays.climat[periode])/climat;
 end;
 
-function scoreActivitePays(pays: TPays; pref: Array of TPref; nbActParJour: Integer): Real;
-var i,j,k,minIndex: Integer;
+procedure scoreActivitePays(pays: TPays; pref: Array of TPref; nbActParJour: Integer);
+var
 score: Array of Real;
 tabIndice: Array of Integer;
 trouve: Boolean;
 somme, scoreMin: Real;
+i,j,k,minIndex:Integer;
 begin
     //initialisation du tableau pour stocker les meilleurs scores (pas de score négatif, donc 0 est la plus petite valeur)
     setlength(score,nbActParJour);
@@ -95,9 +97,15 @@ begin
     for i := 0 to nbActParJour - 1 do
         somme := somme + score[i];
 
-    scoreActivitePays := somme / nbActParJour;
+    pays.score := somme / nbActParJour;
 end;
 
-
+procedure paysVisites(inputPays: TEurope);
+var
+    i: Integer;
+begin
+    for i := 1 to length(inputPays) - 2 do
+        inputPays[i].score:=inputPays[i].score/2;
+end;
 
 end.
