@@ -4,9 +4,10 @@ interface
 uses voyageTypes;
 
 function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
-function scoreClimat(climat:Real;unPays:Tpays;periode:TMois):Real;
-procedure scoreActivitePays(pays:TPays;pref:Array of TPref;nbActParJour:Integer);
-procedure paysVisites(inputPays: TEurope);
+procedure scoreClimat(climat:Real;unPays:Tpays;periode:TMois;coeff:Real);
+procedure scoreActivitePays(var pays:TPays;pref:Array of TPref;nbActParJour:Integer);
+procedure paysVisites(inputPays: TEurope;coeff:Real);
+function poidsChemin(pays1:TPays;pays2:TPays):Real;
 
 implementation
 
@@ -29,26 +30,31 @@ begin
     scoreActivite:=nbPrefVerifiee/length(pref);
 end;
 
-function scoreClimat(climat:Real;unPays:Tpays;periode:TMois):Real;
+{à appeler apres avoir calculé le score des pays en fonction des activités (scoreActivitePays)
+pour pouvoir ensuite faire une
+moyenne pondérée avec le coeff pour le score du climat et 1 pour le score du pays}
+procedure scoreClimat(climat:Real;unPays:Tpays;periode:TMois;coeff:Real);
+var scoreClim:Real;
 begin
     if unPays.climat[periode]>=climat then
-        scoreClimat:=1
+        scoreClim:=1
     else
-        scoreClimat:=1-Abs(climat-unPays.climat[periode])/climat;
+        scoreClim:=1-Abs(climat-unPays.climat[periode])/climat;
+    unPays.score:=(unPays.score+scoreClim*coeff)/(1+coeff);
 end;
 
-procedure scoreActivitePays(pays: TPays; pref: Array of TPref; nbActParJour: Integer);
+procedure scoreActivitePays(var pays:TPays; pref:Array of TPref; nbActParJour:Integer);
 var
-score: Array of Real;
+tabScore: Array of Real;
 tabIndice: Array of Integer;
 trouve: Boolean;
 somme, scoreMin: Real;
 i,j,k,minIndex:Integer;
 begin
     //initialisation du tableau pour stocker les meilleurs scores (pas de score négatif, donc 0 est la plus petite valeur)
-    setlength(score,nbActParJour);
+    setlength(tabScore,nbActParJour);
     for i:=0 to nbActParJour-1 do
-        score[i]:=0;
+        tabScore[i]:=0;
 
     //initialisation du tableau pour stocker les indices des meilleures activités (-1 pour dire qu'il n'y a pas encore d'indice)
     setlength(tabIndice,nbActParJour);
@@ -60,13 +66,13 @@ begin
         for j:=0 to length(pays.activites)-1 do
         begin
             //recherche de la position du plus petit score dans le tableau score, qui sera remplacée par un meilleur score
-            scoreMin:=score[0];
+            scoreMin:=tabScore[0];
             minIndex:=0;
             for i:=1 to nbActParJour-1 do
             begin
-                if score[i] < scoreMin then
+                if tabScore[i] < scoreMin then
                 begin
-                    scoreMin:=score[i];
+                    scoreMin:=tabScore[i];
                     minIndex:=i;
                 end;
             end;
@@ -80,32 +86,48 @@ begin
                         trouve:=True;
                 if not(trouve) then
                 begin
-                    score[minIndex]:=scoreActivite(pays.activites[j], pref);
+                    tabScore[minIndex]:=scoreActivite(pays.activites[j], pref);
                     tabIndice[minIndex]:=j;
                 end;
             end;
         end;
     end
     else
-        //cas où il y a moins d'activités que nbActParJour
+        //cas où il y a moins d'activités que nbActParJour, c'est moyen et pas utile en pratique donc probablement à enlever
         for i := 0 to length(pays.activites) - 1 do
-            score[i] := scoreActivite(pays.activites[i], pref);
+            tabScore[i] := scoreActivite(pays.activites[i], pref);
 
 
     //calcul de la moyenne des meilleurs scores
     somme := 0;
     for i := 0 to nbActParJour - 1 do
-        somme := somme + score[i];
+        somme := somme + tabScore[i];
 
-    pays.score := somme / nbActParJour;
+    pays.score:=somme/nbActParJour;
+    writeln('test',pays.score);
 end;
 
-procedure paysVisites(inputPays: TEurope);
+procedure paysVisites(inputPays: TEurope;coeff:Real);
 var
     i: Integer;
 begin
+    {ces indices de i sont valables dans le cas où on met en entrée l'itinéraire de l'allé 
+    (pas de modif des scores des pays de départ et d'arrivée)
+    (même si en soit c'est pas important comme l'algo cherche à aller dans ces pays 
+    donc le score du dernier chemin n'est pas important)
+    a voir si ca change qqchose pour la fonction math pour déterminer le poids des chemin}
     for i := 1 to length(inputPays) - 2 do
-        inputPays[i].score:=inputPays[i].score/2;
+        inputPays[i].score:=inputPays[i].score/coeff;
 end;
+
+{à appeler logiquement après avoir calculé les scores des pays (donc scoreActPays puis scoreClimat )
+pour l'instant, on prend la moyenne comme fonction, mais quand on changera de fonction math, poidsChemin aura plus d'intérêt}
+function poidsChemin(pays1:TPays;pays2:TPays):Real;
+var poids:Real;
+begin
+    poids:=(pays1.score+pays2.score)/2;
+    poidsChemin:=poids;
+end;
+
 
 end.

@@ -1,6 +1,6 @@
 program main;
 
-uses voyageTypes, chargerDonnees, choixCriteres, triDesPays, afficherVoyage;
+uses voyageTypes, chargerDonnees, choixCriteres, triDesPays, afficherVoyage,score;
 
 var europe, paysVal, itineraire: TEurope;
     criteres: TCriteres;
@@ -124,10 +124,10 @@ europe[2].climat[Novembre] := 13;
 europe[2].climat[Decembre] := 10;
 
 //Critères
-setlength(criteres.categorie,3);
-criteres.categorie[0]:=Histoire;
-criteres.categorie[1]:=Culture;
-criteres.categorie[3]:=Aventure;
+setlength(criteres.categories,3);
+criteres.categories[0]:=Histoire;
+criteres.categories[1]:=Culture;
+criteres.categories[3]:=Aventure;
 criteres.periode:=Octobre;
 criteres.climat:=10;  
 criteres.duree:=1;  
@@ -170,9 +170,17 @@ for i:=0 to length(suppressionPaysVisite(paysVal,itineraire))-1 do
     end;
 
 writeln(scoreClimat(criteres.climat,europe[0],criteres.periode));
-writeln(scoreActivite(europe[0].activites[0],criteres.categorie));
-writeln(scoreActivite(europe[0].activites[1],criteres.categorie));
-writeln(scoreActivite(europe[0].activites[2],criteres.categorie));
 writeln(scoreActivitePays(europe[0],criteres.categorie,2));}
+
+
+writeln(scoreActivite(europe[0].activites[0],criteres.categories));
+writeln(scoreActivite(europe[0].activites[1],criteres.categories));
+writeln(scoreActivite(europe[0].activites[2],criteres.categories));
+
+
+europe[0].score:=1.2;
+scoreActivitePays(europe[0],criteres.categories,2);
+
+writeln(europe[0].score);
 
 end.
