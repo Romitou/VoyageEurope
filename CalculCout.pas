@@ -28,7 +28,6 @@ begin
     distance:=distance+j;
   end;
   voyage.kmTotal:=distance;
-  writeln('La distance total du voyage est de :', voyage.kmTotal);
 end;
 
 procedure coutTotal(var voyage: TVoyage);
@@ -44,7 +43,6 @@ begin
       end; 
   end; 
   voyage.coutTotal:=cout;
-  writeln('Le cout total du voyage est de :', voyage.coutTotal)
 end;
 
 end.
