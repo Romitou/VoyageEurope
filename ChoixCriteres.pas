@@ -14,6 +14,7 @@ procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 implementation
 
 procedure choixPays(var choix: TCriteres; listePays: TEurope);
+// Sélection de pays de départ et de la destination du voyage  
 var depart, arrivee: String; 
 var trouve: Boolean;
 begin 
@@ -32,6 +33,7 @@ begin
 end;
 
 procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
+// Permet au programme de se référer à la base de données, afin d'associer la réponse de l'utilisateur à un pays si celle-ci est correte
 var i: Integer;
 begin
     trouve := false;
