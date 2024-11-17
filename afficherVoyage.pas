@@ -44,13 +44,13 @@ end;
 
 procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
 begin
-    writeln('Détails du voyage');
+    writeln('Détails du voyage :');
     writeln();
     writeln('La durée du séjour est de ',length(voyage.itineraire)-1,' jours.');
     writeln();
-    writeln('Le coût total est de ',voyage.coutTotal,'.');
+    writeln('Le coût total est de ',voyage.coutTotal:5:0,' euros.');
     writeln();
-    writeln('Vous aller parcourir une distance de ',voyage.kmTotal, 'en train à travers toute l''Europe, destination ',criteres.paysArrivee.nom);
+    writeln('Vous aller parcourir une distance de ',voyage.kmTotal:5:1, 'km en train à travers l''Europe, destination ',criteres.paysArrivee.nom);
     writeln();
 end;
 
