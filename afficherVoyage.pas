@@ -26,14 +26,19 @@ begin
                 writeln('Jour ',jour+1,' :');
 
                 if jour=0 then
-                    writeln('= Journée sur votre pays de départ :',voyage.itineraire[jour].nom,'')
+                  begin
+                     writeln('= Journée sur votre pays de départ :',voyage.itineraire[jour].nom,'');  
+                     writeln('= Arrivée en ',voyage.itineraire[jour].nom,' (',voyage.itineraire[jour].capitale,').');
+                  end
                 else if jour=length(voyage.itineraire)-1 then
                     writeln('= Dernière journée sur votre pays de départ',voyage.itineraire[jour].nom,'.')
                 else
-                    writeln('= Voyage en tain depuis ',voyage.itineraire[i-1].capitale,' jusqu''à ',voyage.itineraire[i].capitale,'.');
-                writeln('= Arrivée en ',voyage.itineraire[jour].nom,' (',voyage.itineraire[jour].capitale,').');
-
-                afficherUneEtape(voyage.planning[i]);
+                  begin
+                    writeln('= Voyage en train depuis ',voyage.itineraire[i-2].capitale,' jusqu''à ',voyage.itineraire[i-1].capitale,'.');
+                    writeln('= Arrivée en ',voyage.itineraire[jour].nom,' (',voyage.itineraire[jour].capitale,').');
+                  end;
+             
+                afficherUneEtape(voyage.planning[i-1]);
 
                 end;
 
