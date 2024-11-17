@@ -48,7 +48,7 @@ begin
     // ** Génération itinéraire retour **
     //
     writeln('Calcul de l''itinéraire retour...');
-    retour:=calculerItineraire(listePaysValables, criteres.paysDepart, criteres.paysArrivee);
+    retour:=calculerItineraire(listePaysValables, criteres.paysArrivee, criteres.paysDepart);
     if retour.erreur then
     begin
         voyage.erreur := true;
