@@ -1,34 +1,35 @@
 unit triDesPays;
 
 interface
-uses voyageTypes, calculItineraire;
-
-// TODO: est-ce que tout est utilisé / exporté ?
-// Retirer les fonctions inutilisées à la fin
-
+uses voyageTypes;
 //tri des pays
 function filtrerPays(criteres: TCriteres; europe: TEurope): TEurope;
 function matchActivite(pays:Tpays;pref:Array of TPref):Boolean;
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
 function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
 //generer voyage
-function genererActivitePays(itineraire: TEurope; criteres: TCriteres): TEtapes;
+function genererActivitePays(itineraire:TEurope;criteres:TCriteres):Tvoyage;
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
-function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope): TEurope;
+function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
+//scores
+function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
+function scoreClimat(climat:Real;unPays:Tpays;periode:TMois):Real;
+function scoreActivitePays(pays:TPays;pref:Array of TPref;nbActParJour:Integer):Real;
 
 implementation
 
-function matchPreference(uneAct: TActivite; pref: Array of TPref): Boolean;
-var i,j:Integer;
+function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
+var i,j:Integer; trouve:Boolean;
 begin
-    matchPreference := false;
+    matchPreference:=True;
     for i:=0 to length(pref)-1 do
+        begin
+        trouve:=False;
         for j:=0 to length(uneAct.categories)-1 do
-            if pref[i] = uneAct.categories[j] then
-            begin
-                matchPreference := true;
-                exit;
-            end;
+            if (pref[i]=uneAct.categories[j]) and matchPreference then
+                trouve:=True;
+        matchPreference:=trouve;
+        end;
 end;
 
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
@@ -59,85 +60,109 @@ begin
     j:=0;
     for i:=0 to length(europe)-1 do
         begin
-        //if (matchClimat(criteres.climat,europe[i],criteres.periode)) and (matchActivite(europe[i],criteres.categorie)) then
+        //(matchClimat(criteres.climat,europe[i],criteres.periode)) and
         if (matchActivite(europe[i],criteres.categories)) then
             begin
                 setlength(paysVal,length(paysVal)+1);
                 paysVal[j]:=europe[i];
                 j:=j+1;
             end;
-            
+
         end;
     filtrerPays:=paysVal;
 end; 
 
-function genererActivitePays(itineraire: TEurope; criteres: TCriteres): TEtapes;
+function genererActivitePays(itineraire:TEurope;criteres:TCriteres):Tvoyage;
 var jour,i,nbAct,nbActParJour: Integer;
-var etapes: TEtapes;
+var voyage: TVoyage;
 begin
-    nbActParJour := 2;
-    setlength(etapes, length(itineraire));
+    nbActParJour:=2;
+
+    setlength(voyage.planning,length(itineraire));
+    voyage.itineraire:=itineraire;
     
-    for jour := 0 to length(itineraire) - 1 do 
-    begin
-        nbAct := 0;
-        etapes[jour].jour:=jour;
-        setlength(etapes[jour].activite,nbActParJour);
+    for jour:=0 to length(itineraire)-1 do 
+        begin
+            nbAct:=0;
+            voyage.planning[jour].jour:=jour;
+            setlength(voyage.planning[jour].activite,nbActParJour);
 
-        for i:=0 to length(itineraire[jour].activites)-1 do 
-            if matchPreference(itineraire[jour].activites[i],criteres.categories) and (nbAct<2) then
-                begin
-                    etapes[jour].activite[nbAct]:= itineraire[jour].activites[i];
-                    nbAct:=nbAct+1;
-                end;
-    end;
+            for i:=0 to length(itineraire[jour].activites)-1 do 
+                if matchPreference(itineraire[jour].activites[i],criteres.categories) and (nbAct<2) then
+                    begin
+                        voyage.planning[jour].activite[nbAct]:= itineraire[jour].activites[i];
+                        nbAct:=nbAct+1;
+                    end;
+        end;
 
-    genererActivitePays := etapes;
+    genererActivitePays :=voyage;
 end;
 
-// On doit prendre en compte que certains pays ne peuvent pas être supprimés malgré le fait
-// qu'ils sont inclus dans l'itinéraire aller. En effet, on doit s'assurer que l'algorithme
-// de Dijkstra continue à fonctionner et trouver une solution à la suppression de chaque
-// pays. Exemple : trajet France - Portugal => l'Espagne ne doit pas être supprimé !
-function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope): TEurope;
-var
-    i, j, k: Integer;
-    paysValides, tmpValides: TEurope;
+function suppressionPaysVisite(paysValables:TEurope;itineraire:TEurope):TEurope;
+var i,j,k:Integer;
+tab:TEurope;
+trouve:Boolean;
 begin
-    paysValides := inputPays;
+    k:=0;
+    setlength(tab,1);
 
-    for i := 0 to length(inputPays) - 1 do
-    begin
-        for j := 1 to length(itineraire) - 2 do
+    for i:=0 to length(paysValables)-1 do
         begin
-            if paysValides[i].nom = itineraire[j].nom then
+        trouve:=False;
+        for j:=0 to length(itineraire)-1 do
+            //not(j=length(itineraire)-1) and not(j=0) and
+            if  (paysValables[i].nom=itineraire[j].nom) then
+                trouve:=True;
+
+        if not(trouve) then
             begin
-                setlength(tmpValides, 0);
-                for k := 0 to length(paysValides) - 1 do
-                begin
-                    if paysValides[k].nom <> paysValides[i].nom then
-                    begin
-                        setlength(tmpValides, length(tmpValides) + 1);
-                        tmpValides[length(tmpValides) - 1] := paysValides[k];
-                    end;
-                end;
-                
-                if not calculerItineraire(tmpValides, itineraire[0], itineraire[length(itineraire) - 1]).erreur then
-                begin
-                    paysValides := tmpValides;
-                end;
-
-                Break;
+            tab[k]:=paysValables[i];
+            k:=k+1;
+            setlength(tab,k); 
             end;
-        end;
-    end;
 
-    suppressionPaysVisite := paysValides;
+        end;
+    suppressionPaysVisite:=tab;
 end;
 
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
 begin
-    verifDuree:=length(itineraire)<=criteres.duree;
+    verifDuree:=length(itineraire)>=criteres.duree;
+end;
+
+function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
+var i,j,nbPrefVerifiee:Integer;
+begin
+    nbPrefVerifiee:=0;
+    for i:=0 to length(pref)-1 do
+        for j:=0 to length(activite.categories)-1 do
+            if (pref[i]=activite.categories[j])  then
+                nbPrefVerifiee:=nbPrefVerifiee+1;
+    scoreActivite:=nbPrefVerifiee/length(pref);
+end;
+
+function scoreClimat(climat:Real;unPays:Tpays;periode:TMois):Real;
+begin
+    if unPays.climat[periode]>=climat then
+        scoreClimat:=1
+    else
+        scoreClimat:=1-Abs(climat-unPays.climat[periode])/climat;
+end;
+
+function scoreActivitePays(pays:TPays;pref:Array of TPref;nbActParJour:Integer):Real;
+var i,j:Integer;
+score:Array of Real;
+begin
+    setlength(score,nbActParJour);
+    if length(pays.activites)>nbActParJour then
+        begin    
+            for j:=0 to nbActParJour-1 do
+
+                for i:=0 to length(pays.activites)-1 do
+                //repeter nbactjour fois uhe recherche de max parmi tous les scores de toutes les activités, et en vérifiant à chaque fois que ca n'est pas une activité déjà choisie
+        end
+    else    
+
 end;
 
 end.
