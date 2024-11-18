@@ -43,7 +43,7 @@ europe[0].climat[Juin]:=15;
 europe[0].climat[Juillet]:=17;
 europe[0].climat[Aout]:=18;
 europe[0].climat[Septembre]:=13;
-europe[0].climat[Octobre]:=10;
+europe[0].climat[Octobre]:=19;
 europe[0].climat[Novembre]:=8;
 europe[0].climat[Decembre]:=5;
 
@@ -178,9 +178,10 @@ writeln(scoreActivite(europe[0].activites[1],criteres.categories));
 writeln(scoreActivite(europe[0].activites[2],criteres.categories));
 
 
-europe[0].score:=1.2;
-scoreActivitePays(europe[0],criteres.categories,2);
+writeln('climat',scoreClimat(criteres.climat,criteres.periode,europe[0]));
+writeln('act',scoreActivitePays(europe[0],criteres.categories,2));
+scorePays(1,1,criteres,2,europe[0]);
+writeln('score total',europe[0].score);
 
-writeln(europe[0].score);
 
 end.
