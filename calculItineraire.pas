@@ -1,7 +1,7 @@
 unit calculItineraire;
 
 interface
-uses voyageTypes, dijkstra, utils;
+uses voyageTypes, dijkstra, utils,score;
 
 function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
@@ -98,7 +98,9 @@ begin
                 n := length(listeAdjacence[i]);
                 SetLength(listeAdjacence[i], n + 1);
                 listeAdjacence[i][n].voisin := voisinIndex;
-                listeAdjacence[i][n].distance := 1;
+                //à mettre pour la version avec les scores
+                //listeAdjacence[i][n].distance :=round(100*poidsChemin(europe[i],europe[voisinIndex]));
+                listeAdjacence[i][n].distance :=1;
             end;
         end;
     end;
