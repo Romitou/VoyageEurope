@@ -4,9 +4,9 @@ interface
 uses voyageTypes;
 
 function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
-function scoreClimat(climat:Real;periode:TMois;unPays:Tpays):Real;
+function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
 function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer):Real;
-procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;var pays:TPays);
+procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
 procedure paysVisites(coeff:Real;var inputPays: TEurope);
 function poidsChemin(pays1:TPays;pays2:TPays):Real;
 
@@ -31,20 +31,24 @@ begin
     scoreActivite:=nbPrefVerifiee/length(pref);
 end;
 
-{à appeler apres avoir calculé le score des pays en fonction des activités (scoreActivitePays)
-pour pouvoir ensuite faire une
-moyenne pondérée avec le coeff pour le score du climat et 1 pour le score du pays}
-function scoreClimat(climat:Real;periode:TMois;unPays:Tpays):Real;
-var scoreClim:Real;
-begin
-    if unPays.climat[periode]>=climat then
-        scoreClim:=1
-    else
-        //écart relatif pour le calcul du score dans le cas où le climat ne corrspond pas
-        scoreClim:=1-Abs(climat-unPays.climat[periode])/climat;
+{On utilise une fonction parabolique de la forme f(x)=a(x-xo)²+c 
+avec c=1 et a<0 car le score diminue plus il s'éloigne de xo. 
+xo correspond à la température souhaitée soit climat ici.
+x correspond au climat du pays, donc pays.climat[periode] ici.
+a=-4/F² avec F la fourchette (la distance entre les deux racines) des valeurs qu'on veut regarder
+on trouve ca en calculant les racines du polynome}
 
-    scoreClimat:=scoreClim;
+function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
+var a:Real;
+begin
+    a:=-4/(fourchette*fourchette);
+    scoreClimat:=a*(pays.climat[periode]-climat)*(pays.climat[periode]-climat)+1;
+    //cas où la température du pays sort de la fourchette, donc quand la fonction renvoit
+    //une valeur négative
+    if scoreClimat<0 then
+        scoreClimat:=0;
 end;
+
 
 function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer):Real;
 var
@@ -122,20 +126,35 @@ begin
         inputPays[i].score:=inputPays[i].score/coeff;
 end;
 
-procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;var pays:TPays);
+procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
 begin
-    pays.score:=(scoreActivitePays(pays,criteres.categories,nbActParJour)*coeffAct+scoreClimat(criteres.climat,criteres.periode,pays)*coeffClim)/(coeffAct+coeffClim);
+    pays.score:=(scoreActivitePays(pays,criteres.categories,nbActParJour)*coeffAct+scoreClimat(criteres.climat,criteres.periode,pays,intervalleTemp)*coeffClim)/(coeffAct+coeffClim);
 end;
 
 
-{à appeler logiquement après avoir calculé les scores des pays (donc scoreActPays puis scoreClimat )
-pour l'instant, on prend la moyenne comme fonction, mais quand on changera de fonction math, poidsChemin aura plus d'intérêt}
+{pour l'instant, on prend la moyenne comme fonction, mais quand on changera de fonction math, poidsChemin aura plus d'intérêt}
 function poidsChemin(pays1:TPays;pays2:TPays):Real;
 var poids:Real;
 begin
     poids:=(pays1.score+pays2.score)/2;
     poidsChemin:=poids;
+    {idee de fonction:2xy/(x+y)
+    poids:=(pays1.score*pays2.score*2)/(pays1.score+pays2.score);
+    poidsChemin:=poids;
+    }
 end;
 
 
 end.
+
+{function scoreClimat(climat:Real;periode:TMois;unPays:Tpays):Real;
+var scoreClim:Real;
+begin
+    if unPays.climat[periode]>=climat then
+        scoreClim:=1
+    else
+        //écart relatif pour le calcul du score dans le cas où le climat ne corrspond pas
+        scoreClim:=1-Abs(climat-unPays.climat[periode])/climat;
+
+    scoreClimat:=scoreClim;
+end;}

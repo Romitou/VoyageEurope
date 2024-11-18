@@ -6,6 +6,9 @@ var europe, paysVal, itineraire: TEurope;
     criteres: TCriteres;
     voyage: TVoyage;
     i: Integer;
+    fourchette:Real;
+    nbAct:Integer;
+    numeroPays:Integer;
 
 begin
 //France
@@ -41,9 +44,9 @@ europe[0].climat[Avril]:=9;
 europe[0].climat[Mai]:=12;
 europe[0].climat[Juin]:=15;
 europe[0].climat[Juillet]:=17;
-europe[0].climat[Aout]:=18;
+europe[0].climat[Aout]:=20;
 europe[0].climat[Septembre]:=13;
-europe[0].climat[Octobre]:=19;
+europe[0].climat[Octobre]:=20;
 europe[0].climat[Novembre]:=8;
 europe[0].climat[Decembre]:=5;
 
@@ -81,7 +84,7 @@ europe[1].climat[Juin] := 17;
 europe[1].climat[Juillet] := 19;
 europe[1].climat[Aout] := 18;
 europe[1].climat[Septembre] := 14;
-europe[1].climat[Octobre] := 10;
+europe[1].climat[Octobre] := 17;
 europe[1].climat[Novembre] := 5;
 europe[1].climat[Decembre] := 2;
 
@@ -108,7 +111,7 @@ europe[2].activites[2].nom := 'Plage de Barceloneta';
 setlength(europe[2].activites[2].categories, 3);
 europe[2].activites[2].categories[0] := AventureAquatique;
 europe[2].activites[2].categories[1] := Relaxation;
-europe[2].activites[2].categories[2] := EnFamille;
+europe[2].activites[2].categories[2] := Culture;
 
 europe[2].climat[Janvier] := 10;
 europe[2].climat[Fevrier] := 11;
@@ -173,15 +176,18 @@ writeln(scoreClimat(criteres.climat,europe[0],criteres.periode));
 writeln(scoreActivitePays(europe[0],criteres.categorie,2));}
 
 
-writeln(scoreActivite(europe[0].activites[0],criteres.categories));
-writeln(scoreActivite(europe[0].activites[1],criteres.categories));
-writeln(scoreActivite(europe[0].activites[2],criteres.categories));
+fourchette:=20;
+nbAct:=3;
+numeroPays:=2;
 
+writeln(scoreActivite(europe[numeroPays].activites[0],criteres.categories));
+writeln(scoreActivite(europe[numeroPays].activites[1],criteres.categories));
+writeln(scoreActivite(europe[numeroPays].activites[2],criteres.categories));
 
-writeln('climat',scoreClimat(criteres.climat,criteres.periode,europe[0]));
-writeln('act',scoreActivitePays(europe[0],criteres.categories,2));
-scorePays(1,1,criteres,2,europe[0]);
-writeln('score total',europe[0].score);
+writeln('climat',scoreClimat(criteres.climat,criteres.periode,europe[numeroPays],fourchette));
+writeln('act',scoreActivitePays(europe[numeroPays],criteres.categories,nbAct));
+scorePays(1,1,criteres,nbAct,fourchette,europe[numeroPays]);
+writeln('score total',europe[numeroPays].score);
 
 
 end.
