@@ -71,6 +71,7 @@ begin
     begin
         voyage.erreur := true;
         voyage.message := 'Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.';
+        writeln(voyage.message);
         exit;
     end;
     voyage.planning := genererActivitePays(voyage.itineraire, criteres);
