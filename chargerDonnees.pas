@@ -105,6 +105,7 @@ begin
     deserialiserPays.capitale := split[1];
     deserialiserPays.code := split[2];
     deserialiserPays.codeFrontieres := splitString(split[3], ',');
+    deserialiserPays.climatString := splitString(split[6], ',');
     latlngString := splitString(split[5], ',');
     DecimalSeparator := '.';
     deserialiserPays.latitude := StrToFloat(latlngString[0]);
@@ -155,7 +156,7 @@ begin
     // write('Les ', length(tempPays), ' pays suivants ont été chargés : ');
     // for i := 0 to length(tempPays) - 1 do
     //     write(tempPays[i].nom, ', ');
-    writeln();
+    // writeln();
 
     chargerPays := tempPays;
 end;
@@ -233,31 +234,35 @@ begin
         end;
 
         setlength(pays.activites, 0);
-
-        for k := 0 to length(listeActivites) - 1 do
+        for j := 0 to length(listeActivites) - 1 do
         begin
-            if listeActivites[k].pays = pays.nom then
+            if listeActivites[j].pays = pays.nom then
             begin
-                activite.nom := listeActivites[k].nom;
-                activite.categories := listeActivites[k].categories;
-                activite.cout := listeActivites[k].cout;
+                activite.nom := listeActivites[j].nom;
+                activite.categories := listeActivites[j].categories;
+                activite.cout := listeActivites[j].cout;
 
                 setlength(pays.activites, length(pays.activites) + 1);
                 pays.activites[length(pays.activites) - 1] := activite;
             end;
         end;
 
+        for j := 0 to length(listePays[i].climatString) - 1 do
+        begin
+            pays.climat[TMois(j)] := round(StrToFloat(listePays[i].climatString[j]));
+        end;
+
         europe[i] := pays;
     end;
 
-    writeln(length(europe), ' pays ont été chargés : ');
-    for i := 0 to length(europe) - 1 do
-    begin
-        writeln(europe[i].nom, ' (', length(europe[i].activites), ' activités) :');
-        for j := 0 to length(europe[i].activites) - 1 do
-            writeln('- ', europe[i].activites[j].nom);
-    end;
-    writeln();
+    // writeln(length(europe), ' pays ont été chargés : ');
+    // for i := 0 to length(europe) - 1 do
+    // begin
+    //     writeln(europe[i].nom, ' (', length(europe[i].activites), ' activités) :');
+    //     for j := 0 to length(europe[i].activites) - 1 do
+    //         writeln('- ', europe[i].activites[j].nom);
+    // end;
+    // writeln();
 
     chargerEurope := europe;
 

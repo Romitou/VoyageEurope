@@ -69,7 +69,7 @@ type TFilePays = record
     capitale: String;
     code: String;
     codeFrontieres: TStringArray;
-    climat: Array[TMois] of Integer;
+    climatString: TStringArray;
     longitude: Real;
     latitude: Real;
 end;
