@@ -14,6 +14,13 @@ implementation
 procedure afficher(voyage:TVoyage;criteres:TCriteres);
 var i:Integer;
 begin
+  if voyage.erreur then
+  begin
+    writeln('Une erreur est survenue lors de la génération de ce voyage. Consultez le message généré ci-dessous :');
+    writeln(voyage.message);
+    exit
+  end;
+
       afficherInfos(voyage,criteres);
 
       for i:=0 to length(voyage.planning)-2 do
