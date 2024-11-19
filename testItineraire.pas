@@ -45,7 +45,7 @@ begin
         if listePays[i].nom = nom then
         begin
             trouverPays := @listePays[i];
-            exit;
+            exit(trouverPays);
         end;
 end;
 

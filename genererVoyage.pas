@@ -32,7 +32,7 @@ begin
     begin
         voyage.erreur := true;
         voyage.message := 'Une erreur est survenue lors de la génération de l''itinéraire : ' + aller.message;
-        exit;
+        exit(voyage);
     end;
 
     writeln('Itinéraire aller généré :');
@@ -55,7 +55,7 @@ begin
     begin
         voyage.erreur := true;
         voyage.message := 'Une erreur est survenue lors de la génération de l''itinéraire : ' + retour.message;
-        exit;
+        exit(voyage);
     end;
 
     writeln('Itinéraire retour généré :');
@@ -73,7 +73,7 @@ begin
     begin
         voyage.erreur := true;
         voyage.message := 'Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.';
-        exit;
+        exit(voyage);
     end;
     voyage.planning := genererActivitePays(voyage.itineraire, criteres);
     calculDistanceTotal(voyage);

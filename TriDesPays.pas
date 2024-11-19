@@ -27,7 +27,7 @@ begin
             if pref[i] = uneAct.categories[j] then
             begin
                 matchPreference := true;
-                exit;
+                exit(matchPreference);
             end;
 end;
 
