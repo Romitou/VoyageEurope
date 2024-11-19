@@ -105,7 +105,7 @@ begin
     deserialiserPays.capitale := split[1];
     deserialiserPays.code := split[2];
     deserialiserPays.codeFrontieres := splitString(split[3], ',');
-    latlngString := splitString(split[5], ',');
+    latlngString := splitString(split[6], ',');
     DecimalSeparator := '.';
     deserialiserPays.latitude := StrToFloat(latlngString[0]);
     deserialiserPays.longitude := StrToFloat(latlngString[1]);
@@ -181,6 +181,7 @@ begin
             begin
                 setlength(tempActivites, length(tempActivites) + 1);
                 tempActivites[length(tempActivites) - 1] := deserialiserActivite(ligne);
+                writeln(tempActivites[length(tempActivites) - 1].nom);
             end;
             i := i + 1;
             ligne := '';
@@ -206,8 +207,11 @@ var listePays: TArrayFilePays;
     europe: TEurope;
     i, j, k: Integer;
 begin
+    writeln('test');
     listePays := chargerPays();
+    writeln('test');
     listeActivites := chargerActivites();
+    writeln('test');
 
     setlength(europe, length(listePays));
 
