@@ -91,16 +91,20 @@ begin
 end;
 
 procedure choixPeriode(var choix: TCriteres);
-// var mois: TMois;
-// var i: Integer;
+var mois: TMois;
+var indexChoix: Integer;
+var i: Integer;
 begin
-  // writeln('Le climat du pays principal de votre voyage est le suivant :');
-  // for i:=1 to length(choix.paysArrivee.climat) do
-  //   writeln(TMois(i), ' : ', choix.paysArrivee.climat[TMois(i)], '°C');
-  // writeln(' ');
-  // writeln('Au vu de ces températures, durant quel mois de l''année souhaitez-vous effectuer votre voyage ?');
-  // readln(mois);
-  // choix.periode:=mois;
+  indexChoix := 0;
+  writeln('Le climat du pays principal de votre voyage est le suivant :');
+  for i:=0 to length(choix.paysArrivee.climat) - 1 do
+    writeln('[', i, '] ', TMois(i), ' : ', choix.paysArrivee.climat[TMois(i)], '°C');
+  writeln(' ');
+  repeat
+    writeln('Au vu de ces températures, durant quel mois de l''année souhaitez-vous effectuer votre voyage ?');
+    readln(indexChoix);
+  until ((indexChoix >= 0) and (indexChoix <= 11));
+  choix.periode:=TMois(indexChoix);
 end;
 
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
@@ -108,7 +112,7 @@ begin
   choixPays(choix, listePays);
   choixPreferences(choix);
   choixDuree(choix);
-  // choixPeriode(choix);
+  choixPeriode(choix);
 end;
 
 end.
