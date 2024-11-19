@@ -25,36 +25,36 @@ begin
     if length(adjacence) < 2 then
     begin
         resultat.message := 'Pas assez d''adjacences n''ont été générées.';
-        exit;
+        exit(resultat);
     end;
 
     noeudDepart := trouverIndexPays(paysDepart.nom, paysValables);
     if noeudDepart = -1 then
     begin
         resultat.message := 'Impossible de trouver le pays de départ "' + paysDepart.nom + '".';
-        exit;
+        exit(resultat);
     end;
 
     noeudFin := trouverIndexPays(paysArrivee.nom, paysValables);
     if noeudFin = -1 then
     begin
         resultat.message := 'Impossible de trouver le pays d''arrivée "' + paysArrivee.nom + '".';
-        exit;
+        exit(resultat);
     end;
 
-    // writeln('length(adjacence):',length(adjacence),'noeudDepart:',noeudDepart,'noeudFin:',noeudFin);
+    writeln('length(adjacence):',length(adjacence),'noeudDepart:',noeudDepart,'noeudFin:',noeudFin);
     shortestPath(adjacence, length(adjacence), noeudFin, noeudDepart, chemin, distance);
 
     if distance <= 0 then
     begin
         resultat.message := 'Dijkstra a renvoyé une distance invalide.';
-        exit;
+        exit(resultat);
     end;
 
     if (distance = INFINITY) or (length(chemin) = 0) then
     begin
         resultat.message := 'Aucun chemin n''a été trouvé entre "' + paysDepart.nom + '" et "' + paysArrivee.nom + '".';
-        exit;
+        exit(resultat);
     end;
 
     setlength(cheminPays, length(chemin));
