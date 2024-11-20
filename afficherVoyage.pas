@@ -23,38 +23,41 @@ implementation
 //   end;
 // end;
 
-procedure afficher(voyage:TVoyage;criteres:TCriteres);
-var i:Integer;
+procedure afficher(voyage: TVoyage; criteres: TCriteres);
+var
+    i: Integer;
 begin
-  if voyage.erreur then
-  begin
-    writeln('Une erreur est survenue lors de la génération de ce voyage. Consultez le message généré ci-dessous :');
-    writeln(voyage.message);
-    exit
-  end;
-
-    afficherInfos(voyage,criteres);
-
-    for i:=0 to length(voyage.planning)-1 do
+    if voyage.erreur then
     begin
-      writeln('Jour ',i+1);
-      if voyage.planning[i].paysDepart.nom <> voyage.planning[i].paysEtape.nom then
-        begin 
-          writeln('= Voyage en train depuis ',voyage.planning[i].paysDepart.capitale,' jusqu''à ',voyage.planning[i].paysEtape.capitale,'.');
-          writeln('= Arrivée en ',voyage.planning[i].paysEtape.nom,' (',voyage.planning[i].paysEtape.capitale,').');
-          if i = length(voyage.planning) - 1 then
-            writeln('Fin de votre voyage !')
-          else
-            afficherUneEtape(voyage.planning[i]);
-        end 
-      else if (voyage.planning[i].paysEtape.nom=criteres.paysArrivee.nom) then
-        begin
-          writeln('= Journée sur votre pays de destination : ',voyage.planning[i].paysEtape.nom,' (',voyage.planning[i].paysEtape.capitale,').');
-          afficherUneEtape(voyage.planning[i])
-        end
-      else 
+        writeln('⚠️ Une erreur est survenue lors de la génération du voyage :');
+        writeln(voyage.message);
+        exit;
     end;
-    writeln();       
+
+    afficherInfos(voyage, criteres);
+    writeln;
+    writeln('===== PLANNING DU VOYAGE =====');
+    writeln;
+
+    for i := 0 to length(voyage.planning) - 1 do
+    begin
+        writeln('🗓️  Jour ', i + 1);
+        if voyage.planning[i].paysDepart.nom <> voyage.planning[i].paysEtape.nom then
+            writeln('   🚆 Voyage depuis ', voyage.planning[i].paysDepart.capitale, ' jusqu’à ', voyage.planning[i].paysEtape.capitale, '.');
+        writeln('   📍 Arrivée à ', voyage.planning[i].paysEtape.nom,  ' (', voyage.planning[i].paysEtape.capitale, ').');
+
+        if voyage.planning[i].paysEtape.nom = criteres.paysArrivee.nom then
+            writeln('   🌟 Journée dans le pays de destination : ', voyage.planning[i].paysEtape.nom, '.');
+
+        afficherUneEtape(voyage.planning[i]);
+
+        if i < length(voyage.planning) - 1 then
+            writeln('----------------------------------------')
+        else
+            writeln('🏁 Fin de votre voyage !');
+    end;
+
+    writeln();
 end;
 
 procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
