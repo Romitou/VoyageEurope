@@ -138,10 +138,10 @@ var poids:Real;
 begin
     poids:=(pays1.score+pays2.score)/2;
     poidsChemin:=poids;
-    {idee de fonction:2xy/(x+y)
-    poids:=(pays1.score*pays2.score*2)/(pays1.score+pays2.score);
-    poidsChemin:=poids;
-    }
+    //idee de fonction:2xy/(x+y)
+    //poids:=(pays1.score*pays2.score*2)/(pays1.score+pays2.score);
+    //poidsChemin:=poids;
+    
 end;
 
 

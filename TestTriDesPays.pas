@@ -130,7 +130,7 @@ europe[2].climat[Decembre] := 10;
 setlength(criteres.categories,3);
 criteres.categories[0]:=Histoire;
 criteres.categories[1]:=Culture;
-criteres.categories[3]:=Aventure;
+criteres.categories[2]:=Aventure;
 criteres.periode:=Octobre;
 criteres.climat:=10;  
 criteres.duree:=1;  
