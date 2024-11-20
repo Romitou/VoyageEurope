@@ -8,6 +8,7 @@ procedure choixPreferences(var choix: TCriteres);
 procedure choixDuree(var choix: TCriteres);
 procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
 procedure choixPeriode(var choix: TCriteres);
+procedure choixBudget(var choix: TCriteres);
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 
 
@@ -91,7 +92,6 @@ begin
 end;
 
 procedure choixPeriode(var choix: TCriteres);
-var mois: TMois;
 var indexChoix: Integer;
 var i: Integer;
 begin
@@ -101,10 +101,18 @@ begin
     writeln('[', i, '] ', TMois(i), ' : ', choix.paysArrivee.climat[TMois(i)], '°C');
   writeln(' ');
   repeat
-    writeln('Au vu de ces températures, durant quel mois de l''année souhaitez-vous effectuer votre voyage ?');
+    writeln('Au vu de ces températures, durant quel mois de l''année souhaitez-vous effectuer votre voyage ? (Vueillez entrer le numéro du mois)');
     readln(indexChoix);
   until ((indexChoix >= 0) and (indexChoix <= 11));
   choix.periode:=TMois(indexChoix);
+end;
+
+procedure choixBudget(var choix: TCriteres);
+var coutLimite: Integer;
+begin
+  writeln('Quel est le coût maximal que souhatez fixer pour votre voyage ?');
+  readln(coutLimite);
+  choix.budget:=coutLimite;
 end;
 
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
@@ -113,6 +121,7 @@ begin
   choixPreferences(choix);
   choixDuree(choix);
   choixPeriode(choix);
+  choixBudget(choix);
 end;
 
 end.

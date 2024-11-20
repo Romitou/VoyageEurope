@@ -38,6 +38,7 @@ type TCriteres = record
     duree: Integer;
     periode: TMois;
     climat: Real;
+    budget: Real;
 end;
 
 type TEtape = record

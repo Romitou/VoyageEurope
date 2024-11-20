@@ -57,6 +57,8 @@ begin
     writeln();
     writeln('Vous aller parcourir une distance de ',voyage.kmTotal:5:1, 'km en train à travers l''Europe, depuis ',criteres.paysDepart.nom,' destination ',criteres.paysArrivee.nom, '.');
     writeln();
+    if (voyage.coutTotal>criteres.budget) then
+    writeln('ATTENTION : Le coût du voyage proposé ci-dessous est supérieur de ', voyage.coutTotal-criteres.budget:5:0, ' euros au coût maximal que vous avez renseigné.');
 end;
 
 
