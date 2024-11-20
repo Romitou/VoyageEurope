@@ -43,6 +43,7 @@ end;
 type TEtape = record
     jour: Integer;
     activite: Array of TActivite;
+    paysDepart: TPays;
     paysEtape: TPays;
 end;
 

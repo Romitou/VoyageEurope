@@ -72,26 +72,38 @@ begin
 end; 
 
 function genererActivitePays(itineraire: TEurope; criteres: TCriteres): TEtapes;
-var j,i,nbAct,nbActParJour: Integer;
-var etapes: TEtapes;
+var
+    j, jour, nbAct, i: Integer;
+    etapes: TEtapes;
 begin
-    nbActParJour := 2;
-    setlength(etapes, length(itineraire)); // au maximum length(itineraire) étapes
-    
-    for j := 0 to length(itineraire) - 1 do 
-    begin
-        nbAct := 0;
-        etapes[j].jour:=j;
-        etapes[j].paysEtape:=itineraire[j];
-        setlength(etapes[j].activite,nbActParJour);
+    jour := 0;
+    setlength(etapes, 0);
 
-        for i:=0 to length(itineraire[j].activites)-1 do 
-            if matchPreference(itineraire[j].activites[i],criteres.categories) and (nbAct<2) then
-                begin
-                    etapes[j].activite[nbAct]:= itineraire[j].activites[i];
-                    nbAct:=nbAct+1;
-                    
-                end;           
+    for j := 1 to length(itineraire) - 1 do
+    begin
+        // Si on souhaite éviter les doublons (si besoin dans un cas futur)
+        // if (j < length(itineraire) - 1) and (itineraire[j].nom = itineraire[j + 1].nom) then
+        //     continue;
+
+        setlength(etapes, length(etapes) + 1);
+        etapes[jour].jour := jour;
+
+        etapes[jour].paysDepart := itineraire[j - 1];
+        etapes[jour].paysEtape := itineraire[j];
+
+        setlength(etapes[jour].activite, 2);
+
+        nbAct := 0;
+        for i := 0 to length(itineraire[j].activites) - 1 do
+        begin
+            if matchPreference(itineraire[j].activites[i], criteres.categories) and (nbAct < 2) then
+            begin
+                etapes[jour].activite[nbAct] := itineraire[j].activites[i];
+                nbAct := nbAct + 1;
+            end;
+        end;
+
+        jour := jour + 1;
     end;
 
     genererActivitePays := etapes;

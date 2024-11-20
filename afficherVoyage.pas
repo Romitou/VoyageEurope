@@ -10,6 +10,18 @@ procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
 
 implementation
 
+// procedure debug(etapes: TEtapes);
+// var i,j:Integer;
+// begin
+//   for i := 0 to length(etapes) - 1 do
+//   begin
+//     writeln('Jour ', etapes[i].jour, ' :');
+//     for j := 0 to length(etapes[i].activite) - 1 do
+//     begin
+//       writeln(' - ', etapes[i].activite[j].nom);
+//     end;
+//   end;
+// end;
 
 procedure afficher(voyage:TVoyage;criteres:TCriteres);
 var i:Integer;
@@ -21,30 +33,28 @@ begin
     exit
   end;
 
-      afficherInfos(voyage,criteres);
+    afficherInfos(voyage,criteres);
 
-      for i:=0 to length(voyage.planning)-2 do
-      begin
-        writeln('Jour ',i+1,' :');
-        if (voyage.planning[i].paysEtape.nom=criteres.paysArrivee.nom) and (voyage.planning[i+1].paysEtape.nom=criteres.paysArrivee.nom)  then
-          begin
-            writeln('= Journée sur votre pays de destination : ',voyage.planning[i].paysEtape.nom,' (',voyage.planning[i].paysEtape.capitale,').');
-            afficherUneEtape(voyage.planning[i])
-          end
-        else if i=length(voyage.planning)-2 then
-          begin
-            writeln('= Voyage en train depuis ',voyage.planning[i].paysEtape.capitale,' jusqu''à ',voyage.planning[i+1].paysEtape.capitale,'.');
-            writeln('= Arrivée en ',voyage.planning[i+1].paysEtape.nom,' (',voyage.planning[i+1].paysEtape.capitale,').');
+    for i:=0 to length(voyage.planning)-1 do
+    begin
+      writeln('Jour ',i+1);
+      if voyage.planning[i].paysDepart.nom <> voyage.planning[i].paysEtape.nom then
+        begin 
+          writeln('= Voyage en train depuis ',voyage.planning[i].paysDepart.capitale,' jusqu''à ',voyage.planning[i].paysEtape.capitale,'.');
+          writeln('= Arrivée en ',voyage.planning[i].paysEtape.nom,' (',voyage.planning[i].paysEtape.capitale,').');
+          if i = length(voyage.planning) - 1 then
             writeln('Fin de votre voyage !')
-          end
-        else 
-          begin 
-            writeln('= Voyage en train depuis ',voyage.planning[i].paysEtape.capitale,' jusqu''à ',voyage.planning[i+1].paysEtape.capitale,'.');
-            writeln('= Arrivée en ',voyage.planning[i+1].paysEtape.nom,' (',voyage.planning[i+1].paysEtape.capitale,').');
-            afficherUneEtape(voyage.planning[i+1]);
-          end;     
-      end;
-      writeln();       
+          else
+            afficherUneEtape(voyage.planning[i]);
+        end 
+      else if (voyage.planning[i].paysEtape.nom=criteres.paysArrivee.nom) then
+        begin
+          writeln('= Journée sur votre pays de destination : ',voyage.planning[i].paysEtape.nom,' (',voyage.planning[i].paysEtape.capitale,').');
+          afficherUneEtape(voyage.planning[i])
+        end
+      else 
+    end;
+    writeln();       
 end;
 
 procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
