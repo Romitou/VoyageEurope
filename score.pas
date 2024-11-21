@@ -7,7 +7,7 @@ function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
 function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
 function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer):Real;
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
-procedure paysVisites(coeff:Real;var inputPays: TEurope);
+procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
 function poidsChemin(pays1:TPays;pays2:TPays):Real;
 
 implementation
@@ -113,17 +113,15 @@ begin
     scoreActivitePays:=somme/nbActParJour;
 end;
 
-procedure paysVisites(coeff:Real;var inputPays: TEurope);
+procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
 var
-    i: Integer;
+    i,j: Integer;
 begin
-    {ces indices de i sont valables dans le cas où on met en entrée l'itinéraire de l'allé 
-    (pas de modif des scores des pays de départ et d'arrivée)
-    (même si en soit c'est pas important comme l'algo cherche à aller dans ces pays 
-    donc le score du dernier chemin n'est pas important)
-    a voir si ca change qqchose pour la fonction math pour déterminer le poids des chemin}
-    for i := 1 to length(inputPays) - 2 do
-        inputPays[i].score:=inputPays[i].score/coeff;
+
+    for i := 0 to length(inputPays) - 1 do
+        for j:=0 to length(europe)-1 do 
+            if inputPays[i].nom=europe[j].nom then
+                europe[j].score:=europe[j].score/coeff;
 end;
 
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
