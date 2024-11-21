@@ -26,14 +26,13 @@ procedure afficherAdjacence(listeAdjacence: TAdjacenceListe);
 var
     i, j: Integer;
 begin
-    for i := 0 to High(listeAdjacence) do
+    Writeln('Liste d''adjacence :');
+    for i := 0 to length(listeAdjacence) - 1 do
     begin
-        Writeln('Noeud ', i, ': ');
-        for j := 0 to High(listeAdjacence[i]) do
-        begin
-            Writeln(' -> (Voisin: ', listeAdjacence[i][j].voisin, ', Distance: ', listeAdjacence[i][j].distance, ')');
-        end;
-        Writeln;
+        writeln('Nœud ', i, ':');
+        for j := 0 to length(listeAdjacence[i]) - 1 do
+            writeln(' -> (Voisin: ', ListeAdjacence[i][j].voisin, ', Distance: ', ListeAdjacence[i][j].distance, ')');
+        writeln();
     end;
 end;
 
@@ -45,7 +44,7 @@ var
     noeudActuel, voisin, i, j, minDistNoeud: TNoeud;
     nouveauChemin, minDist: TDistance;
 begin
-    // afficherAdjacence(listeAdjacence);
+    afficherAdjacence(listeAdjacence);
     SetLength(noeudsInitial, nbNoeuds);
     SetLength(distanceDepart, nbNoeuds);
     SetLength(noeudPrecedent, nbNoeuds);
