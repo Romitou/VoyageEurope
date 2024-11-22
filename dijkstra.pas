@@ -44,7 +44,7 @@ var
     noeudActuel, voisin, i, j, minDistNoeud: TNoeud;
     nouveauChemin, minDist: TDistance;
 begin
-    afficherAdjacence(listeAdjacence);
+    // afficherAdjacence(listeAdjacence);
     SetLength(noeudsInitial, nbNoeuds);
     SetLength(distanceDepart, nbNoeuds);
     SetLength(noeudPrecedent, nbNoeuds);
