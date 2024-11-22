@@ -1,6 +1,6 @@
 program main;
 
-uses voyageTypes, chargerDonnees, choixCriteres,calculItineraireScore,score;
+uses voyageTypes, chargerDonnees, choixCriteres,calculItineraire,score;
 
 var europe: TEurope;
 criteres: TCriteres;

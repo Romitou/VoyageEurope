@@ -98,7 +98,9 @@ begin
                 n := length(listeAdjacence[i]);
                 SetLength(listeAdjacence[i], n + 1);
                 listeAdjacence[i][n].voisin := voisinIndex;
-                listeAdjacence[i][n].distance :=round(100*poidsChemin(europe[i],europe[voisinIndex]));
+                //à mettre pour la version avec les scores
+                listeAdjacence[i][n].distance :=100-round(100*poidsChemin(europe[i],europe[voisinIndex]));
+                //listeAdjacence[i][n].distance :=1000;
             end;
         end;
     end;
