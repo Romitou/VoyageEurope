@@ -41,7 +41,7 @@ begin
     for i := 0 to length(voyage.planning) - 1 do
     begin
         writeln('🗓️  Jour ', i + 1);
-        for j := 0 to length(voyage.planning[i].etapes) do
+        for j := 0 to length(voyage.planning[i].etapes) - 1 do
         begin
             etape := voyage.planning[i].etapes[j];
 
@@ -52,7 +52,7 @@ begin
             else
             begin
                 writeln('   🚆 Voyage depuis ', etape.deplacement.paysDepart.capitale, ' jusqu’à ', etape.deplacement.paysEtape.capitale, '.');
-                writeln('   📍 Arrivée à ', etape.deplacement.paysEtape.nom,  ' (', etape.deplacement.paysEtape.capitale, ').');
+                writeln('   📍 Arrivée à ', etape.deplacement.paysEtape.nom,  ' (', etape.deplacement.paysEtape.capitale, ') - ', etape.deplacement.minutes, ' minutes');
                 if etape.deplacement.paysEtape.nom = criteres.paysArrivee.nom then
                     writeln('   🌟 Journée dans le pays de destination : ', etape.deplacement.paysEtape.nom, '.');
             end;
@@ -70,15 +70,12 @@ end;
 procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
 begin
     writeln('Détails du voyage :');
-    writeln();
-    writeln('La durée du séjour est de ',length(voyage.itineraire)-1,' jours.');
-    writeln();
-    writeln('Le coût total est de ',voyage.coutTotal:5:0,' euros.');
-    writeln();
-    writeln('Vous aller parcourir une distance de ',voyage.kmTotal:5:1, 'km en train à travers l''Europe, depuis ',criteres.paysDepart.nom,' destination ',criteres.paysArrivee.nom, '.');
+    writeln('> Durée du séjour : ', length(voyage.planning)-1, ' jours');
+    writeln('> Coût total : ', voyage.coutTotal:5:0, ' euros');
+    writeln('> Distance de ',voyage.kmTotal:5:1, ' km en train à travers l''Europe, depuis ',criteres.paysDepart.nom,' destination ',criteres.paysArrivee.nom);
     writeln();
     if (voyage.coutTotal>criteres.budget) then
-    writeln('ATTENTION : Le coût du voyage proposé ci-dessous est supérieur de ', voyage.coutTotal-criteres.budget:5:0, ' euros au coût maximal que vous avez renseigné.');
+        writeln('ATTENTION : Le coût du voyage proposé ci-dessous est supérieur de ', voyage.coutTotal-criteres.budget:5:0, ' euros au coût maximal que vous avez renseigné.');
 end;
 
 end.
