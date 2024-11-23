@@ -33,7 +33,10 @@ end;
 procedure coutTotal(var voyage: TVoyage);
 var i, j : Integer; a, cout : Real;
 begin
-  cout:=3*power(voyage.kmTotal, 0.5);
+  if voyage.transport = Train then
+    cout:=3 * power(voyage.kmTotal, 0.5)
+  else 
+    cout:=0.04 * power(voyage.kmTotal, 1.5);
   for i := 0 to (length(voyage.planning)-1) do
   begin
     for j := 0 to (length(voyage.planning[i].activite)-1) do
