@@ -1,15 +1,15 @@
 unit calculItineraire;
 
 interface
-uses voyageTypes, dijkstra, utils,score;
+uses voyageTypes, dijkstra, sysutils, utils, score;
 
-function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
+function convertirEuropeAdjacence(europe: TEurope; transport: TTransport): TAdjacenceListe;
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
-function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays): TItineraireResult;
+function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; transport: TTransport): TItineraireResult;
 
 implementation
 
-function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays): TItineraireResult;
+function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; transport: TTransport): TItineraireResult;
 var adjacence: TAdjacenceListe;
 var chemin: TNoeudList;
 var distance: TDistance;
@@ -21,7 +21,7 @@ begin
     setlength(resultat.itineraire, 0);
     resultat.erreur := true;
 
-    adjacence := convertirEuropeAdjacence(paysValables);
+    adjacence := convertirEuropeAdjacence(paysValables, transport);
     if length(adjacence) < 2 then
     begin
         resultat.message := 'Pas assez d''adjacences n''ont été générées.';
@@ -81,18 +81,24 @@ begin
     Exit(-1);
 end;
 
-function convertirEuropeAdjacence(europe: TEurope): TAdjacenceListe;
+function convertirEuropeAdjacence(europe: TEurope; transport: TTransport): TAdjacenceListe;
 var
     listeAdjacence: TAdjacenceListe;
+    paysVoisins: TStringArray;
     i, j, n, voisinIndex: Integer;
 begin
     SetLength(listeAdjacence, Length(europe));
     for i := 0 to length(europe) - 1 do
     begin
         SetLength(listeAdjacence[i], 0);
-        for j := 0 to length(europe[i].nomFrontieres) - 1 do
+        if transport = Train then
+            paysVoisins := europe[i].nomFrontieres
+        else
+            paysVoisins := europe[i].nomAvions;
+        
+        for j := 0 to length(paysVoisins) - 1 do
         begin
-            voisinIndex := trouverIndexPays(europe[i].nomFrontieres[j], europe);
+            voisinIndex := trouverIndexPays(paysVoisins[j], europe);
             if voisinIndex <> -1 then
             begin
                 n := length(listeAdjacence[i]);

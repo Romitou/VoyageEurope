@@ -14,7 +14,7 @@ function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
 //generer voyage
 function genererActivitePays(itineraire: TEurope; criteres: TCriteres): TEtapes;
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
-function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope): TEurope;
+function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope; transport: TTransport): TEurope;
 
 implementation
 
@@ -113,7 +113,7 @@ end;
 // qu'ils sont inclus dans l'itinéraire aller. En effet, on doit s'assurer que l'algorithme
 // de Dijkstra continue à fonctionner et trouver une solution à la suppression de chaque
 // pays. Exemple : trajet France - Portugal => l'Espagne ne doit pas être supprimé !
-function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope): TEurope;
+function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope; transport: TTransport): TEurope;
 var
     i, j, k: Integer;
     paysValides, tmpValides: TEurope;
@@ -136,7 +136,7 @@ begin
                     end;
                 end;
                 
-                if not calculerItineraire(tmpValides, itineraire[0], itineraire[length(itineraire) - 1]).erreur then
+                if not calculerItineraire(tmpValides, itineraire[0], itineraire[length(itineraire) - 1], transport).erreur then
                 begin
                     paysValides := tmpValides;
                 end;

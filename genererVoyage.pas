@@ -23,7 +23,7 @@ begin
     // ** Génération itinéraire aller **
     //
     writeln('Calcul de l''itinéraire aller...');
-    aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee);
+    aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee, criteres.transport);
     if aller.erreur then
     begin
         voyage.erreur := true;
@@ -40,7 +40,7 @@ begin
     // ** Génération itinéraire retour **
     //
     writeln('Calcul de l''itinéraire retour...');
-    retour:=calculerItineraire(europe, criteres.paysArrivee, criteres.paysDepart);
+    retour:=calculerItineraire(europe, criteres.paysArrivee, criteres.paysDepart, criteres.transport);
     if retour.erreur then
     begin
         voyage.erreur := true;
