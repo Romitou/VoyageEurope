@@ -3,6 +3,8 @@ unit calculCout;
 interface
 uses voyageTypes, math;
 
+function calculDureeTransport(distance: Real; transport: TTransport): Integer;
+function calculCoutTransport(distance: Real; transport: TTransport): Real;
 function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
 procedure calculDistanceTotal(var voyage: TVoyage);
 procedure coutTotal(var voyage: TVoyage);
@@ -33,10 +35,7 @@ end;
 procedure coutTotal(var voyage: TVoyage);
 var i: Integer; cout, coutEtape : Real;
 begin
-  if voyage.transport = Train then
-    cout := 3 * power(voyage.kmTotal, 0.5)
-  else 
-    cout := 0.04 * power(voyage.kmTotal, 1.5);
+  cout := calculCoutTransport(voyage.kmTotal, voyage.transport);
   for i := 0 to length(voyage.etapes) - 1 do
   begin
     if voyage.etapes[i].estActivite then
@@ -46,6 +45,29 @@ begin
     cout := cout + coutEtape;
   end; 
   voyage.coutTotal:=cout;
+end;
+
+function calculCoutTransport(distance: Real; transport: TTransport): Real;
+begin
+  if transport = Train then
+    calculCoutTransport := 3 * power(distance, 0.5)
+  else 
+    calculCoutTransport := 0.04 * power(distance, 1.5);
+end;
+
+function calculDureeTransport(distance: Real; transport: TTransport): Integer;
+var vitesse: Integer;
+begin
+  if transport = Train then
+  begin
+    if distance < 200 then
+      vitesse := 120
+    else
+      vitesse := 250;
+    calculDureeTransport := round((distance / vitesse) * 60)
+  end
+  else
+    calculDureeTransport := round((distance / 800) * 60)
 end;
 
 end.
