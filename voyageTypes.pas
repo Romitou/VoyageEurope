@@ -22,6 +22,7 @@ type TPays = record
     nom: String;
     capitale: String;
     activites: Array of TActivite;
+    ordreAct: Array of Integer;
     nomFrontieres: TStringArray;
     climat: Array[TMois] of Integer;
     score: Real;
