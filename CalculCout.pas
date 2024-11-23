@@ -21,8 +21,8 @@ end;
 procedure calculDistanceTotal(var voyage: TVoyage);
 var i : Integer; j, distance : Real;
 begin
-  distance:= 0;
-  for i := 1 to (length(voyage.itineraire)-1) do
+  distance := 0;
+  for i := 0 to length(voyage.itineraire) - 2 do
   begin
     j:=calculDuneDistance(voyage.itineraire[i].latitude, voyage.itineraire[i].longitude, voyage.itineraire[i+1].latitude, voyage.itineraire[i+1].longitude, i);
     distance:=distance+j;
