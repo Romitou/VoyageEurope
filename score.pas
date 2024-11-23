@@ -7,7 +7,7 @@ function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
 function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
 function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer):Real;
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
-procedure paysVisites(coeff:Real;var inputPays: TEurope);
+procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
 function poidsChemin(pays1:TPays;pays2:TPays):Real;
 
 implementation
@@ -56,7 +56,7 @@ tabScore: Array of Real;
 tabIndice: Array of Integer;
 trouve: Boolean;
 somme, scoreMin: Real;
-i,j,k,minIndex:Integer;
+i,j,k,indiceMin:Integer;
 begin
     //initialisation du tableau pour stocker les meilleurs scores (pas de score négatif, donc 0 est la plus petite valeur)
     setlength(tabScore,nbActParJour);
@@ -74,17 +74,18 @@ begin
         begin
             //recherche de la position du plus petit score dans le tableau score, qui sera remplacée par un meilleur score
             scoreMin:=tabScore[0];
-            minIndex:=0;
+            indiceMin:=0;
+            //on commence à i=0 pour éviter une boucle inutile (l'indice min est intialisé à 0)
             for i:=1 to nbActParJour-1 do
             begin
                 if tabScore[i] < scoreMin then
                 begin
                     scoreMin:=tabScore[i];
-                    minIndex:=i;
+                    indiceMin:=i;
                 end;
             end;
 
-            //vérification si l'activité étudiée a un score plus élevé que le plus petit score dans score et qu'elle n'a pas déjà été sélectionnée
+            //vérification si l'activité étudiée a un score plus élevé que le plus petit score du tableau et qu'elle n'a pas déjà été sélectionnée
             if scoreActivite(pays.activites[j], pref) > scoreMin then
             begin
                 trouve:=False;
@@ -93,8 +94,8 @@ begin
                         trouve:=True;
                 if not(trouve) then
                 begin
-                    tabScore[minIndex]:=scoreActivite(pays.activites[j], pref);
-                    tabIndice[minIndex]:=j;
+                    tabScore[indiceMin]:=scoreActivite(pays.activites[j], pref);
+                    tabIndice[indiceMin]:=j;
                 end;
             end;
         end;
@@ -113,17 +114,15 @@ begin
     scoreActivitePays:=somme/nbActParJour;
 end;
 
-procedure paysVisites(coeff:Real;var inputPays: TEurope);
+procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
 var
-    i: Integer;
+    i,j: Integer;
 begin
-    {ces indices de i sont valables dans le cas où on met en entrée l'itinéraire de l'allé 
-    (pas de modif des scores des pays de départ et d'arrivée)
-    (même si en soit c'est pas important comme l'algo cherche à aller dans ces pays 
-    donc le score du dernier chemin n'est pas important)
-    a voir si ca change qqchose pour la fonction math pour déterminer le poids des chemin}
-    for i := 1 to length(inputPays) - 2 do
-        inputPays[i].score:=inputPays[i].score/coeff;
+
+    for i := 0 to length(inputPays) - 1 do
+        for j:=0 to length(europe)-1 do 
+            if inputPays[i].nom=europe[j].nom then
+                europe[j].score:=europe[j].score/coeff;
 end;
 
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
