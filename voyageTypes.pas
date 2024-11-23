@@ -16,6 +16,7 @@ type TActivite = record
     nom: String;
     categories: Array of TPref;
     cout: Real;
+    minutes: Integer;
 end;
 type TActivites = Array of TActivite;
 
@@ -44,18 +45,30 @@ type TCriteres = record
     transport: TTransport;
 end;
 
-type TEtape = record
-    jour: Integer;
-    activite: Array of TActivite;
+type TDeplacement = record
     paysDepart: TPays;
     paysEtape: TPays;
+    cout: Real;
+    minutes: Integer;
 end;
 
+type TEtape = record
+    estActivite: Boolean;
+    activite: TActivite;
+    deplacement: TDeplacement;
+end;
 type TEtapes = Array of TEtape;
+
+type TJournee = record
+    jour: Integer;
+    etapes: TEtapes;
+end;
+type TJournees = Array of TJournee;
 
 type TVoyage = record
     itineraire: Array of TPays;
-    planning: TEtapes;
+    etapes: TEtapes;
+    planning: TJournees;
     coutTotal: Real;
     kmTotal: Real;
     erreur: Boolean;

@@ -31,19 +31,19 @@ begin
 end;
 
 procedure coutTotal(var voyage: TVoyage);
-var i, j : Integer; a, cout : Real;
+var i, j : Integer; cout, coutEtape : Real;
 begin
   if voyage.transport = Train then
-    cout:=3 * power(voyage.kmTotal, 0.5)
+    cout := 3 * power(voyage.kmTotal, 0.5)
   else 
-    cout:=0.04 * power(voyage.kmTotal, 1.5);
-  for i := 0 to (length(voyage.planning)-1) do
+    cout := 0.04 * power(voyage.kmTotal, 1.5);
+  for i := 0 to length(voyage.etapes) - 1 do
   begin
-    for j := 0 to (length(voyage.planning[i].activite)-1) do
-      begin
-        a:= voyage.planning[i].activite[j].cout;
-        cout:=cout+a;
-      end; 
+    if voyage.etapes[i].estActivite then
+      coutEtape := voyage.etapes[i].activite.cout
+    else
+      coutEtape := voyage.etapes[i].deplacement.cout;
+    cout := cout + coutEtape;
   end; 
   voyage.coutTotal:=cout;
 end;
