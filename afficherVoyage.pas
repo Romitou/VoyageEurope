@@ -4,8 +4,6 @@ interface
 uses voyageTypes;
 
 procedure afficher(voyage:TVoyage;criteres:TCriteres);
-procedure afficherUneEtape(uneEtape:TEtape);
-procedure afficherUneAct(uneAct:TActivite);
 procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
 
 implementation
@@ -25,7 +23,8 @@ implementation
 
 procedure afficher(voyage: TVoyage; criteres: TCriteres);
 var
-    i: Integer;
+    i, j: Integer;
+    etape: TEtape;
 begin
     if voyage.erreur then
     begin
@@ -42,14 +41,22 @@ begin
     for i := 0 to length(voyage.planning) - 1 do
     begin
         writeln('🗓️  Jour ', i + 1);
-        if voyage.planning[i].paysDepart.nom <> voyage.planning[i].paysEtape.nom then
-            writeln('   🚆 Voyage depuis ', voyage.planning[i].paysDepart.capitale, ' jusqu’à ', voyage.planning[i].paysEtape.capitale, '.');
-        writeln('   📍 Arrivée à ', voyage.planning[i].paysEtape.nom,  ' (', voyage.planning[i].paysEtape.capitale, ').');
+        for j := 0 to length(voyage.planning[i].etapes) do
+        begin
+            etape := voyage.planning[i].etapes[j];
 
-        if voyage.planning[i].paysEtape.nom = criteres.paysArrivee.nom then
-            writeln('   🌟 Journée dans le pays de destination : ', voyage.planning[i].paysEtape.nom, '.');
-
-        afficherUneEtape(voyage.planning[i]);
+            if etape.estActivite then
+            begin
+                write('> Activités : ', etape.activite.nom);       
+            end
+            else
+            begin
+                writeln('   🚆 Voyage depuis ', etape.deplacement.paysDepart.capitale, ' jusqu’à ', etape.deplacement.paysEtape.capitale, '.');
+                writeln('   📍 Arrivée à ', etape.deplacement.paysEtape.nom,  ' (', etape.deplacement.paysEtape.capitale, ').');
+                if etape.deplacement.paysEtape.nom = criteres.paysArrivee.nom then
+                    writeln('   🌟 Journée dans le pays de destination : ', etape.deplacement.paysEtape.nom, '.');
+            end;
+        end;
 
         if i < length(voyage.planning) - 1 then
             writeln('----------------------------------------')
@@ -73,26 +80,5 @@ begin
     if (voyage.coutTotal>criteres.budget) then
     writeln('ATTENTION : Le coût du voyage proposé ci-dessous est supérieur de ', voyage.coutTotal-criteres.budget:5:0, ' euros au coût maximal que vous avez renseigné.');
 end;
-
-
-procedure afficherUneEtape(uneEtape:TEtape);
-var i:Integer;
-begin
- 
-    for i:=0 to 1 do
-        begin
-        write('> Activités :');       
-        afficherUneAct(uneEtape.activite[i]);
-        writeln();
-        end;
-
-end;
-
-
-procedure afficherUneAct(uneAct:TActivite);
-begin
-    write(' ',uneAct.nom);
-end;
-
 
 end.

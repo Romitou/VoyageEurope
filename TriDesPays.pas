@@ -12,7 +12,7 @@ function matchActivite(pays:Tpays;pref:Array of TPref):Boolean;
 function matchClimat(climat:Real;unPays:Tpays;periode:TMois):Boolean;
 function matchPreference(uneAct:TActivite;pref:Array of TPref):Boolean;
 //generer voyage
-function genererActivitePays(itineraire: TEurope; criteres: TCriteres): TEtapes;
+function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
 function verifDuree(itineraire:TEurope;criteres:TCriteres):Boolean;
 function suppressionPaysVisite(inputPays: TEurope; itineraire: TEurope; transport: TTransport): TEurope;
 
@@ -71,12 +71,12 @@ begin
     filtrerPays:=paysVal;
 end; 
 
-function genererActivitePays(itineraire: TEurope; criteres: TCriteres): TEtapes;
+function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
 var
-    j, jour, nbAct, i: Integer;
+    j, nbAct, i, n: Integer;
     etapes: TEtapes;
 begin
-    jour := 0;
+    n := 0;
     setlength(etapes, 0);
 
     for j := 1 to length(itineraire) - 1 do
@@ -84,29 +84,26 @@ begin
         // Si on souhaite éviter les doublons (si besoin dans un cas futur)
         // if (j < length(itineraire) - 1) and (itineraire[j].nom = itineraire[j + 1].nom) then
         //     continue;
-
-        setlength(etapes, length(etapes) + 1);
-        etapes[jour].jour := jour;
-
-        etapes[jour].paysDepart := itineraire[j - 1];
-        etapes[jour].paysEtape := itineraire[j];
-
-        setlength(etapes[jour].activite, 2);
+        setlength(etapes, n + 1);
+        etapes[n].estActivite := false;
+        etapes[n].deplacement.paysDepart := itineraire[j - 1];
+        etapes[n].deplacement.paysEtape := itineraire[j];
+        n := n + 1;
 
         nbAct := 0;
         for i := 0 to length(itineraire[j].activites) - 1 do
         begin
             if matchPreference(itineraire[j].activites[i], criteres.categories) and (nbAct < 2) then
             begin
-                etapes[jour].activite[nbAct] := itineraire[j].activites[i];
+                setlength(etapes, n + 1);
+                etapes[n].activite := itineraire[j].activites[i];
                 nbAct := nbAct + 1;
+                n := n + 1;
             end;
         end;
-
-        jour := jour + 1;
     end;
 
-    genererActivitePays := etapes;
+    genererEtapes := etapes;
 end;
 
 // On doit prendre en compte que certains pays ne peuvent pas être supprimés malgré le fait

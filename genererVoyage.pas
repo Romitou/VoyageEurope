@@ -94,7 +94,7 @@ begin
         voyage.message := 'Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.';
         exit(voyage);
     end;
-    voyage.planning := genererActivite(voyage.itineraire, criteres,2);
+    voyage.etapes := genererEtapes(voyage.itineraire, criteres);
     calculDistanceTotal(voyage);
     coutTotal(voyage);
     generer:=voyage;

@@ -6,9 +6,9 @@ uses sysutils;
 type TTransport = (Train, TrainAvion);
 type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novembre, Decembre);
 type TPref = (Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education,
-    BienEtre, Sport, AventureAquatique, FestivalsEtEvenements, Romantique, EnFamille, EntreAmis, Solo, Luxe, Budget, EcoResponsable, 
-    Immersif, Authentique, RoadTrip, VoyageEnTrain, CourtTerme, JourneeComplete, MultiJours, Relaxant, Actif, Intensif, Modere, 
-    Debutant,Histoire, ArtisanatLocal, Photographie, ObservationFaune, Agritourisme, 
+    BienEtre, Sport, AventureAquatique, FestivalsEtEvenements, Romantique, EnFamille, EntreAmis, Solo, Luxe, Budget, EcoResponsable,
+    Immersif, Authentique, RoadTrip, VoyageEnTrain, CourtTerme, JourneeComplete, MultiJours, Relaxant, Actif, Intensif, Modere,
+    Debutant,Histoire, ArtisanatLocal, Photographie, ObservationFaune, Agritourisme,
     Mystere, CinemaEtTelevision, ReligieuxEtSpirituel,Enfants, MobiliteReduite, TouteAnnee, ActiviteSaisonniere, Climatisation,
     TemperatureDouce, Guide, NonGuide,Hiver, Printemps, Ete, Automne, TouteSaison, SaisonFestivals);
 
@@ -17,6 +17,7 @@ type TActivite = record
     categories: Array of TPref;
     cout: Real;
     score:Real;
+    minutes: Integer;
 end;
 type TActivites = Array of TActivite;
 
@@ -46,18 +47,30 @@ type TCriteres = record
     transport: TTransport;
 end;
 
-type TEtape = record
-    jour: Integer;
-    activite: Array of TActivite;
+type TDeplacement = record
     paysDepart: TPays;
     paysEtape: TPays;
+    cout: Real;
+    minutes: Integer;
 end;
 
+type TEtape = record
+    estActivite: Boolean;
+    activite: TActivite;
+    deplacement: TDeplacement;
+end;
 type TEtapes = Array of TEtape;
+
+type TJournee = record
+    jour: Integer;
+    etapes: TEtapes;
+end;
+type TJournees = Array of TJournee;
 
 type TVoyage = record
     itineraire: Array of TPays;
-    planning: TEtapes;
+    etapes: TEtapes;
+    planning: TJournees;
     coutTotal: Real;
     kmTotal: Real;
     erreur: Boolean;
