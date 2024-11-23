@@ -10,6 +10,9 @@ function scoreActivitePays(pays:TPays;pref:Array of TPref; nbActParJour:Integer)
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
 function poidsChemin(pays1:TPays;pays2:TPays):Real;
 procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
+function genererActivite(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
+
+
 
  
  
@@ -106,7 +109,9 @@ i:Integer;
 begin
     somme:=0;
     for i:=0 to nbActParJour-1 do 
+        begin
         somme:=somme + scoreActivite(pays.activites[pays.ordreAct[i]],pref);
+        end;
     scoreActivitePays:=somme/nbActParJour;
 end;
 
@@ -140,7 +145,59 @@ begin
 end;
 
 
+
+
+function genererActivite(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
+var
+    j, jour, nbAct: Integer;
+    etapes: TEtapes;
+begin
+    jour := 0;
+    setlength(etapes, 0);
+
+    for j := 1 to length(itineraire) - 1 do
+    begin
+        // Si on souhaite éviter les doublons (si besoin dans un cas futur)
+        // if (j < length(itineraire) - 1) and (itineraire[j].nom = itineraire[j + 1].nom) then
+        //     continue;
+
+        setlength(etapes, length(etapes) + 1);
+        etapes[jour].jour := jour;
+
+        etapes[jour].paysDepart := itineraire[j - 1];
+        etapes[jour].paysEtape := itineraire[j];
+
+        setlength(etapes[jour].activite, nbActParJour);
+
+        nbAct := 0;
+
+        repeat
+            etapes[jour].activite[nbAct] := itineraire[j].activites[itineraire[j].ordreAct[nbAct]];
+            nbAct:=nbAct+1;
+        until (nbAct=nbActParJour);
+
+        {for i := 0 to length(itineraire[j].activites) - 1 do
+        begin
+            if matchPreference(itineraire[j].activites[i], criteres.categories) and (nbAct < 2) then
+            begin
+                etapes[jour].activite[nbAct] := itineraire[j].activites[i];
+                nbAct := nbAct + 1;
+            end;
+        end;}
+
+        jour := jour + 1;
+    end;
+
+    genererActivite := etapes;
+end;
+
+
+
+
+
+
 end.
+
 
 {function scoreClimat(climat:Real;periode:TMois;unPays:Tpays):Real;
 var scoreClim:Real;

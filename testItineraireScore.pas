@@ -28,14 +28,17 @@ begin
         triActPays(criteres.categories,europe[j]);
         for i:=0 to length(europe[j].ordreAct)-1 do
             writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',scoreActivite(europe[j].activites[europe[j].ordreAct[i]],criteres.categories));
-        writeln('scoreAct : ',scoreActivitePays(europe[j],criteres.categories,2));
+        writeln('scoreAct : ',scoreActivitePays(europe[j],criteres.categories,3));
         writeln('');
         writeln('pays suivant');
         writeln('');
         end;
-    {writeln('Calcul des scores...');
+
+
+
+    writeln('Calcul des scores...');
     coeffAct:=1;
-    coeffClim:=1;
+    coeffClim:=0;
     nbActParJour:=3;
     intervalleTemp:=15;
     for i:=0 to length(europe)-1 do 
@@ -52,5 +55,9 @@ begin
     aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee);
 
     for i:=0 to length(aller.itineraire)-1 do 
-        writeln('- ', aller.itineraire[i].nom);}
+        writeln('- ', aller.itineraire[i].nom);
+
+    
+
+    
 end.
