@@ -91,10 +91,18 @@ begin
     for i := 0 to length(europe) - 1 do
     begin
         SetLength(listeAdjacence[i], 0);
-        if transport = Train then
-            paysVoisins := europe[i].nomFrontieres
-        else
-            paysVoisins := europe[i].nomAvions;
+        paysVoisins := europe[i].nomFrontieres;
+        if transport = TrainAvion then
+        begin
+            for j := 0 to length(europe[i].nomAvions) - 1 do
+            begin
+                for n := 0 to length(europe[i].nomFrontieres) - 1 do
+                    if europe[i].nomAvions[j] = europe[i].nomFrontieres[n] then
+                        continue;
+                setlength(paysVoisins, length(paysVoisins) + 1);
+                paysVoisins[length(paysVoisins) - 1] := europe[i].nomAvions[j];
+            end;
+        end;
         
         for j := 0 to length(paysVoisins) - 1 do
         begin
