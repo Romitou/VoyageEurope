@@ -87,12 +87,12 @@ begin
     for i:=0 to length(retour.itineraire)-1 do
         voyage.itineraire[length(aller.itineraire)+i]:=retour.itineraire[i];
     //ajouter champ message dans TVoyage et l'afficher plus tard
-    {if not(verifDuree(voyage.itineraire,criteres)) then
+    if length(voyage.itineraire)>criteres.duree then
     begin
         voyage.erreur := true;
         voyage.message := 'Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.';
         exit(voyage);
-    end;}
+    end;
     voyage.planning := genererActivite(voyage.itineraire, criteres,2);
     calculDistanceTotal(voyage);
     coutTotal(voyage);
