@@ -14,9 +14,13 @@ var aller,retour: TItineraireResult;
 begin
     voyage.erreur := false;
     voyage.message := '';
-
+    writeln('climat',criteres.climat);
     for i:=0 to length(europe)-1 do 
-        scorePays(1,1,criteres,1,1,europe[i]);
+        begin
+        scorePays(1,1,criteres,2,20,europe[i]);
+        writeln(europe[i].nom,' : ',europe[i].score);
+        end;
+
 
     //
     // ** Génération itinéraire aller **
@@ -33,7 +37,12 @@ begin
     writeln('Itinéraire aller généré :');
     for i:=0 to length(aller.itineraire)-1 do writeln('- ', aller.itineraire[i].nom);
 
-    paysVisites(1, aller.itineraire);
+    paysVisites(2, aller.itineraire,europe);
+
+    for i:=0 to length(europe)-1 do 
+        begin
+        writeln(europe[i].nom,' : ',europe[i].score);
+        end;
 
     //
     // ** Génération itinéraire retour **
