@@ -9,6 +9,8 @@ function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
 procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
 function poidsChemin(pays1:TPays;pays2:TPays):Real;
+procedure triActPays(pref:Array of TPref;var pays:TPays);
+
 
 implementation
 
@@ -48,6 +50,55 @@ begin
     if scoreClimat<0 then
         scoreClimat:=0;
 end;
+
+procedure triActPays(pref:Array of TPref;var pays:TPays);
+var
+tabIndice: Array of Integer;
+indiceMax:Integer;
+scoreMax: Real;
+i,j,k:Integer;
+begin
+    //initialisation du tableau pour stocker les indices des meilleures activités
+    setlength(tabIndice,length(pays.activites));
+    setlength(pays.ordreAct,length(pays.activites));
+
+    for i:=0 to length(pays.activites)-1 do
+            tabIndice[i]:=i;
+
+    //on attibue à la i ème case l'indice de l'activité avec le meilleur score du tableau
+    for i:=0 to length(pays.activites)-1 do
+    begin
+
+        //pas de scores négatifs donc -1 est la plus petite valeur
+        scoreMax:=-1;
+        //cas où on ne trouve pas de score supérieur : il ne se passe rien 
+        indiceMax:=i;
+
+        //on cherche l'indice du meilleur score du tableau après les ièmes cases déjà triées
+        for j:=i to length(pays.activites)-1 do 
+        begin
+            if scoreActivite(pays.activites[tabIndice[j]],pref)>scoreMax then
+            begin
+                scoreMax:=scoreActivite(pays.activites[tabIndice[j]],pref);
+                indiceMax:=j;
+            end;
+
+        end;
+
+        //on remplace l'indce max par le ième
+        k := tabIndice[i];
+        tabIndice[i] := tabIndice[indiceMax];
+        tabIndice[indiceMax] := k;
+
+
+    end;
+
+    pays.ordreAct:=tabIndice;
+
+end;
+
+
+
 
 
 function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer):Real;
