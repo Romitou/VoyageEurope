@@ -10,11 +10,8 @@ function scoreActivitePays(pays:TPays;pref:Array of TPref; nbActParJour:Integer)
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
 function poidsChemin(pays1:TPays;pays2:TPays):Real;
 procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
-function genererActivite(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
-
-
-
-
+function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
+function genererJournees(etapes: TEtapes): TJournees;
 
 implementation
 
@@ -144,36 +141,33 @@ begin
 
 end;
 
-
-
-
-function genererActivite(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
+function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
 var
-    j, jour, nbAct: Integer;
+    j, nbAct, n: Integer;
     etapes: TEtapes;
 begin
-    jour := 0;
+    n := 0;
     setlength(etapes, 0);
 
     for j := 1 to length(itineraire) - 1 do
     begin
-        // Si on souhaite éviter les doublons (si besoin dans un cas futur)
-        // if (j < length(itineraire) - 1) and (itineraire[j].nom = itineraire[j + 1].nom) then
-        //     continue;
-
-        setlength(etapes, length(etapes) + 1);
-        etapes[jour].jour := jour;
-
-        etapes[jour].paysDepart := itineraire[j - 1];
-        etapes[jour].paysEtape := itineraire[j];
-
-        setlength(etapes[jour].activite, nbActParJour);
-
         nbAct := 0;
+        // Si on souhaite éviter les doublons (si besoin dans un cas futur)
+        if not ((itineraire[j - 1].nom = itineraire[j].nom)) then
+        begin
+            setlength(etapes, n + 1);
+            etapes[n].estActivite := false;
+            etapes[n].deplacement.paysDepart := itineraire[j - 1];
+            etapes[n].deplacement.paysEtape := itineraire[j];
+            n := n + 1;
+        end;
 
         repeat
-            etapes[jour].activite[nbAct] := itineraire[j].activites[itineraire[j].ordreAct[nbAct]];
-            nbAct:=nbAct+1;
+            setlength(etapes, n + 1);
+            etapes[n].estActivite := true;
+            etapes[n].activite := itineraire[j].activites[itineraire[j].ordreAct[nbAct]];
+            nbAct := nbAct + 1;
+            n := n + 1;
         until (nbAct=nbActParJour);
 
         {for i := 0 to length(itineraire[j].activites) - 1 do
@@ -184,14 +178,59 @@ begin
                 nbAct := nbAct + 1;
             end;
         end;}
-
-        jour := jour + 1;
     end;
 
-    genererActivite := etapes;
+    genererEtapes := etapes;
 end;
 
+function genererJournees(etapes: TEtapes): TJournees;
+var
+    i, nJour, tempsAccumule, dureeEtape: Integer;
+    journee: TJournee;
+    journees: TJournees;
+begin
+    nJour := 0;
+    tempsAccumule := 0;
+    setlength(journees, 0);
 
+    setlength(journee.etapes, 0);
+    
+    for i := 0 to length(etapes) - 1 do
+    begin
+        if etapes[i].estActivite then
+            dureeEtape := etapes[i].activite.minutes
+        else
+            dureeEtape := etapes[i].deplacement.minutes;
+
+        if tempsAccumule + dureeEtape <= 600 then
+        begin
+            setlength(journee.etapes, length(journee.etapes) + 1);
+            journee.etapes[length(journee.etapes) - 1] := etapes[i];
+            tempsAccumule := tempsAccumule + dureeEtape;
+        end
+        else
+        begin
+            journee.jour := nJour + 1;
+            setlength(journees, length(journees) + 1);
+            journees[length(journees) - 1] := journee;
+
+            nJour := nJour + 1;
+            tempsAccumule := dureeEtape;
+
+            setlength(journee.etapes, 1);
+            journee.etapes[0] := etapes[i];
+        end;
+    end;
+
+    if length(journee.etapes) > 0 then
+    begin
+        journee.jour := nJour + 1;
+        setlength(journees, length(journees) + 1);
+        journees[length(journees) - 1] := journee;
+    end;
+
+    genererJournees := journees;
+end;
 
 
 
