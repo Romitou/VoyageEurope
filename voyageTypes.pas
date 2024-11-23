@@ -3,7 +3,7 @@ unit voyageTypes;
 interface
 uses sysutils;
 
-type TTransport = (Train, Avion);
+type TTransport = (Train, TrainAvion);
 type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novembre, Decembre);
 type TPref = (Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education,
     BienEtre, Sport, AventureAquatique, FestivalsEtEvenements, Romantique, EnFamille, EntreAmis, Solo, Luxe, Budget, EcoResponsable, 

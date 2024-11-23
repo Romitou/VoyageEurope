@@ -9,7 +9,7 @@ begin
     europe:=chargerEurope();
     demanderCriteres(criteres,europe);
     // en attendant que ce soit implémenté dans demanderCriteres
-    criteres.transport := Train;
+    criteres.transport := TrainAvion;
     voyage := generer(criteres,europe);
     afficher(voyage,criteres);
 end.
