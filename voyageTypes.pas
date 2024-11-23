@@ -103,6 +103,7 @@ type TFileActivite = record
     pays: String;
     categories: Array of TPref;
     cout: Real;
+    minutes: Integer;
 end;
 type TArrayFileActivite = Array of TFileActivite;
 
