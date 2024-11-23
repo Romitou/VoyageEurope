@@ -47,7 +47,7 @@ begin
 
             if etape.estActivite then
             begin
-                writeln('> Activités : ', etape.activite.nom);       
+                writeln('> Activités : ', etape.activite.nom, ' (', etape.activite.minutes, ' min)');       
             end
             else
             begin

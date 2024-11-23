@@ -256,6 +256,7 @@ begin
             begin
                 activite.nom := listeActivites[j].nom;
                 activite.categories := listeActivites[j].categories;
+                activite.minutes := listeActivites[j].minutes;
                 activite.cout := listeActivites[j].cout;
 
                 setlength(pays.activites, length(pays.activites) + 1);
