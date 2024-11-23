@@ -122,8 +122,9 @@ begin
     deserialiserActivite.nom := split[0];
     deserialiserActivite.pays := split[1];
     DecimalSeparator := '.';
-    deserialiserActivite.cout := StrToFloat(split[3]);
-    categories := splitString(split[5], ',');
+    deserialiserActivite.minutes := round(StrToFloat(split[3]));
+    deserialiserActivite.cout := StrToFloat(split[4]);
+    categories := splitString(split[6], ',');
     setlength(deserialiserActivite.categories, length(categories));
     for i := 0 to length(categories) - 1 do
     begin
