@@ -23,15 +23,16 @@ begin
     criteres.paysDepart:=europe[3];
     criteres.paysArrivee:=europe[13];
 
- {for j:=0 to length(europe)-1 do
+ for j:=0 to length(europe)-1 do
         begin
         triActPays(criteres.categories,europe[j]);
         for i:=0 to length(europe[j].ordreAct)-1 do
             writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',scoreActivite(europe[j].activites[europe[j].ordreAct[i]],criteres.categories));
+        writeln('scoreAct : ',scoreActivitePays(europe[j],criteres.categories,2));
         writeln('');
         writeln('pays suivant');
         writeln('');
-        end;}
+        end;
     {writeln('Calcul des scores...');
     coeffAct:=1;
     coeffClim:=1;

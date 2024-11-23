@@ -4,14 +4,15 @@ interface
 uses voyageTypes;
 
 function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
-function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
-function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer):Real;
-procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
-procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
-function poidsChemin(pays1:TPays;pays2:TPays):Real;
 procedure triActPays(pref:Array of TPref;var pays:TPays);
+function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
+function scoreActivitePays(pays:TPays;pref:Array of TPref; nbActParJour:Integer):Real;
+procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
+function poidsChemin(pays1:TPays;pays2:TPays):Real;
+procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
 
-
+ 
+ 
 implementation
 
 function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
@@ -98,10 +99,62 @@ begin
 end;
 
 
+function scoreActivitePays(pays:TPays;pref:Array of TPref; nbActParJour:Integer):Real;
+var
+somme:Real;
+i:Integer;
+begin
+    somme:=0;
+    for i:=0 to nbActParJour-1 do 
+        somme:=somme + scoreActivite(pays.activites[pays.ordreAct[i]],pref);
+    scoreActivitePays:=somme/nbActParJour;
+end;
+
+procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
+var
+    i,j: Integer;
+begin
+
+    for i := 0 to length(inputPays) - 1 do
+        for j:=0 to length(europe)-1 do 
+            if inputPays[i].nom=europe[j].nom then
+                europe[j].score:=europe[j].score/coeff;
+end;
+
+procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
+begin
+    pays.score:=(scoreActivitePays(pays,criteres.categories,nbActParJour)*coeffAct+scoreClimat(criteres.climat,criteres.periode,pays,intervalleTemp)*coeffClim)/(coeffAct+coeffClim);
+end;
 
 
+{pour l'instant, on prend la moyenne comme fonction, mais quand on changera de fonction math, poidsChemin aura plus d'intérêt}
+function poidsChemin(pays1:TPays;pays2:TPays):Real;
+var poids:Real;
+begin
+    poids:=(pays1.score+pays2.score)/2;
+    poidsChemin:=poids;
+    //idee de fonction:2xy/(x+y)
+    //poids:=(pays1.score*pays2.score*2)/(pays1.score+pays2.score);
+    //poidsChemin:=poids;
+    
+end;
 
-function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer):Real;
+
+end.
+
+{function scoreClimat(climat:Real;periode:TMois;unPays:Tpays):Real;
+var scoreClim:Real;
+begin
+    if unPays.climat[periode]>=climat then
+        scoreClim:=1
+    else
+        //écart relatif pour le calcul du score dans le cas où le climat ne corrspond pas
+        scoreClim:=1-Abs(climat-unPays.climat[periode])/climat;
+
+    scoreClimat:=scoreClim;
+end;}
+
+{function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer):Real;
 var
 tabScore: Array of Real;
 tabIndice: Array of Integer;
@@ -163,48 +216,4 @@ begin
         somme := somme + tabScore[i];
 
     scoreActivitePays:=somme/nbActParJour;
-end;
-
-procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
-var
-    i,j: Integer;
-begin
-
-    for i := 0 to length(inputPays) - 1 do
-        for j:=0 to length(europe)-1 do 
-            if inputPays[i].nom=europe[j].nom then
-                europe[j].score:=europe[j].score/coeff;
-end;
-
-procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
-begin
-    pays.score:=(scoreActivitePays(pays,criteres.categories,nbActParJour)*coeffAct+scoreClimat(criteres.climat,criteres.periode,pays,intervalleTemp)*coeffClim)/(coeffAct+coeffClim);
-end;
-
-
-{pour l'instant, on prend la moyenne comme fonction, mais quand on changera de fonction math, poidsChemin aura plus d'intérêt}
-function poidsChemin(pays1:TPays;pays2:TPays):Real;
-var poids:Real;
-begin
-    poids:=(pays1.score+pays2.score)/2;
-    poidsChemin:=poids;
-    //idee de fonction:2xy/(x+y)
-    //poids:=(pays1.score*pays2.score*2)/(pays1.score+pays2.score);
-    //poidsChemin:=poids;
-    
-end;
-
-
-end.
-
-{function scoreClimat(climat:Real;periode:TMois;unPays:Tpays):Real;
-var scoreClim:Real;
-begin
-    if unPays.climat[periode]>=climat then
-        scoreClim:=1
-    else
-        //écart relatif pour le calcul du score dans le cas où le climat ne corrspond pas
-        scoreClim:=1-Abs(climat-unPays.climat[periode])/climat;
-
-    scoreClimat:=scoreClim;
 end;}
