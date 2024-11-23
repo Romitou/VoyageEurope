@@ -3,13 +3,13 @@ unit calculCout;
 interface
 uses voyageTypes, math;
 
-function calculDuneDistance(lat1, lon1, lat2, lon2: Real; i:Integer): Real;
+function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
 procedure calculDistanceTotal(var voyage: TVoyage);
 procedure coutTotal(var voyage: TVoyage);
 
 implementation
 
-function calculDuneDistance(lat1, lon1, lat2, lon2: Real; i: Integer): Real;
+function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
 const r= 6371; //km
 const p= (Pi/180);
 var a : Real;
@@ -24,14 +24,14 @@ begin
   distance := 0;
   for i := 0 to length(voyage.itineraire) - 2 do
   begin
-    j:=calculDuneDistance(voyage.itineraire[i].latitude, voyage.itineraire[i].longitude, voyage.itineraire[i+1].latitude, voyage.itineraire[i+1].longitude, i);
+    j:=calculDuneDistance(voyage.itineraire[i].latitude, voyage.itineraire[i].longitude, voyage.itineraire[i+1].latitude, voyage.itineraire[i+1].longitude);
     distance:=distance+j;
   end;
   voyage.kmTotal:=distance;
 end;
 
 procedure coutTotal(var voyage: TVoyage);
-var i, j : Integer; cout, coutEtape : Real;
+var i: Integer; cout, coutEtape : Real;
 begin
   if voyage.transport = Train then
     cout := 3 * power(voyage.kmTotal, 0.5)
