@@ -5,7 +5,7 @@ uses voyageTypes, chargerDonnees, choixCriteres,calculItineraireScore,score;
 var europe: TEurope;
 criteres: TCriteres;
 aller:TItineraireResult;
-i,nbActParJour:Integer;
+i,j,nbActParJour:Integer;
 coeffAct,coeffClim,intervalleTemp:Real;
 
 begin
@@ -22,10 +22,17 @@ begin
     criteres.duree:=10;
     criteres.paysDepart:=europe[3];
     criteres.paysArrivee:=europe[13];
-    writeln(europe[1].nom);
 
-
-    writeln('Calcul des scores...');
+ {for j:=0 to length(europe)-1 do
+        begin
+        triActPays(criteres.categories,europe[j]);
+        for i:=0 to length(europe[j].ordreAct)-1 do
+            writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',scoreActivite(europe[j].activites[europe[j].ordreAct[i]],criteres.categories));
+        writeln('');
+        writeln('pays suivant');
+        writeln('');
+        end;}
+    {writeln('Calcul des scores...');
     coeffAct:=1;
     coeffClim:=1;
     nbActParJour:=3;
@@ -44,5 +51,5 @@ begin
     aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee);
 
     for i:=0 to length(aller.itineraire)-1 do 
-        writeln('- ', aller.itineraire[i].nom);
+        writeln('- ', aller.itineraire[i].nom);}
 end.
