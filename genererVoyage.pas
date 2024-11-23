@@ -12,6 +12,7 @@ var aller,retour: TItineraireResult;
     voyage:TVoyage;
     i:Integer;
 begin
+    voyage.transport := criteres.transport;
     voyage.erreur := false;
     voyage.message := '';
 
