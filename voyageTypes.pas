@@ -23,6 +23,7 @@ type TPays = record
     capitale: String;
     activites: Array of TActivite;
     nomFrontieres: TStringArray;
+    nomAvions: TStringArray;
     climat: Array[TMois] of Integer;
     score: Real;
     longitude: Real;
@@ -71,6 +72,7 @@ type TFilePays = record
     capitale: String;
     code: String;
     codeFrontieres: TStringArray;
+    codeAvions: TStringArray;
     climatString: TStringArray;
     longitude: Real;
     latitude: Real;

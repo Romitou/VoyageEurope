@@ -105,8 +105,9 @@ begin
     deserialiserPays.capitale := split[1];
     deserialiserPays.code := split[2];
     deserialiserPays.codeFrontieres := splitString(split[3], ',');
-    deserialiserPays.climatString := splitString(split[6], ',');
-    latlngString := splitString(split[5], ',');
+    deserialiserPays.codeAvions := splitString(split[4], ',');
+    deserialiserPays.climatString := splitString(split[7], ',');
+    latlngString := splitString(split[6], ',');
     DecimalSeparator := '.';
     deserialiserPays.latitude := StrToFloat(latlngString[0]);
     deserialiserPays.longitude := StrToFloat(latlngString[1]);
@@ -219,7 +220,9 @@ begin
         pays.capitale := listePays[i].capitale;
         pays.longitude := listePays[i].longitude;
         pays.latitude := listePays[i].latitude;
+
         setlength(pays.nomFrontieres, 0);
+        setlength(pays.nomAvions, 0);
 
         for j := 0 to length(listePays[i].codeFrontieres) - 1 do
         begin
@@ -229,6 +232,18 @@ begin
                 begin
                     setlength(pays.nomFrontieres, length(pays.nomFrontieres) + 1);
                     pays.nomFrontieres[length(pays.nomFrontieres) - 1] := listePays[k].nom;
+                end;
+            end;
+        end;
+
+        for j := 0 to length(listePays[i].codeAvions) - 1 do
+        begin
+            for k := 0 to length(listePays) - 1 do
+            begin
+                if listePays[i].codeAvions[j] = listePays[k].code then
+                begin
+                    setlength(pays.nomAvions, length(pays.nomAvions) + 1);
+                    pays.nomAvions[length(pays.nomAvions) - 1] := listePays[k].nom;
                 end;
             end;
         end;
