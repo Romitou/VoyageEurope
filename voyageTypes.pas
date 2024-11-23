@@ -15,6 +15,7 @@ type TActivite = record
     nom: String;
     categories: Array of TPref;
     cout: Real;
+    score:Real;
 end;
 type TActivites = Array of TActivite;
 
