@@ -50,6 +50,7 @@ end;
 type TDeplacement = record
     paysDepart: TPays;
     paysEtape: TPays;
+    distance: Real;
     cout: Real;
     minutes: Integer;
 end;

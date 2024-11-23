@@ -1,7 +1,7 @@
 unit score;
 
 interface
-uses voyageTypes;
+uses voyageTypes, calculCout;
 
 function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
 procedure triActPays(pref:Array of TPref;var pays:TPays);
@@ -141,16 +141,31 @@ begin
 
 end;
 
+// L'idée ici serait de calculer le temps total pouvant être alloué aux transports et aux activités en fonction de la durée du voyage des critères
+// Notons dureeTotale cette durée. Afin d'augmenter la quantité d'activités "préférées" (= meilleur score), il faudrait attribuer une durée dans
+// chaque pays proportionnelle au score. CàD : dureePays = (scorePays/totalScores) * dureeTotale
 function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
 var
-    j, nbAct, n: Integer;
+    dureePays, dureeTotale, dureeActivites: Integer;
+    totalScores: Real;
+    i, j, nbAct, n: Integer;
     etapes: TEtapes;
 begin
+    dureeTotale := criteres.duree * 6 * 60; // à modifier
+
+    totalScores := 0;
+    for i := 1 to length(itineraire) - 1 do
+        totalScores := totalScores + itineraire[i].score;
+
     n := 0;
     setlength(etapes, 0);
 
     for j := 1 to length(itineraire) - 1 do
     begin
+        dureePays := round((itineraire[i].score / totalScores) * dureeTotale);
+        writeln('durée pays : ', dureePays);
+
+        dureeActivites := 0;
         nbAct := 0;
         // Si on souhaite éviter les doublons (si besoin dans un cas futur)
         if not ((itineraire[j - 1].nom = itineraire[j].nom)) then
@@ -159,6 +174,9 @@ begin
             etapes[n].estActivite := false;
             etapes[n].deplacement.paysDepart := itineraire[j - 1];
             etapes[n].deplacement.paysEtape := itineraire[j];
+            etapes[n].deplacement.distance := calculDuneDistance(itineraire[j - 1].latitude, itineraire[j - 1].longitude, itineraire[j].latitude, itineraire[j].longitude);
+            etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, criteres.transport);
+            dureeActivites := dureeActivites + etapes[n].deplacement.minutes;
             n := n + 1;
         end;
 
@@ -166,9 +184,10 @@ begin
             setlength(etapes, n + 1);
             etapes[n].estActivite := true;
             etapes[n].activite := itineraire[j].activites[itineraire[j].ordreAct[nbAct]];
-            nbAct := nbAct + 1;
+            dureeActivites := dureeActivites + etapes[n].activite.minutes;
             n := n + 1;
-        until (nbAct=nbActParJour);
+            nbAct := nbAct + 1;
+        until (dureeActivites >= (dureePays - 300)); // TODO: revoir le -300 QUID ? prendre l'activité avec max temps ? jsp
 
         {for i := 0 to length(itineraire[j].activites) - 1 do
         begin
@@ -202,7 +221,7 @@ begin
         else
             dureeEtape := etapes[i].deplacement.minutes;
 
-        if tempsAccumule + dureeEtape <= 600 then
+        if tempsAccumule + dureeEtape <= 300 then
         begin
             setlength(journee.etapes, length(journee.etapes) + 1);
             journee.etapes[length(journee.etapes) - 1] := etapes[i];
