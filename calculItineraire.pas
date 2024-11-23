@@ -60,14 +60,14 @@ begin
     setlength(cheminPays, length(chemin));
     for i := 0 to length(chemin) - 1 do
     begin
-        // TODO: expliquer destructuration obligatoire 
+        // TODO: expliquer destructuration obligatoire
         indexPays := chemin[i];
         cheminPays[i] := paysValables[indexPays];
     end;
 
     resultat.erreur := false;
     resultat.itineraire := cheminPays;
-    
+
     calculerItineraire := resultat;
 end;
 
@@ -103,7 +103,7 @@ begin
                 paysVoisins[length(paysVoisins) - 1] := europe[i].nomAvions[j];
             end;
         end;
-        
+
         for j := 0 to length(paysVoisins) - 1 do
         begin
             voisinIndex := trouverIndexPays(paysVoisins[j], europe);
@@ -112,9 +112,7 @@ begin
                 n := length(listeAdjacence[i]);
                 SetLength(listeAdjacence[i], n + 1);
                 listeAdjacence[i][n].voisin := voisinIndex;
-                //à mettre pour la version avec les scores
                 listeAdjacence[i][n].distance :=100-round(100*poidsChemin(europe[i],europe[voisinIndex]));
-                //listeAdjacence[i][n].distance :=1000;
             end;
         end;
     end;

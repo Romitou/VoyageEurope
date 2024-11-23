@@ -48,7 +48,7 @@ begin
     SetLength(noeudsInitial, nbNoeuds);
     SetLength(distanceDepart, nbNoeuds);
     SetLength(noeudPrecedent, nbNoeuds);
-    
+
     for i := 0 to nbNoeuds - 1 do
     begin
         noeudsInitial[i] := i;

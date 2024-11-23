@@ -16,6 +16,7 @@ type TActivite = record
     nom: String;
     categories: Array of TPref;
     cout: Real;
+    score:Real;
 end;
 type TActivites = Array of TActivite;
 
@@ -23,6 +24,7 @@ type TPays = record
     nom: String;
     capitale: String;
     activites: Array of TActivite;
+    ordreAct: Array of Integer;
     nomFrontieres: TStringArray;
     nomAvions: TStringArray;
     climat: Array[TMois] of Integer;

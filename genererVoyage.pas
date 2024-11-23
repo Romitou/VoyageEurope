@@ -1,7 +1,7 @@
 unit genererVoyage;
 
 interface
-uses voyageTypes, triDesPays, calculItineraire, calculCout, score;
+uses voyageTypes, calculItineraire, calculCout, score;
 
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 
@@ -10,14 +10,38 @@ implementation
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 var aller,retour: TItineraireResult;
     voyage:TVoyage;
-    i:Integer;
+    i,j:Integer;
 begin
     voyage.transport := criteres.transport;
     voyage.erreur := false;
     voyage.message := '';
 
-    for i:=0 to length(europe)-1 do 
-        scorePays(1, 1, criteres, 2, 20, europe[i]);
+    writeln('climat',criteres.climat);
+    criteres.climat:=0;
+
+    writeln('Classement activités...');
+    for j:=0 to length(europe)-1 do
+    begin
+    triActPays(criteres.categories,europe[j]);
+
+        for i:=0 to length(europe[j].ordreAct)-1 do
+            writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',scoreActivite(europe[j].activites[europe[j].ordreAct[i]],criteres.categories));
+        writeln('scoreAct : ',scoreActivitePays(europe[j],criteres.categories,3));
+        writeln('');
+        writeln('pays suivant');
+        writeln('');
+
+    end;
+
+
+    writeln('Calcul des scores des pays...');
+    for i:=0 to length(europe)-1 do
+        begin
+        //attention, coeff non définitif, utilisés pour test, remettre à 1,1,criteres,2,20,europe[i] pour les critères de base
+        scorePays(1,0,criteres,2,20,europe[i]);
+        writeln(europe[i].nom,' : ',europe[i].score);
+        end;
+
 
     //
     // ** Génération itinéraire aller **
@@ -34,7 +58,12 @@ begin
     writeln('Itinéraire aller généré :');
     for i:=0 to length(aller.itineraire)-1 do writeln('- ', aller.itineraire[i].nom);
 
-    paysVisites(2, aller.itineraire, europe);
+    paysVisites(2, aller.itineraire,europe);
+
+    for i:=0 to length(europe)-1 do
+        begin
+        writeln(europe[i].nom,' : ',europe[i].score);
+        end;
 
     //
     // ** Génération itinéraire retour **
@@ -59,13 +88,13 @@ begin
     for i:=0 to length(retour.itineraire)-1 do
         voyage.itineraire[length(aller.itineraire)+i]:=retour.itineraire[i];
     //ajouter champ message dans TVoyage et l'afficher plus tard
-    if not(verifDuree(voyage.itineraire,criteres)) then
+    if length(voyage.itineraire)>criteres.duree then
     begin
         voyage.erreur := true;
         voyage.message := 'Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.';
         exit(voyage);
     end;
-    voyage.planning := genererActivitePays(voyage.itineraire, criteres);
+    voyage.planning := genererActivite(voyage.itineraire, criteres,2);
     calculDistanceTotal(voyage);
     coutTotal(voyage);
     generer:=voyage;
