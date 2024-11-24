@@ -1,6 +1,6 @@
 program main;
 
-uses voyageTypes, chargerDonnees, choixCriteres,calculItineraireScore,score;
+uses voyageTypes, chargerDonnees, choixCriteres,calculItineraire,score;
 
 var europe: TEurope;
 criteres: TCriteres;
@@ -22,13 +22,14 @@ begin
     criteres.duree:=10;
     criteres.paysDepart:=europe[3];
     criteres.paysArrivee:=europe[13];
+    criteres.coeffCout:=1;
 
  for j:=0 to length(europe)-1 do
         begin
-        triActPays(criteres.categories,europe[j]);
+        triActPays(criteres,europe[j]);
         for i:=0 to length(europe[j].ordreAct)-1 do
-            writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',scoreActivite(europe[j].activites[europe[j].ordreAct[i]],criteres.categories));
-        writeln('scoreAct : ',scoreActivitePays(europe[j],criteres.categories,3));
+            writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',scoreActivite(europe[j].activites[europe[j].ordreAct[i]],criteres.categories,criteres.coeffCout));
+        writeln('scoreAct : ',scoreActivitePays(europe[j],criteres,3));
         writeln('');
         writeln('pays suivant');
         writeln('');
@@ -38,7 +39,7 @@ begin
 
     writeln('Calcul des scores...');
     coeffAct:=1;
-    coeffClim:=0;
+    coeffClim:=1;
     nbActParJour:=3;
     intervalleTemp:=15;
     for i:=0 to length(europe)-1 do
@@ -52,7 +53,7 @@ begin
 
 
     writeln('Calcul de l''itinéraire aller...');
-    aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee);
+    aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee,TrainAvion);
 
     for i:=0 to length(aller.itineraire)-1 do
         writeln('- ', aller.itineraire[i].nom);

@@ -22,11 +22,11 @@ begin
     writeln('Classement activités...');
     for j:=0 to length(europe)-1 do
     begin
-    triActPays(criteres.categories,europe[j]);
+    triActPays(criteres,europe[j]);
 
         for i:=0 to length(europe[j].ordreAct)-1 do
-            writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',scoreActivite(europe[j].activites[europe[j].ordreAct[i]],criteres.categories));
-        writeln('scoreAct : ',scoreActivitePays(europe[j],criteres.categories,3));
+            writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',scoreActivite(europe[j].activites[europe[j].ordreAct[i]],criteres.categories,criteres.coeffCout));
+        writeln('scoreAct : ',scoreActivitePays(europe[j],criteres,3));
         writeln('');
         writeln('pays suivant');
         writeln('');

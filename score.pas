@@ -3,10 +3,10 @@ unit score;
 interface
 uses voyageTypes, calculCout, utils;
 
-function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
-procedure triActPays(pref:Array of TPref;var pays:TPays);
+function scoreActivite(activite:TActivite;pref:Array of TPref;coeffCout:Real):Real;
+procedure triActPays(criteres:TCriteres;var pays:TPays);
 function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
-function scoreActivitePays(pays:TPays;pref:Array of TPref; nbActParJour:Integer):Real;
+function scoreActivitePays(pays:TPays;criteres:TCriteres; nbActParJour:Integer):Real;
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
 function poidsChemin(pays1:TPays;pays2:TPays):Real;
 procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
@@ -15,10 +15,12 @@ function genererJournees(etapes: TEtapes): TJournees;
 
 implementation
 
-function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
+function scoreActivite(activite:TActivite;pref:Array of TPref;coeffCout:Real):Real;
 var i,j,nbPrefVerifiee:Integer;
+scorePref, scoreCout, coutMax :Real;
 trouve:Boolean;
 begin
+    //score en fonction du nombre de critères respectés sur le nombre de critères choisis
     nbPrefVerifiee:=0;
     for i:=0 to length(pref)-1 do
         begin
@@ -31,7 +33,19 @@ begin
                 end;
         end;
 
-    scoreActivite:=nbPrefVerifiee/length(pref);
+    scorePref:=nbPrefVerifiee/length(pref);
+
+    {score en fonction du coût, dans le cas où l'utilisateur a sélectionné l'option budget
+    comme pour le score du climat, on utilise une parabole, cette fois plus simple car pas de modification de paramètres
+    f(cout)=1-(cout/100)² donc le score est nul pour les activités dont le couût est > à 100€}
+    coutMax:=50;
+    scoreCout:=1-(activite.cout/coutMax)*(activite.cout/coutMax);
+    if scoreCout<0 then
+        scoreCout:=0;
+
+    //moyenne pondérée pour le score total de l'activité (coeff fixe de 1 pour scorePref)
+    scoreActivite:=(scorePref+coeffCout*scoreCout)/(1+coeffCout);
+
 end;
 
 {On utilise une fonction parabolique de la forme f(x)=a(x-xo)²+c
@@ -39,7 +53,7 @@ avec c=1 et a<0 car le score diminue plus il s'éloigne de xo.
 xo correspond à la température souhaitée soit climat ici.
 x correspond au climat du pays, donc pays.climat[periode] ici.
 a=-4/F² avec F la fourchette (la distance entre les deux racines) des valeurs qu'on veut regarder
-on trouve ca en calculant les racines du polynome}
+on trouve cela en calculant les racines du polynome}
 
 function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
 var a:Real;
@@ -52,7 +66,7 @@ begin
         scoreClimat:=0;
 end;
 
-procedure triActPays(pref:Array of TPref;var pays:TPays);
+procedure triActPays(criteres:TCriteres;var pays:TPays);
 var
 tabIndice: Array of Integer;
 indiceMax:Integer;
@@ -78,9 +92,9 @@ begin
         //on cherche l'indice du meilleur score du tableau après les ièmes cases déjà triées
         for j:=i to length(pays.activites)-1 do
         begin
-            if scoreActivite(pays.activites[tabIndice[j]],pref)>scoreMax then
+            if scoreActivite(pays.activites[tabIndice[j]],criteres.categories,criteres.coeffCout)>scoreMax then
             begin
-                scoreMax:=scoreActivite(pays.activites[tabIndice[j]],pref);
+                scoreMax:=scoreActivite(pays.activites[tabIndice[j]],criteres.categories,criteres.coeffCout);
                 indiceMax:=j;
             end;
 
@@ -99,7 +113,7 @@ begin
 end;
 
 
-function scoreActivitePays(pays:TPays;pref:Array of TPref; nbActParJour:Integer):Real;
+function scoreActivitePays(pays:TPays;criteres:TCriteres; nbActParJour:Integer):Real;
 var
 somme:Real;
 i:Integer;
@@ -107,7 +121,7 @@ begin
     somme:=0;
     for i:=0 to nbActParJour-1 do
         begin
-        somme:=somme + scoreActivite(pays.activites[pays.ordreAct[i]],pref);
+        somme:=somme + scoreActivite(pays.activites[pays.ordreAct[i]],criteres.categories,criteres.coeffCout);
         end;
     scoreActivitePays:=somme/nbActParJour;
 end;
@@ -125,7 +139,7 @@ end;
 
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
 begin
-    pays.score:=(scoreActivitePays(pays,criteres.categories,nbActParJour)*coeffAct+scoreClimat(criteres.climat,criteres.periode,pays,intervalleTemp)*coeffClim)/(coeffAct+coeffClim);
+    pays.score:=(scoreActivitePays(pays,criteres,nbActParJour)*coeffAct+scoreClimat(criteres.climat,criteres.periode,pays,intervalleTemp)*coeffClim)/(coeffAct+coeffClim);
 end;
 
 
