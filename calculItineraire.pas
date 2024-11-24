@@ -4,7 +4,6 @@ interface
 uses voyageTypes, dijkstra, sysutils, utils, score;
 
 function convertirEuropeAdjacence(europe: TEurope; transport: TTransport): TAdjacenceListe;
-function trouverIndexPays(nom: String; europe: TEurope): Integer;
 function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; transport: TTransport): TItineraireResult;
 
 implementation
@@ -69,16 +68,6 @@ begin
     resultat.itineraire := cheminPays;
 
     calculerItineraire := resultat;
-end;
-
-function trouverIndexPays(nom: String; europe: TEurope): Integer;
-var
-    i: Integer;
-begin
-    for i := 0 to high(europe) do
-        if europe[i].nom = nom then
-            Exit(i);
-    Exit(-1);
 end;
 
 function convertirEuropeAdjacence(europe: TEurope; transport: TTransport): TAdjacenceListe;

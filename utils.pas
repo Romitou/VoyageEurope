@@ -1,8 +1,9 @@
 unit utils;
 
 interface
-uses sysutils;
+uses voyageTypes, sysutils;
 
+function trouverIndexPays(nom: String; europe: TEurope): Integer;
 function splitStringQuotes(value: string; delimiter: string): TStringArray;
 function splitString(value: string; delimiter: string): TStringArray;
 
@@ -79,5 +80,16 @@ begin
 
     splitString := resultArray;
 end;
+
+function trouverIndexPays(nom: String; europe: TEurope): Integer;
+var
+    i: Integer;
+begin
+    for i := 0 to high(europe) do
+        if europe[i].nom = nom then
+            Exit(i);
+    Exit(-1);
+end;
+
 
 end.
