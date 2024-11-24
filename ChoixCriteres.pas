@@ -9,6 +9,7 @@ procedure choixDuree(var choix: TCriteres);
 procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
 procedure choixPeriode(var choix: TCriteres);
 procedure choixBudget(var choix: TCriteres);
+procedure choixExperience(var choix: TCriteres);
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 
 
@@ -115,6 +116,43 @@ begin
   choix.budget:=coutLimite;
 end;
 
+
+
+procedure choixExperience(var choix: TCriteres);
+var
+  expLength, i, reponse: Integer;
+begin
+  choix.coeffActivite:=1;
+  choix.coeffClimat:=1;
+  choix.coeffCout:=1;
+  choix.intervalleTemperature:=20;
+
+  expLength := ord(high(TExperience)) + 1;
+
+  writeln('');
+  writeln('Veuillez choisir vos préférences pour votre voyage.');
+  writeln('');
+
+  for i := 1 to expLength do
+    writeln('[', i, '] ', TExperience(i - 1));
+  readln(reponse);
+
+  case  reponse of 
+    1 : choix.coeffCout:=2;
+    2 : choix.transport:=Train;
+    3 : begin
+        choix.coeffClimat:=2;
+        choix.intervalleTemperature:=15;
+        end;
+    4 : choix.coeffActivite:=2;
+  end;
+  writeln('');
+
+
+end;
+
+
+
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 begin
   choixPays(choix, listePays);
@@ -122,6 +160,8 @@ begin
   choixDuree(choix);
   choixPeriode(choix);
   choixBudget(choix);
+  choixExperience(choix);
+
 end;
 
 end.
