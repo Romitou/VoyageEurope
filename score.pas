@@ -1,7 +1,7 @@
 unit score;
 
 interface
-uses voyageTypes, calculCout;
+uses voyageTypes, calculCout, utils;
 
 function scoreActivite(activite:TActivite;pref:Array of TPref):Real;
 procedure triActPays(pref:Array of TPref;var pays:TPays);
@@ -144,14 +144,16 @@ end;
 // L'idée ici serait de calculer le temps total pouvant être alloué aux transports et aux activités en fonction de la durée du voyage des critères
 // Notons dureeTotale cette durée. Afin d'augmenter la quantité d'activités "préférées" (= meilleur score), il faudrait attribuer une durée dans
 // chaque pays proportionnelle au score. CàD : dureePays = (scorePays/totalScores) * dureeTotale
-function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
+function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour: Integer): TEtapes;
 var
     dureePays, dureeTotale, dureeActivites: Integer;
     totalScores: Real;
     i, j, nbAct, n: Integer;
     etapes: TEtapes;
+    activitesUtilisees: array of array of Boolean;
+    indexPays: Integer;
 begin
-    dureeTotale := criteres.duree * 6 * 60; // à modifier
+    dureeTotale := criteres.duree * 10 * 60; // 10h, à modifier
 
     totalScores := 0;
     for i := 1 to length(itineraire) - 1 do
@@ -159,46 +161,47 @@ begin
 
     n := 0;
     setlength(etapes, 0);
+    setlength(activitesUtilisees, length(itineraire));
+    for i := 0 to length(itineraire) - 1 do
+        setlength(activitesUtilisees[i], length(itineraire[i].activites));
 
     for j := 1 to length(itineraire) - 1 do
     begin
-        dureePays := round((itineraire[i].score / totalScores) * dureeTotale);
-        writeln('durée pays : ', dureePays);
+        indexPays := trouverIndexPays(itineraire[j].nom, itineraire);
+        dureePays := round((itineraire[j].score / totalScores) * dureeTotale);
 
         dureeActivites := 0;
         nbAct := 0;
         // Si on souhaite éviter les doublons (si besoin dans un cas futur)
-        if not ((itineraire[j - 1].nom = itineraire[j].nom)) then
-        begin
-            setlength(etapes, n + 1);
-            etapes[n].estActivite := false;
-            etapes[n].deplacement.paysDepart := itineraire[j - 1];
-            etapes[n].deplacement.paysEtape := itineraire[j];
-            etapes[n].deplacement.distance := calculDuneDistance(itineraire[j - 1].latitude, itineraire[j - 1].longitude, itineraire[j].latitude, itineraire[j].longitude);
-            etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, criteres.transport);
-            dureeActivites := dureeActivites + etapes[n].deplacement.minutes;
-            n := n + 1;
-        end;
+        if ((itineraire[j - 1].nom = itineraire[j].nom)) then
+            continue;
+
+        setlength(etapes, n + 1);
+        etapes[n].estActivite := false;
+        etapes[n].deplacement.paysDepart := itineraire[j - 1];
+        etapes[n].deplacement.paysEtape := itineraire[j];
+        etapes[n].deplacement.distance := calculDuneDistance(itineraire[j - 1].latitude, itineraire[j - 1].longitude, itineraire[j].latitude, itineraire[j].longitude);
+        etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, criteres.transport);
+        dureeActivites := dureeActivites + etapes[n].deplacement.minutes;
+        n := n + 1;
 
         repeat
+            while (nbAct < length(itineraire[j].activites)) and (activitesUtilisees[indexPays][itineraire[j].ordreAct[nbAct]]) do
+                nbAct := nbAct + 1;
+
+            if nbAct >= length(itineraire[j].activites) then
+                break;
+
             setlength(etapes, n + 1);
             etapes[n].estActivite := true;
-            if itineraire[j].ordreAct[nbAct] > length(itineraire[j].activites) then
-                break;
             etapes[n].activite := itineraire[j].activites[itineraire[j].ordreAct[nbAct]];
+
+            activitesUtilisees[indexPays][itineraire[j].ordreAct[nbAct]] := true;
+
             dureeActivites := dureeActivites + etapes[n].activite.minutes;
             n := n + 1;
             nbAct := nbAct + 1;
-        until (dureeActivites >= (dureePays - 300)); // TODO: revoir le -300 QUID ? prendre l'activité avec max temps ? jsp
-
-        {for i := 0 to length(itineraire[j].activites) - 1 do
-        begin
-            if matchPreference(itineraire[j].activites[i], criteres.categories) and (nbAct < 2) then
-            begin
-                etapes[jour].activite[nbAct] := itineraire[j].activites[i];
-                nbAct := nbAct + 1;
-            end;
-        end;}
+        until (dureeActivites >= (dureePays - 180));
     end;
 
     genererEtapes := etapes;
@@ -223,7 +226,7 @@ begin
         else
             dureeEtape := etapes[i].deplacement.minutes;
 
-        if tempsAccumule + dureeEtape <= 300 then
+        if tempsAccumule + dureeEtape <= 10 * 60 then // 10h
         begin
             setlength(journee.etapes, length(journee.etapes) + 1);
             journee.etapes[length(journee.etapes) - 1] := etapes[i];
