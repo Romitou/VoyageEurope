@@ -124,8 +124,9 @@ var
 begin
   choix.coeffActivite:=1;
   choix.coeffClimat:=1;
-  choix.coeffCout:=1;
+  choix.coeffCout:=0;
   choix.intervalleTemperature:=20;
+  choix.transport:=Avion;
 
   expLength := ord(high(TExperience)) + 1;
 
