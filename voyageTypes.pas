@@ -11,6 +11,8 @@ type TPref = (Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, S
     Debutant,Histoire, ArtisanatLocal, Photographie, ObservationFaune, Agritourisme,
     Mystere, CinemaEtTelevision, ReligieuxEtSpirituel,Enfants, MobiliteReduite, TouteAnnee, ActiviteSaisonniere, Climatisation,
     TemperatureDouce, Guide, NonGuide,Hiver, Printemps, Ete, Automne, TouteSaison, SaisonFestivals);
+type TExperience = (Economique, Ecologique, RespectDesTemperatures, RespectDesActivites);
+
 
 type TActivite = record
     nom: String;
@@ -45,6 +47,10 @@ type TCriteres = record
     climat: Real;
     budget: Real;
     transport: TTransport;
+    coeffClimat: Real;
+    coeffActivite: Real;
+    coeffCout: Real;
+    intervalleTemperature: Real;
 end;
 
 type TDeplacement = record
