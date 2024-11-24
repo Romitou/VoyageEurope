@@ -27,6 +27,7 @@
 -impact de mettre les poids sur une référence de 1000 ? ferait resortir les différences ?
 -faire en sorte que passer par plus de pays ait moins d'impact? Car il est possible de contourner naturellement un pays avec un mauvais score pour passer par 2 pays avec de bons scores. Mais passer par trois pays est quasis impossible.
 -demander à l'utilisateur de régler, au travers de questions, la valeur des coefficients utilisés, ou au moins quelques uns. Il y a coeffClimat, coeffAct pour la moyenne pondérée des scores des pays, fourchette (température) et coeffDiv (pour la suppression des pays) ou alors dire parmi ces possibilités, laquelle vous importe le plus ? 1-Respect du climat 2-respect des préférences 3-ne pas passer par les mêmes pays
+- organisation du code / dépendances circulaires
 
 ## FAIT
 - Ajout de la possibilité de déplacement en avion
