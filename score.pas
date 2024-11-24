@@ -183,6 +183,8 @@ begin
         repeat
             setlength(etapes, n + 1);
             etapes[n].estActivite := true;
+            if itineraire[j].ordreAct[nbAct] > length(itineraire[j].activites) then
+                break;
             etapes[n].activite := itineraire[j].activites[itineraire[j].ordreAct[nbAct]];
             dureeActivites := dureeActivites + etapes[n].activite.minutes;
             n := n + 1;
