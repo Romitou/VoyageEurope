@@ -126,7 +126,7 @@ begin
   choix.coeffClimat:=1;
   choix.coeffCout:=0;
   choix.intervalleTemperature:=20;
-  choix.transport:=Avion;
+  choix.transport:=TrainAvion;
 
   expLength := ord(high(TExperience)) + 1;
 
