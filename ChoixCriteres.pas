@@ -10,8 +10,9 @@ procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var
 procedure choixPeriode(var choix: TCriteres);
 procedure choixBudget(var choix: TCriteres);
 procedure choixExperience(var choix: TCriteres);
+procedure initialisermenus(var menus : TMenus);
+procedure choixmenu(menus : TMenus; var choix:TCriteres);
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
-
 
 implementation
 
@@ -139,7 +140,7 @@ begin
   readln(reponse);
 
   case  reponse of 
-    1 : choix.coeffCout:=2;
+    1 : choix.coeffCout:=1;
     2 : choix.transport:=Train;
     3 : begin
         choix.coeffClimat:=2;
@@ -152,12 +153,87 @@ begin
 
 end;
 
+procedure initialisermenus(var menus : TMenus);
+begin
+setLength(menus, 5);
+
+menus[0].nom := 'Menu Nature et Photographie';
+setlength(menus[0].preferences,3);
+menus[0].preferences := [Photographie,Relaxation,Nature];
+menus[0].description := 'Explorez les merveilles de la nature avec des aventures passionnantes.';
+
+menus[1].nom := 'Menu Aventure Culturelle';
+setlength(menus[1].preferences,3);
+menus[1].preferences := [Culture,Histoire,Art];
+menus[1].description := 'Plongez dans l''histoire et le patrimoine culturel unique.';
+
+menus[2].nom := 'Menu En Famille';
+setlength(menus[2].preferences,4);
+menus[2].preferences := [Gastronomie,Sport,Authentique,EnFamille];
+menus[2].description := 'Des activités pour petits et grands à partager en famille.';
+
+menus[3].nom := 'Menu Vie Nocturne';
+setlength(menus[3].preferences,3);
+menus[3].preferences := [VieNocturne,FestivalsEtEvenements,Luxe];
+menus[3].description := 'Vivez des soirées inoubliables et profitez d''expériences exclusives';
+
+menus[4].nom := 'Menu Culture et Relaxation Spirituelle';
+setlength(menus[4].preferences,3);
+menus[4].preferences := [Culture,ReligieuxEtSpirituel,Relaxation];
+menus[4].description := 'Alliez découvertes culturelles et moments de paix intérieure';
+end;
+
+
+procedure choixmenu(menus : TMenus; var choix:TCriteres);
+var i,j,reponse:Integer;
+begin
+
+  writeln('');
+  writeln('Veuillez choisir votre menu pour votre voyage.');
+  writeln('');
+
+  //Affichage des menus
+  for i := 1 to length(menus) do
+    begin
+    writeln( i, ') ', menus[i-1].nom);
+    writeln('Préférences associées :');
+
+    for j:=0 to length(menus[i-1].preferences)-1 do 
+      writeln('-> ',menus[i-1].preferences[j]);
+    
+    writeln('Desciption : ', menus[i-1].description);
+    writeln('');
+    end;
+
+  readln(reponse);
+
+  //on attribue les préférences du menu aux critères
+  setlength(choix.categories,length(menus[reponse-1].preferences));
+  choix.categories:=menus[reponse-1].preferences;
+  writeln('');
+
+end;
 
 
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
+var reponse:Integer;
+menus:TMenus;
 begin
   choixPays(choix, listePays);
-  choixPreferences(choix);
+
+  //choix des préférences
+  repeat
+    writeln('Voulez vous choisir individuellement vos préférences concernant les activités (1), ou bien sélectionner parmi des packs de préférences (2) ?');
+    readln(reponse);
+  until (reponse=1) or (reponse=2);
+  if reponse=1 then
+    choixPreferences(choix)
+  else
+    begin
+    initialisermenus(menus);
+    choixmenu(menus, choix);
+    end;    
+  
   choixDuree(choix);
   choixPeriode(choix);
   choixBudget(choix);

@@ -18,7 +18,6 @@ type TActivite = record
     nom: String;
     categories: Array of TPref;
     cout: Real;
-    score:Real;
     minutes: Integer;
 end;
 type TActivites = Array of TActivite;
@@ -52,6 +51,14 @@ type TCriteres = record
     coeffCout: Real;
     intervalleTemperature: Real;
 end;
+
+type TMenu = record
+    nom: String;
+    preferences: array of TPref;
+    description: String;
+  end;
+
+type TMenus = array of TMenu;
 
 type TDeplacement = record
     paysDepart: TPays;
