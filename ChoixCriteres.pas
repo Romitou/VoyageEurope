@@ -7,11 +7,13 @@ procedure choixPays(var choix: TCriteres; listePays: TEurope);
 procedure choixPreferences(var choix: TCriteres);
 procedure choixDuree(var choix: TCriteres);
 procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
+procedure choixClimat(var choix: TCriteres);
 procedure choixPeriode(var choix: TCriteres);
 procedure choixBudget(var choix: TCriteres);
 procedure choixExperience(var choix: TCriteres);
 procedure initialisermenus(var menus : TMenus);
 procedure choixmenu(menus : TMenus; var choix:TCriteres);
+procedure choixNbVoyageurs(var choix: TCriteres);
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 
 implementation
@@ -91,6 +93,14 @@ begin
   writeln('Quelle durée souhaitez-vous pour votre voyage ?');
   readln(temps);
   choix.duree:=temps;
+end;
+
+procedure choixClimat(var choix: TCriteres);
+var temperature: Integer;
+begin
+  writeln('Quelle est la température souhaitée pour votre voyage ?');
+  readln(temperature);
+  choix.climat:=temperature;
 end;
 
 procedure choixPeriode(var choix: TCriteres);
@@ -212,6 +222,14 @@ begin
   choix.categories:=menus[reponse-1].preferences;
   writeln('');
 
+end;
+
+procedure choixNbVoyageurs(var choix: TCriteres);
+var nbPersonnes: Integer;
+begin
+  writeln('Combien de personnes feront parties du voyage ?');
+  readln(nbPersonnes);
+  choix.nbVoyageurs:=nbPersonnes;
 end;
 
 

@@ -43,13 +43,14 @@ type TCriteres = record
     categories: Array of TPref;
     duree: Integer;
     periode: TMois;
-    climat: Real;
+    climat: Integer;
     budget: Real;
     transport: TTransport;
     coeffClimat: Real;
     coeffActivite: Real;
     coeffCout: Real;
     intervalleTemperature: Real;
+    nbVoyageurs: Integer;
 end;
 
 type TMenu = record
