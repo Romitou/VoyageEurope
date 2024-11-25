@@ -58,11 +58,10 @@ var
   prefUser: array of TPref;
   prefLength, i, n: Integer;
   j: String;
-  k: Integer;
+  p: LongInt;
 begin
   setlength(prefUser, 0);
   n := 0;
-  k := 0;
   prefLength := ord(high(TPref)) + 1;
 
   writeln('Veuillez choisir vos préférences pour les activités de votre voyage.');
@@ -75,16 +74,16 @@ begin
     repeat
       writeln('Veuillez saisir un chiffre associé à une préférence :');
       readln(j);
-      strToInt(j);
-    until (k >= 0) and (k <= prefLength);
+      TryStrToInt(j,p);
+    until (p >= 0) and (p <= prefLength);
 
-    if (k > 0) then
+    if (p > 0) then
     begin
       setlength(prefUser, n + 1);
-      prefUser[n] := TPref(k - 1);
+      prefUser[n] := TPref(p - 1);
       n := n + 1;
     end;
-  until (k = 0) and (n >= 2);
+  until (p = 0) and (n >= 2);
 
   setlength(choix.categories, n);
   for i := 0 to n - 1 do
@@ -92,26 +91,31 @@ begin
 end;
 
 procedure choixDuree(var choix: TCriteres);
-var temps: String;
+var temps: String; p: LongInt;
 begin
-  writeln('Quelle durée souhaitez-vous pour votre voyage ?');
-  readln(temps);
-  strToInt(temps);
-  choix.duree:=strToInt(temps);
+  repeat
+    writeln('Quelle durée souhaitez-vous pour votre voyage ?');
+    readln(temps);
+    TryStrToInt(temps,p);
+  until (TryStrToInt(temps,p)=True);
+  choix.duree:=p;
 end;
 
 procedure choixClimat(var choix: TCriteres);
-var temperature: String;
+var temperature: String; p: LongInt;
 begin
-  writeln('Quelle est la température souhaitée pour votre voyage ?');
-  readln(temperature);
-  strToInt(temperature);
-  choix.climat:=strToInt(temperature);
+  repeat
+    writeln('Quelle est la température souhaitée pour votre voyage ?');
+    readln(temperature);
+    TryStrToInt(temperature,p);
+  until (TryStrToInt(temperature,p)=True);
+  choix.climat:=p;
 end;
 
 procedure choixPeriode(var choix: TCriteres);
 var indexChoix: String;
 var i: Integer;
+var p: LongInt;
 begin
   indexChoix := ' ';
   writeln('Le climat du pays principal de votre voyage est le suivant :');
@@ -121,18 +125,20 @@ begin
   repeat
     writeln('Au vu de ces températures, durant quel mois de l''année souhaitez-vous effectuer votre voyage ? (Vueillez entrer le numéro du mois)');
     readln(indexChoix);
-    strToInt(indexChoix);
-  until ((strToInt(indexChoix) >= 0) and (strToInt(indexChoix) <= 11));
-  choix.periode:=TMois(strToInt(indexChoix));
+    TryStrToInt(indexChoix,p);
+  until (0<p)and(p<12);
+  choix.periode:=TMois(p);
 end;
 
 procedure choixBudget(var choix: TCriteres);
-var coutLimite: String;
+var coutLimite: String; p: LongInt;
 begin
-  writeln('Quel est le coût maximal que souhatez fixer pour votre voyage ?');
-  readln(coutLimite);
-  strToInt(coutLimite);
-  choix.budget:=strToInt(coutLimite);
+  repeat
+    writeln('Quel est le coût maximal que souhatez fixer pour votre voyage ?');
+    readln(coutLimite);
+    TryStrToInt(coutLimite,p);
+  until (TryStrToInt(coutLimite,p)=True);
+  choix.budget:=p;
 end;
 
 
@@ -141,6 +147,7 @@ procedure choixExperience(var choix: TCriteres);
 var
   expLength, i: Integer; 
   reponse: String;
+  p: LongInt;
 begin
   choix.coeffActivite:=1;
   choix.coeffClimat:=1;
@@ -155,13 +162,16 @@ begin
   writeln('');
 
   repeat
+  writeln('');
   for i := 1 to expLength do
     writeln('[', i, '] ', TExperience(i - 1)); 
+  writeln('');
+  writeln('Veuillez choisir votre critère préféré.');  
   readln(reponse);
-  strToInt(reponse);
-  until (0<strToInt(reponse))and(strToInt(reponse)<5);
+  TryStrToInt(reponse,p);
+  until (0<p)and(p<5);
   
-  case  strToInt(reponse) of 
+  case  p of 
     1 : choix.coeffCout:=1;
     2 : choix.transport:=Train;
     3 : begin
@@ -207,7 +217,7 @@ end;
 
 
 procedure choixmenu(menus : TMenus; var choix:TCriteres);
-var i,j:Integer; reponse:String;
+var i,j:Integer; reponse:String; p: LongInt;
 begin
 
   writeln('');
@@ -229,28 +239,30 @@ begin
   repeat
    writeln('Saisissez votre choix en indicant le nuléro du menu.');
    readln(reponse); 
-   strToInt(reponse);
-  until (0<strToInt(reponse))and(strToInt(reponse)<(length(menus)+1));
+   TryStrToInt(reponse,p);
+  until (0<p)and(p<(length(menus)+1));
   
   //on attribue les préférences du menu aux critères
-  setlength(choix.categories,length(menus[strToInt(reponse)-1].preferences));
-  choix.categories:=menus[strToInt(reponse)-1].preferences;
+  setlength(choix.categories,length(menus[p-1].preferences));
+  choix.categories:=menus[p-1].preferences;
   writeln('');
 
 end;
 
 procedure choixNbVoyageurs(var choix: TCriteres);
-var nbPersonnes: String;
+var nbPersonnes: String; p: LongInt;
 begin
-  writeln('Combien de personnes feront parties du voyage ?');
-  readln(nbPersonnes);
-  strToInt(nbPersonnes);
-  choix.nbVoyageurs:=strToInt(nbPersonnes);
+  repeat
+    writeln('Combien de personnes feront parties du voyage ?');
+    readln(nbPersonnes);
+    TryStrToInt(nbPersonnes,p);
+  until (TryStrToInt(nbPersonnes,p)=True);
+  choix.nbVoyageurs:=p;
 end;
 
 
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
-var reponse:String;
+var reponse:String; p: LongInt;
 menus:TMenus;
 begin
   choixPays(choix, listePays);
@@ -259,9 +271,9 @@ begin
   repeat
     writeln('Voulez vous choisir individuellement vos préférences concernant les activités (1), ou bien sélectionner parmi des packs de préférences (2) ?');
     readln(reponse);
-    strToInt(reponse);
-  until (strToInt(reponse)=1) or (strToInt(reponse)=2);
-  if strToInt(reponse)=1 then
+    TryStrToInt(reponse,p);
+  until (p=1)or(p=2);
+  if p=1 then
     choixPreferences(choix)
   else
     begin
@@ -270,9 +282,11 @@ begin
     end;    
   
   choixDuree(choix);
+  choixClimat(choix);
   choixPeriode(choix);
   choixBudget(choix);
   choixExperience(choix);
+  choixNbVoyageurs(choix);
 
 end;
 

@@ -41,16 +41,16 @@ type TCriteres = record
     paysDepart: TPays;
     paysArrivee: TPays;
     categories: Array of TPref;
-    duree: Integer;
+    duree: LongInt;
     periode: TMois;
-    climat: Integer;
+    climat: LongInt;
     budget: Real;
     transport: TTransport;
     coeffClimat: Real;
     coeffActivite: Real;
     coeffCout: Real;
     intervalleTemperature: Real;
-    nbVoyageurs: Integer;
+    nbVoyageurs: LongInt;
 end;
 
 type TMenu = record
