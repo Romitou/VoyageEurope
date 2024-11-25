@@ -1,6 +1,6 @@
 program main;
 
-uses voyageTypes, chargerDonnees, choixCriteres, triDesPays, afficherVoyage,score;
+uses voyageTypes, chargerDonnees, choixCriteres, afficherVoyage,score;
 
 var europe, paysVal, itineraire: TEurope;
     criteres: TCriteres;
@@ -22,7 +22,7 @@ europe[0].activites[0].nom:='Tour Eiffel';
 setlength(europe[0].activites[0].categories,3);
 europe[0].activites[0].categories[0]:=Culture;
 europe[0].activites[0].categories[1]:=Hiver;
-europe[0].activites[0].categories[2]:=Culture;
+europe[0].activites[0].categories[2]:=Nature;
 
 europe[0].activites[1].nom:='Louvre';
 setlength(europe[0].activites[1].categories,3);
@@ -178,16 +178,16 @@ writeln(scoreActivitePays(europe[0],criteres.categorie,2));}
 
 fourchette:=20;
 nbAct:=3;
-numeroPays:=2;
+numeroPays:=0;
 
-writeln(scoreActivite(europe[numeroPays].activites[0],criteres.categories));
-writeln(scoreActivite(europe[numeroPays].activites[1],criteres.categories));
-writeln(scoreActivite(europe[numeroPays].activites[2],criteres.categories));
+writeln(scoreActivite(europe[numeroPays].activites[0],criteres.categories,0));
+writeln(scoreActivite(europe[numeroPays].activites[1],criteres.categories,0));
+writeln(scoreActivite(europe[numeroPays].activites[2],criteres.categories,0));
 
-writeln('climat',scoreClimat(criteres.climat,criteres.periode,europe[numeroPays],fourchette));
+{writeln('climat',scoreClimat(criteres.climat,criteres.periode,europe[numeroPays],fourchette));
 writeln('act',scoreActivitePays(europe[numeroPays],criteres.categories,nbAct));
 scorePays(1,1,criteres,nbAct,fourchette,europe[numeroPays]);
-writeln('score total',europe[numeroPays].score);
+writeln('score total',europe[numeroPays].score);}
 
 
 end.

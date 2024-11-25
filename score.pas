@@ -17,11 +17,11 @@ implementation
 
 function scoreActivite(activite:TActivite;pref:Array of TPref;coeffCout:Real):Real;
 var i,j,nbPrefVerifiee:Integer;
-scorePref, scoreCout, coutMax :Real;
+scorePref, scoreCout, coutMax, pasCoeff,coeffPrefMax, coeffPrefMin,somme,sommeCoeff :Real;
+nbPref : Integer;
 trouve:Boolean;
 begin
-    //score en fonction du nombre de critères respectés sur le nombre de critères choisis
-    nbPrefVerifiee:=0;
+ nbPrefVerifiee:=0;
     for i:=0 to length(pref)-1 do
         begin
         trouve:=False;
@@ -34,6 +34,36 @@ begin
         end;
 
     scorePref:=nbPrefVerifiee/length(pref);
+
+
+
+
+
+
+    {nbPref:=length(pref)-1;
+    somme:=0;
+    sommeCoeff:=0;
+    //calcul du pas pour la moyenne pondérée
+    coeffPrefMax:=2;
+    coeffPrefMin:=1;
+    pasCoeff:=(coeffPrefMax-coeffPrefMin)/nbPref;
+    writeln('pas',pasCoeff);
+    
+    for i:=0 to nbPref do
+    begin
+        for j:=0 to length(activite.categories)-1 do
+            if pref[i]=activite.categories[j] then
+                somme:=somme+coeffPrefMin+pasCoeff*(i);
+        sommeCoeff:=sommeCoeff+pasCoeff*(i);
+    end;     
+    
+                
+                
+
+    //moyenne pondérée
+    scorePref:=somme/sommeCoeff;}
+
+
 
     {score en fonction du coût, dans le cas où l'utilisateur a sélectionné l'option budget
     comme pour le score du climat, on utilise une parabole, cette fois plus simple car pas de modification de paramètres
