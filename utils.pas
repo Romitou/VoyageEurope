@@ -6,6 +6,7 @@ uses voyageTypes, sysutils;
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
 function splitStringQuotes(value: string; delimiter: string): TStringArray;
 function splitString(value: string; delimiter: string): TStringArray;
+function strToInt(mot: String): Integer;
 
 implementation
 
@@ -91,5 +92,14 @@ begin
     Exit(-1);
 end;
 
-
+function strToInt(mot: String): Integer;
+var 
+  k: Integer;
+  m: Boolean;
+  p: Extended;
+begin
+  m:=TryStrToFloat(mot,p);
+  k:=Round(p);
+  strToInt:=k;
+end;
 end.
