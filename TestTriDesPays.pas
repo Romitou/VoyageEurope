@@ -20,21 +20,21 @@ setlength(europe[0].activites,3);
 europe[0].activites[0].nom:='Tour Eiffel';
 
 setlength(europe[0].activites[0].categories,3);
-europe[0].activites[0].categories[0]:=Culture;
-europe[0].activites[0].categories[1]:=Hiver;
-europe[0].activites[0].categories[2]:=Nature;
+europe[0].activites[0].categories[0]:=Aventure;
+europe[0].activites[0].categories[1]:=Culture;
+europe[0].activites[0].categories[2]:=Hiver;
 
 europe[0].activites[1].nom:='Louvre';
 setlength(europe[0].activites[1].categories,3);
-europe[0].activites[1].categories[0]:=Culture;
-europe[0].activites[1].categories[1]:=Histoire;
+europe[0].activites[1].categories[0]:=Histoire;
+europe[0].activites[1].categories[1]:=Aventure;
 europe[0].activites[1].categories[2]:=JourneeComplete;
 
 europe[0].activites[2].nom:='Arc de Trimphe';
 setlength(europe[0].activites[2].categories,3);
 europe[0].activites[2].categories[0]:=Culture;
 europe[0].activites[2].categories[1]:=Histoire;
-europe[0].activites[2].categories[2]:=Aventure;
+europe[0].activites[2].categories[2]:=Hiver;
 
 
 europe[0].climat[Janvier]:=15;

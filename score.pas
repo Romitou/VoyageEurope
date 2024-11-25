@@ -21,48 +21,27 @@ scorePref, scoreCout, coutMax, pasCoeff,coeffPrefMax, coeffPrefMin,somme,sommeCo
 nbPref : Integer;
 trouve:Boolean;
 begin
- nbPrefVerifiee:=0;
+
+somme:=0;
+sommeCoeff:=0;
+coeffPrefMax:=1.5;
+coeffPrefMin:=1;
+pasCoeff:=(coeffPrefMax-coeffPrefMin)/(length(pref)-1);
+writeln('pas',pasCoeff);
+
     for i:=0 to length(pref)-1 do
         begin
         trouve:=False;
         for j:=0 to length(activite.categories)-1 do
             if (pref[i]=activite.categories[j]) and not(trouve) then
                 begin
-                nbPrefVerifiee:=nbPrefVerifiee+1;
+                somme:=somme+coeffPrefMax-pasCoeff*(i);
                 trouve:=True;
                 end;
+            sommeCoeff:=sommeCoeff+coeffPrefMax-pasCoeff*(i);
         end;
 
-    scorePref:=nbPrefVerifiee/length(pref);
-
-
-
-
-
-
-    {nbPref:=length(pref)-1;
-    somme:=0;
-    sommeCoeff:=0;
-    //calcul du pas pour la moyenne pondérée
-    coeffPrefMax:=2;
-    coeffPrefMin:=1;
-    pasCoeff:=(coeffPrefMax-coeffPrefMin)/nbPref;
-    writeln('pas',pasCoeff);
-    
-    for i:=0 to nbPref do
-    begin
-        for j:=0 to length(activite.categories)-1 do
-            if pref[i]=activite.categories[j] then
-                somme:=somme+coeffPrefMin+pasCoeff*(i);
-        sommeCoeff:=sommeCoeff+pasCoeff*(i);
-    end;     
-    
-                
-                
-
-    //moyenne pondérée
-    scorePref:=somme/sommeCoeff;}
-
+    scorePref:=somme/sommeCoeff;
 
 
     {score en fonction du coût, dans le cas où l'utilisateur a sélectionné l'option budget
