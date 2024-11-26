@@ -22,6 +22,9 @@ implementation
 // end;
 
 procedure afficher(voyage: TVoyage; criteres: TCriteres);
+{Procédure permettant l'affichage de l'intégralité du voyage, avec pour chaque journée le trajet effectué et sa durée, 
+la ville d'arrivée, puis une liste d'activités suggérées à l'utilisateur relativement à ses attentes avec le prix et 
+la durée de chaque activité. La procédure affiche également un message d'alerte en cas d'erreur.}
 var
     i, j: Integer;
     etape: TEtape;
@@ -68,6 +71,9 @@ begin
 end;
 
 procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
+{Cette procédure permet d'afficher dans le terminal les informations relatives au voyage proposé par le programme 
+(durée du séjour, coût total et distance total parcourue). En cas de dépassement du coût maximal rentré par l'utilisateur 
+en début de programme, la procédure envoie un message d'alerte signalant la différence avec le budget rensigné.}
 begin
     writeln('Détails du voyage :');
     writeln('> Durée du séjour : ', length(voyage.planning)-1, ' jours');
