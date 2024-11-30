@@ -1,7 +1,7 @@
 unit choixCriteres;
 
 interface
-uses voyageTypes, utils, sysutils;
+uses voyageTypes, utils, sysutils, constantes;
 
 procedure choixPays(var choix: TCriteres; listePays: TEurope);
 procedure choixPreferences(var choix: TCriteres);
@@ -159,10 +159,10 @@ var
   reponse: String;
   p: LongInt;
 begin
-  choix.coeffActivite:=1;
-  choix.coeffClimat:=1;
-  choix.coeffCout:=0;
-  choix.intervalleTemperature:=20;
+  choix.coeffActivite:=coeffActiviteInitial;
+  choix.coeffClimat:=coeffClimatInitial;
+  choix.coeffCout:=coeffCoutInitial;
+  choix.intervalleTemperature:=intervalleTemperatureInitial;
   choix.transport:=TrainAvion;
 
   expLength := ord(high(TExperience)) + 1;
@@ -182,13 +182,13 @@ begin
   until (0<p)and(p<5);
   
   case  p of 
-    1 : choix.coeffCout:=1;
+    1 : choix.coeffCout:=coeffCoutFinal;
     2 : choix.transport:=Train;
     3 : begin
-        choix.coeffClimat:=2;
-        choix.intervalleTemperature:=15;
+        choix.coeffClimat:=coeffClimatFinal;
+        choix.intervalleTemperature:=intervalleTemperatureFinal;
         end;
-    4 : choix.coeffActivite:=2;
+    4 : choix.coeffActivite:=coeffActiviteFinal;
   end;
   writeln('');
 

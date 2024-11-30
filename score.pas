@@ -1,7 +1,7 @@
 unit score;
 
 interface
-uses voyageTypes, calculCout, utils;
+uses voyageTypes, calculCout, utils, constantes;
 
 function scoreActivite(activite:TActivite;pref:Array of TPref;coeffCout:Real):Real;
 procedure triActPays(criteres:TCriteres;var pays:TPays);
@@ -9,23 +9,21 @@ function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
 function scoreActivitePays(pays:TPays;criteres:TCriteres; nbActParJour:Integer):Real;
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
 function poidsChemin(pays1:TPays;pays2:TPays):Real;
-procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
+procedure paysVisites(inputPays:TEurope;var europe: TEurope);
 function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
 function genererJournees(etapes: TEtapes): TJournees;
 
 implementation
 
 function scoreActivite(activite:TActivite;pref:Array of TPref;coeffCout:Real):Real;
-var i,j,nbPrefVerifiee:Integer;
-scorePref, scoreCout, coutMax, pasCoeff,coeffPrefMax, coeffPrefMin,somme,sommeCoeff :Real;
-nbPref : Integer;
+var i,j : Integer;
+scorePref, scoreCout, pasCoeff,somme,sommeCoeff :Real;
 trouve:Boolean;
 begin
 
 somme:=0;
 sommeCoeff:=0;
-coeffPrefMax:=1.5;
-coeffPrefMin:=1;
+
 pasCoeff:=(coeffPrefMax-coeffPrefMin)/(length(pref)-1);
 writeln('pas',pasCoeff);
 
@@ -47,7 +45,6 @@ writeln('pas',pasCoeff);
     {score en fonction du coût, dans le cas où l'utilisateur a sélectionné l'option budget
     comme pour le score du climat, on utilise une parabole, cette fois plus simple car pas de modification de paramètres
     f(cout)=1-(cout/100)² donc le score est nul pour les activités dont le couût est > à 100€}
-    coutMax:=50;
     scoreCout:=1-(activite.cout/coutMax)*(activite.cout/coutMax);
     if scoreCout<0 then
         scoreCout:=0;
@@ -135,7 +132,7 @@ begin
     scoreActivitePays:=somme/nbActParJour;
 end;
 
-procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
+procedure paysVisites(inputPays:TEurope;var europe: TEurope);
 var
     i,j: Integer;
 begin
@@ -143,7 +140,7 @@ begin
     for i := 0 to length(inputPays) - 1 do
         for j:=0 to length(europe)-1 do
             if inputPays[i].nom=europe[j].nom then
-                europe[j].score:=europe[j].score/coeff;
+                europe[j].score:=europe[j].score/divisionDuScore;
 end;
 
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
@@ -176,7 +173,7 @@ var
     activitesUtilisees: array of array of Boolean;
     indexPays: Integer;
 begin
-    dureeTotale := criteres.duree * 10 * 60; // 10h, à modifier
+    dureeTotale := criteres.duree * nbHeuresParJour * 60; // 10h, à modifier
 
     totalScores := 0;
     for i := 1 to length(itineraire) - 1 do

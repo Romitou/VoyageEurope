@@ -1,6 +1,6 @@
 program main;
 
-uses voyageTypes, chargerDonnees, choixCriteres, afficherVoyage,score;
+uses voyageTypes, chargerDonnees, choixCriteres, afficherVoyage,score,constantes;
 
 var europe, paysVal, itineraire: TEurope;
     criteres: TCriteres;
@@ -34,7 +34,7 @@ europe[0].activites[2].nom:='Arc de Trimphe';
 setlength(europe[0].activites[2].categories,3);
 europe[0].activites[2].categories[0]:=Culture;
 europe[0].activites[2].categories[1]:=Histoire;
-europe[0].activites[2].categories[2]:=Hiver;
+europe[0].activites[2].categories[2]:=Aventure;
 
 
 europe[0].climat[Janvier]:=15;

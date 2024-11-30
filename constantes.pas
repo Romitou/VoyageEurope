@@ -18,7 +18,12 @@ nbHeuresParJour=10;
 coeffActiviteInitial=1;
 coeffClimatInitial=1;
 intervalleTemperatureInitial=20;
-coeffCout=1;
+coeffCoutInitial=0;
+
+coeffActiviteFinal=2;
+coeffClimatFinal=2;
+intervalleTemperatureFinal=15;
+coeffCoutFinal=1;
 
 implementation
 end.
