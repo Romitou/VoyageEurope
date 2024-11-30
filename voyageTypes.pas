@@ -3,7 +3,7 @@ unit voyageTypes;
 interface
 uses sysutils;
 
-type TTransport = (Train, TrainAvion);
+type TTransport = (Train, TrainEtAvion);
 type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novembre, Decembre);
 type TPref = (Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education,
     BienEtre, Sport, AventureAquatique, FestivalsEtEvenements, Romantique, EnFamille, EntreAmis, Solo, Luxe, Budget, EcoResponsable,
@@ -88,6 +88,8 @@ type TVoyage = record
     etapes: TEtapes;
     planning: TJournees;
     coutTotal: Real;
+    kmTrain: Real;
+    kmAvion: Real;
     kmTotal: Real;
     erreur: Boolean;
     message: String;

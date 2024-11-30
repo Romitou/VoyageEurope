@@ -98,6 +98,7 @@ begin
     voyage.planning := genererJournees(voyage.etapes);
     calculDistanceTotal(voyage);
     coutTotal(voyage);
+    coutCarbone(voyage);
     generer:=voyage;
 end;
 end.

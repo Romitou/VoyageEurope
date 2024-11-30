@@ -25,6 +25,10 @@ coeffClimatFinal=2;
 intervalleTemperatureFinal=15;
 coeffCoutFinal=1;
 
+//cout carbone 
+emissionCO2Train=0.003;
+emissionCO2Avion=0.152;
+
 implementation
 end.
 

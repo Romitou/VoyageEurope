@@ -1,13 +1,14 @@
 unit calculCout;
 
 interface
-uses voyageTypes, math;
+uses voyageTypes, math, constantes, choixCriteres;
 
 function calculDureeTransport(distance: Real; transport: TTransport): Integer;
 function calculCoutTransport(distance: Real; transport: TTransport): Real;
 function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
 procedure calculDistanceTotal(var voyage: TVoyage);
 procedure coutTotal(var voyage: TVoyage);
+procedure coutCarbone(var voyage: TVoyage);
 
 implementation
 
@@ -70,4 +71,13 @@ begin
     calculDureeTransport := round((distance / 800) * 60)
 end;
 
+procedure coutCarbone(var voyage: TVoyage);
+begin
+  if voyage.transport = Train then
+    voyage.carbonImpact:=emissionCO2Train*voyage.kmTotal
+  else
+  begin
+    voyage.carbonImpact:=emissionCO2Train*voyage.kmAvion+emissionCO2Train*voyage.kmTrain;
+  end;
+end;
 end.

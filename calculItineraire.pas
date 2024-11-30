@@ -81,7 +81,7 @@ begin
     begin
         SetLength(listeAdjacence[i], 0);
         paysVoisins := europe[i].nomFrontieres;
-        if transport = TrainAvion then
+        if transport = TrainEtAvion then
         begin
             for j := 0 to length(europe[i].nomAvions) - 1 do
             begin

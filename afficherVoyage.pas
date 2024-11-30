@@ -1,7 +1,7 @@
 unit afficherVoyage;
 
 interface
-uses voyageTypes;
+uses voyageTypes, constantes;
 
 procedure afficher(voyage:TVoyage;criteres:TCriteres);
 procedure afficherInfos(voyage:TVoyage;criteres:TCriteres);
@@ -78,10 +78,15 @@ begin
     writeln('Détails du voyage :');
     writeln('> Durée du séjour : ', length(voyage.planning)-1, ' jours');
     writeln('> Coût total : ', voyage.coutTotal:5:0, ' euros');
-    writeln('> Distance de ',voyage.kmTotal:5:1, ' km en train à travers l''Europe, depuis ',criteres.paysDepart.nom,' destination ',criteres.paysArrivee.nom);
+    writeln('> Distance de ',voyage.kmTotal:5:1, ' km en ', voyage.transport ,' à travers l''Europe, depuis ',criteres.paysDepart.nom,' destination ',criteres.paysArrivee.nom);
     writeln();
     if (voyage.coutTotal>criteres.budget) then
         writeln('ATTENTION : Le coût du voyage proposé ci-dessous est supérieur de ', voyage.coutTotal-criteres.budget:5:0, ' euros au coût maximal que vous avez renseigné.');
+    writeln('> Coût carbone : ', voyage.carbonImpact:4:0, 'kg de CO2 rejété dans l''atmosphère durant votre voyage');
+    writeln();
+    if voyage.transport = Train then
+    writeln('')
+    else writeln('A noter que votre voyage fait exclusivement en train rejette ', (voyage.carbonImpact:4:0)-(voyage.kmTotal*emissionCO2Train):4:0, ' kg de CO2 en moins par rapport à votre voyage.' )    
 end;
 
 end.

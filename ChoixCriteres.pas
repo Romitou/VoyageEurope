@@ -68,6 +68,7 @@ begin
 
   writeln('Veuillez choisir vos préférences pour les activités de votre voyage.');
   writeln('Sélectionnez au moins 2 préférences en entrant leurs numéros associés.');
+  writeln('Pensez à sélectionner vos préférences par ordre de priorité.');
   for i := 1 to prefLength do
     writeln('[', i, '] ', TPref(i - 1));
   writeln('Tapez 0 quand vous aurez terminé votre saisie.');
@@ -296,12 +297,12 @@ begin
     choixmenu(menus, choix);
     end;    
   
-  choixDuree(choix);
   choixClimat(choix);
   choixPeriode(choix);
   choixBudget(choix);
   choixExperience(choix);
   choixNbVoyageurs(choix);
+  choixDuree(choix);
 
 end;
 
