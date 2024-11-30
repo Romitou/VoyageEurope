@@ -88,7 +88,7 @@ begin
     writeln('')
     else 
     begin
-      writeln('A noter que votre voyage fait exclusivement en train rejette ', (voyage.carbonImpact:4:0)-(voyage.kmTotal*emissionCO2Train):4:0, ' kg de CO2 en moins par rapport à votre voyage.' )    
+      writeln('A noter que votre voyage fait exclusivement en train rejeterait ', (voyage.carbonImpact:4:0)-(voyage.kmTotal*emissionCO2Train):4:0, ' kg de CO2 en moins par rapport à votre voyage.' )    
     end;
 end;
 

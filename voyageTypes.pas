@@ -3,7 +3,8 @@ unit voyageTypes;
 interface
 uses sysutils;
 
-type TTransport = (Train, TrainEtAvion);
+type TMode = (TrainSeul, TrainEtAvion);
+type TTransport = (train, avion);
 type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novembre, Decembre);
 type TPref = (Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education,
     BienEtre, Sport, AventureAquatique, FestivalsEtEvenements, Romantique, EnFamille, EntreAmis, Solo, Luxe, Budget, EcoResponsable,
@@ -46,7 +47,7 @@ type TCriteres = record
     periode: TMois;
     climat: LongInt;
     budget: Real;
-    transport: TTransport;
+    transport: TMode;
     coeffClimat: Real;
     coeffActivite: Real;
     coeffCout: Real;
@@ -65,6 +66,7 @@ type TMenus = array of TMenu;
 type TDeplacement = record
     paysDepart: TPays;
     paysEtape: TPays;
+    transport: TTransport;
     distance: Real;
     cout: Real;
     minutes: Integer;
@@ -93,7 +95,7 @@ type TVoyage = record
     kmTotal: Real;
     erreur: Boolean;
     message: String;
-    transport: TTransport;
+    transport: TMode;
     carbonImpact: Real;
 end;
 
