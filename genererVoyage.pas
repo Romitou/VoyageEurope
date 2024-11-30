@@ -25,7 +25,7 @@ begin
     triActPays(criteres,europe[j]);
 
         for i:=0 to length(europe[j].ordreAct)-1 do
-            writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',scoreActivite(europe[j].activites[europe[j].ordreAct[i]],criteres.categories,criteres.coeffCout));
+            writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',europe[j].activites[europe[j].ordreAct[i]].score);
         writeln('scoreAct : ',scoreActivitePays(europe[j],criteres,3));
         writeln('');
         writeln('pays suivant');
@@ -58,7 +58,7 @@ begin
     writeln('Itinéraire aller généré :');
     for i:=0 to length(aller.itineraire)-1 do writeln('- ', aller.itineraire[i].nom);
 
-    paysVisites(2, aller.itineraire,europe);
+    paysVisites(aller.itineraire,europe);
 
     for i:=0 to length(europe)-1 do
         begin

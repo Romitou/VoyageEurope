@@ -72,7 +72,7 @@ europe[1].activites[1].categories[2] := Immersif;
 europe[1].activites[2].nom := 'Forêt-Noire';
 setlength(europe[1].activites[2].categories, 3);
 europe[1].activites[2].categories[0] := Nature;
-europe[1].activites[2].categories[1] := EnFamille;
+europe[1].activites[2].categories[1] := Culture;
 europe[1].activites[2].categories[2] := RoadTrip;
 
 europe[1].climat[Janvier] := 1;
@@ -99,13 +99,13 @@ europe[2].activites[0].nom := 'Sagrada Familia';
 setlength(europe[2].activites[0].categories, 3);
 europe[2].activites[0].categories[0] := Culture;
 europe[2].activites[0].categories[1] := Histoire;
-europe[2].activites[0].categories[2] := ReligieuxEtSpirituel;
+europe[2].activites[0].categories[2] := Histoire;
 
 europe[2].activites[1].nom := 'Alhambra';
 setlength(europe[2].activites[1].categories, 3);
 europe[2].activites[1].categories[0] := Histoire;
 europe[2].activites[1].categories[1] := Culture;
-europe[2].activites[1].categories[2] := Photographie;
+europe[2].activites[1].categories[2] := Aventure;
 
 europe[2].activites[2].nom := 'Plage de Barceloneta';
 setlength(europe[2].activites[2].categories, 3);
@@ -178,13 +178,20 @@ writeln(scoreActivitePays(europe[0],criteres.categorie,2));}
 
 fourchette:=20;
 nbAct:=3;
-numeroPays:=0;
+numeroPays:=2;
 
-writeln(scoreActivite(europe[numeroPays].activites[0],criteres.categories,0));
+for i:=0 to 2 do
+    begin
+        scoreActivite(criteres.categories,0,europe[numeroPays].activites[i]);
+        writeln(europe[numeroPays].activites[i].score);
+    end;
+
+
+{writeln((europe[numeroPays].activites[0],criteres.categories,0));
 writeln(scoreActivite(europe[numeroPays].activites[1],criteres.categories,0));
 writeln(scoreActivite(europe[numeroPays].activites[2],criteres.categories,0));
 
-{writeln('climat',scoreClimat(criteres.climat,criteres.periode,europe[numeroPays],fourchette));
+writeln('climat',scoreClimat(criteres.climat,criteres.periode,europe[numeroPays],fourchette));
 writeln('act',scoreActivitePays(europe[numeroPays],criteres.categories,nbAct));
 scorePays(1,1,criteres,nbAct,fourchette,europe[numeroPays]);
 writeln('score total',europe[numeroPays].score);}

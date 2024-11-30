@@ -19,6 +19,7 @@ type TActivite = record
     categories: Array of TPref;
     cout: Real;
     minutes: Integer;
+    score: Real;
 end;
 type TActivites = Array of TActivite;
 

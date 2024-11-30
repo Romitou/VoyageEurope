@@ -3,7 +3,7 @@ unit score;
 interface
 uses voyageTypes, calculCout, utils, constantes;
 
-function scoreActivite(activite:TActivite;pref:Array of TPref;coeffCout:Real):Real;
+procedure scoreActivite(pref:Array of TPref;coeffCout:Real; var activite:TActivite);
 procedure triActPays(criteres:TCriteres;var pays:TPays);
 function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
 function scoreActivitePays(pays:TPays;criteres:TCriteres; nbActParJour:Integer):Real;
@@ -15,7 +15,7 @@ function genererJournees(etapes: TEtapes): TJournees;
 
 implementation
 
-function scoreActivite(activite:TActivite;pref:Array of TPref;coeffCout:Real):Real;
+procedure scoreActivite(pref:Array of TPref;coeffCout:Real; var activite:TActivite);
 var i,j : Integer;
 scorePref, scoreCout, pasCoeff,somme,sommeCoeff :Real;
 trouve:Boolean;
@@ -25,7 +25,6 @@ somme:=0;
 sommeCoeff:=0;
 
 pasCoeff:=(coeffPrefMax-coeffPrefMin)/(length(pref)-1);
-writeln('pas',pasCoeff);
 
     for i:=0 to length(pref)-1 do
         begin
@@ -50,7 +49,7 @@ writeln('pas',pasCoeff);
         scoreCout:=0;
 
     //moyenne pondérée pour le score total de l'activité (coeff fixe de 1 pour scorePref)
-    scoreActivite:=(scorePref+coeffCout*scoreCout)/(1+coeffCout);
+    activite.score:=(scorePref+coeffCout*scoreCout)/(1+coeffCout);
 
 end;
 
@@ -98,9 +97,9 @@ begin
         //on cherche l'indice du meilleur score du tableau après les ièmes cases déjà triées
         for j:=i to length(pays.activites)-1 do
         begin
-            if scoreActivite(pays.activites[tabIndice[j]],criteres.categories,criteres.coeffCout)>scoreMax then
+            if pays.activites[tabIndice[j]].score>scoreMax then
             begin
-                scoreMax:=scoreActivite(pays.activites[tabIndice[j]],criteres.categories,criteres.coeffCout);
+                scoreMax:=pays.activites[tabIndice[j]].score;
                 indiceMax:=j;
             end;
 
@@ -127,7 +126,7 @@ begin
     somme:=0;
     for i:=0 to nbActParJour-1 do
         begin
-        somme:=somme + scoreActivite(pays.activites[pays.ordreAct[i]],criteres.categories,criteres.coeffCout);
+        somme:=somme + pays.activites[pays.ordreAct[i]].score;
         end;
     scoreActivitePays:=somme/nbActParJour;
 end;
