@@ -1,7 +1,7 @@
 unit calculCout;
 
 interface
-uses voyageTypes, math, constantes, choixCriteres;
+uses voyageTypes, math, constantes;
 
 function calculDureeTransport(distance: Real; transport: TTransport): Integer;
 function calculCoutTransport(distance: Real; transport: TTransport): Real;
@@ -13,6 +13,7 @@ procedure coutCarbone(var voyage: TVoyage);
 implementation
 
 function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
+{Fonction permettant de calculer la distance séparant deux points de latitude et longitude connues.}
 const r= 6371; //km
 const p= (Pi/180);
 var a : Real;
@@ -22,6 +23,7 @@ begin
 end;
 
 procedure calculDistanceTotal(var voyage: TVoyage);
+{Cette procédure calcul la distance totale parcourue durant le voyage proposé à l'utilisateur.}
 var i : Integer; j, distance : Real;
 begin
   distance := 0;
@@ -34,6 +36,7 @@ begin
 end;
 
 procedure coutTotal(var voyage: TVoyage);
+{Procédure calculant le coût total du voyage, en prenant en compte le coût des transports et le coût des activités.}
 var i: Integer; cout, coutEtape : Real;
 begin
   cout := calculCoutTransport(voyage.kmTotal, voyage.transport);
@@ -49,6 +52,7 @@ begin
 end;
 
 function calculCoutTransport(distance: Real; transport: TTransport): Real;
+{Cette fonction calcule le coût total des trajets effectués durant le voyage, selon les transports utilsées (train, ou bien train et avion).}
 begin
   if transport = Train then
     calculCoutTransport := 3 * power(distance, 0.5)
@@ -57,6 +61,7 @@ begin
 end;
 
 function calculDureeTransport(distance: Real; transport: TTransport): Integer;
+{Cette fonction calcul la durée d'un trajet. Cette dernière sera alors affichée dans le terminal avec son trajet associé.}
 var vitesse: Integer;
 begin
   if transport = Train then
@@ -72,6 +77,7 @@ begin
 end;
 
 procedure coutCarbone(var voyage: TVoyage);
+{Cette procédure calcul le coût carbone du voyage (kg de CO2 émis). Celui-ci sera affiché dans le terminal en fin de programme.}
 begin
   if voyage.transport = Train then
     voyage.carbonImpact:=emissionCO2Train*voyage.kmTotal
