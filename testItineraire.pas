@@ -1,12 +1,12 @@
-program testCalculItineraire;
+﻿program testCalculItineraire;
 
-uses chargerDonnees, voyageTypes, calculItineraire, sysutils, utils;
+uses calculItineraire, chargerDonnees, sysutils, utils, voyageTypes;
 
 type TTestCase = record
-    input: String;
-    expected: String;
-    output: String; 
-end;
+        input: String;
+        expected: String;
+        output: String;
+    end;
 
 type ArrayTestCase = array of TTestCase;
 
@@ -16,11 +16,8 @@ function afficherItineraire(result: TItineraireResult): String;
 var i: Integer;
 begin
     if result.erreur then
-    begin
-        afficherItineraire := ('Erreur : ' + result.message);
-    end
-    else
-    begin
+        afficherItineraire := ('Erreur : ' + result.message)
+    else begin
         afficherItineraire := ('');
         for i := 0 to High(result.itineraire) do
         begin
@@ -81,7 +78,7 @@ begin
     testCases[17] := creerTestCase('Suède -> Lettonie', 'Suède -> Estonie -> Lettonie');
     testCases[18] := creerTestCase('Grèce -> Espagne', 'Aucun chemin trouvé');
     testCases[19] := creerTestCase('Danemark -> Portugal', 'Danemark -> Allemagne -> France -> Espagne -> Portugal');
-    //
+
     testCases[20] := creerTestCase('Royaume-Uni -> France', 'ERREUR');
 
     europe := chargerEurope();
@@ -98,7 +95,7 @@ begin
             continue;
         end;
         paysDepart := pointeurPays^;
-        
+
         pointeurPays := trouverPays(splitText[1], europe);
         if pointeurPays = nil then
         begin
@@ -119,7 +116,6 @@ begin
     // Writeln('Cas de test 1 : France -> Allemagne');
 
 
-    
     // resultat := calculerItineraire(europe, paysDepart, paysArrivee);
     // afficherItineraire(resultat);
 

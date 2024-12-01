@@ -1,9 +1,9 @@
-{$H+}
+﻿{$H+}
 
 unit chargerDonnees;
 
 interface
-uses voyageTypes, sysutils;
+uses sysutils, voyageTypes;
 
 function chargerEurope(): TEurope;
 // procedure sauvegarderPays(europe: TEurope);
@@ -27,9 +27,7 @@ begin
     while startPos <= Length(value) do
     begin
         if value[startPos] = '"' then
-        begin
-            inQuotes := not inQuotes;
-        end
+            inQuotes := not inQuotes
         else if (not inQuotes) and (Copy(value, startPos, delimLength) = delimiter) then
         begin
             SetLength(resultArray, i + 1);
@@ -39,9 +37,7 @@ begin
             Inc(startPos, delimLength - 1);
         end
         else
-        begin
             currentSegment := currentSegment + value[startPos];
-        end;
 
         Inc(startPos);
     end;
@@ -72,9 +68,7 @@ begin
             value := copy(value, foundPos + delimLength, Length(value) - foundPos - delimLength + 1);
         end
         else
-        begin
             resultArray[i] := value;
-        end;
 
         i := i + 1;
     until foundPos = 0;
@@ -127,9 +121,7 @@ begin
     categories := splitString(split[6], ',');
     setlength(deserialiserActivite.categories, length(categories));
     for i := 0 to length(categories) - 1 do
-    begin
-        readStr(categories[i], deserialiserActivite.categories[i])
-    end;
+        readStr(categories[i], deserialiserActivite.categories[i]);
 end;
 
 
@@ -226,32 +218,23 @@ begin
         setlength(pays.nomAvions, 0);
 
         for j := 0 to length(listePays[i].codeFrontieres) - 1 do
-        begin
             for k := 0 to length(listePays) - 1 do
-            begin
                 if listePays[i].codeFrontieres[j] = listePays[k].code then
                 begin
                     setlength(pays.nomFrontieres, length(pays.nomFrontieres) + 1);
                     pays.nomFrontieres[length(pays.nomFrontieres) - 1] := listePays[k].nom;
                 end;
-            end;
-        end;
 
         for j := 0 to length(listePays[i].codeAvions) - 1 do
-        begin
             for k := 0 to length(listePays) - 1 do
-            begin
                 if listePays[i].codeAvions[j] = listePays[k].code then
                 begin
                     setlength(pays.nomAvions, length(pays.nomAvions) + 1);
                     pays.nomAvions[length(pays.nomAvions) - 1] := listePays[k].nom;
                 end;
-            end;
-        end;
 
         setlength(pays.activites, 0);
         for j := 0 to length(listeActivites) - 1 do
-        begin
             if listeActivites[j].pays = pays.nom then
             begin
                 activite.nom := listeActivites[j].nom;
@@ -262,12 +245,9 @@ begin
                 setlength(pays.activites, length(pays.activites) + 1);
                 pays.activites[length(pays.activites) - 1] := activite;
             end;
-        end;
 
         for j := 0 to length(listePays[i].climatString) - 1 do
-        begin
             pays.climat[TMois(j)] := round(StrToFloat(listePays[i].climatString[j]));
-        end;
 
         europe[i] := pays;
     end;
@@ -293,14 +273,14 @@ end;
 // begin
 //   assign(fichierPays, 'data/pays.csv');
 //   rewrite(fichierPays);
-  
+
 //   writeln(length(europe));
 //   for i := 0 to length(europe) - 1 do
 //   begin
 //     writeln(fichierPays, serialiserPays(europe[i]));
 //     writeln('ok ', i);
 //   end;
-  
+
 //   close(fichierPays);
 // end;
 

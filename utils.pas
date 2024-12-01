@@ -1,7 +1,7 @@
-unit utils;
+﻿unit utils;
 
 interface
-uses voyageTypes, sysutils;
+uses sysutils, voyageTypes;
 
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
 function splitStringQuotes(value: string; delimiter: string): TStringArray;
@@ -26,9 +26,7 @@ begin
     while startPos <= Length(value) do
     begin
         if value[startPos] = '"' then
-        begin
-            inQuotes := not inQuotes;
-        end
+            inQuotes := not inQuotes
         else if (not inQuotes) and (Copy(value, startPos, delimLength) = delimiter) then
         begin
             SetLength(resultArray, i + 1);
@@ -38,9 +36,7 @@ begin
             Inc(startPos, delimLength - 1);
         end
         else
-        begin
             currentSegment := currentSegment + value[startPos];
-        end;
 
         Inc(startPos);
     end;
@@ -71,9 +67,7 @@ begin
             value := copy(value, foundPos + delimLength, Length(value) - foundPos - delimLength + 1);
         end
         else
-        begin
             resultArray[i] := value;
-        end;
 
         i := i + 1;
     until foundPos = 0;

@@ -1,4 +1,4 @@
-unit constantes;
+﻿unit constantes;
 
 interface
 
@@ -24,12 +24,9 @@ const COEFF_ACT_FINAL = 2;
     INTERVALLE_TEMP_FINAL = 15;
     COEFF_COUT_FINAL = 1;
 
-//cout carbone 
-emissionCO2Train=0.003;
-emissionCO2Avion=0.152;
+    //cout carbone 
+    emissionCO2Train = 0.003;
+    emissionCO2Avion = 0.152;
 
 implementation
 end.
-
-
-
