@@ -24,7 +24,7 @@ begin
 somme:=0;
 sommeCoeff:=0;
 
-pasCoeff:=(coeffPrefMax-coeffPrefMin)/(length(pref)-1);
+pasCoeff:=(COEFF_PREF_MAX-COEFF_PREF_MIN)/(length(pref)-1);
 
     for i:=0 to length(pref)-1 do
         begin
@@ -32,10 +32,10 @@ pasCoeff:=(coeffPrefMax-coeffPrefMin)/(length(pref)-1);
         for j:=0 to length(activite.categories)-1 do
             if (pref[i]=activite.categories[j]) and not(trouve) then
                 begin
-                somme:=somme+coeffPrefMax-pasCoeff*(i);
+                somme:=somme+COEFF_PREF_MAX-pasCoeff*(i);
                 trouve:=True;
                 end;
-            sommeCoeff:=sommeCoeff+coeffPrefMax-pasCoeff*(i);
+            sommeCoeff:=sommeCoeff+COEFF_PREF_MAX-pasCoeff*(i);
         end;
 
     scorePref:=somme/sommeCoeff;
@@ -44,7 +44,7 @@ pasCoeff:=(coeffPrefMax-coeffPrefMin)/(length(pref)-1);
     {score en fonction du coût, dans le cas où l'utilisateur a sélectionné l'option budget
     comme pour le score du climat, on utilise une parabole, cette fois plus simple car pas de modification de paramètres
     f(cout)=1-(cout/100)² donc le score est nul pour les activités dont le couût est > à 100€}
-    scoreCout:=1-(activite.cout/coutMax)*(activite.cout/coutMax);
+    scoreCout:=1-(activite.cout/COUT_MAX)*(activite.cout/COUT_MAX);
     if scoreCout<0 then
         scoreCout:=0;
 
@@ -139,7 +139,7 @@ begin
     for i := 0 to length(inputPays) - 1 do
         for j:=0 to length(europe)-1 do
             if inputPays[i].nom=europe[j].nom then
-                europe[j].score:=europe[j].score/divisionDuScore;
+                europe[j].score:=europe[j].score/DIVISION_SCORE;
 end;
 
 procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
@@ -172,7 +172,7 @@ var
     activitesUtilisees: array of array of Boolean;
     indexPays: Integer;
 begin
-    dureeTotale := criteres.duree * nbHeuresParJour * 60; // 10h, à modifier
+    dureeTotale := criteres.duree * HEURES_PAR_JOUR * 60;
 
     totalScores := 0;
     for i := 1 to length(itineraire) - 1 do
@@ -237,7 +237,7 @@ begin
     setlength(journees, 0);
 
     setlength(journee.etapes, 0);
-    
+
     for i := 0 to length(etapes) - 1 do
     begin
         if etapes[i].estActivite then
