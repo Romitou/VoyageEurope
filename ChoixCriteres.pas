@@ -195,43 +195,52 @@ begin
 
 end;
 
-procedure initialisermenus(var menus : TMenus);
+function chargerMenus(): TMenus;
+var menus: TMenus;
 {Définitions des menus caractéristiques du prgramme; un menu étant en quelque sorte un package 
 contenant des préférences pré-sélectionnées et correspondant chacun à un profil de voyages.}
 begin
-menus[0].nom := 'Menu Nature et Photographie';
-setlength(menus[0].preferences,3);
-menus[0].preferences := [Photographie,Relaxation,Nature];
-menus[0].description := 'Explorez les merveilles de la nature avec des aventures passionnantes.';
+  setlength(menus, 5);
 
-menus[1].nom := 'Menu Aventure Culturelle';
-setlength(menus[1].preferences,3);
-menus[1].preferences := [Culture,Histoire,Art];
-menus[1].description := 'Plongez dans l''histoire et le patrimoine culturel unique.';
+  menus[0].nom := 'Menu Nature et Photographie';
+  setlength(menus[0].preferences, 3);
+  menus[0].preferences := [Photographie, Relaxation, Nature];
+  menus[0].description := 'Explorez les merveilles de la nature avec des aventures passionnantes.';
 
-menus[2].nom := 'Menu En Famille';
-setlength(menus[2].preferences,4);
-menus[2].preferences := [Gastronomie,Sport,Authentique,EnFamille];
-menus[2].description := 'Des activités pour petits et grands à partager en famille.';
+  menus[1].nom := 'Menu Aventure Culturelle';
+  setlength(menus[1].preferences, 3);
+  menus[1].preferences := [Culture, Histoire, Art];
+  menus[1].description := 'Plongez dans l''histoire et le patrimoine culturel unique.';
 
-menus[3].nom := 'Menu Vie Nocturne';
-setlength(menus[3].preferences,3);
-menus[3].preferences := [VieNocturne,FestivalsEtEvenements,Luxe];
-menus[3].description := 'Vivez des soirées inoubliables et profitez d''expériences exclusives';
+  menus[2].nom := 'Menu En Famille';
+  setlength(menus[2].preferences, 4);
+  menus[2].preferences := [Gastronomie, Sport, Authentique, EnFamille];
+  menus[2].description := 'Des activités pour petits et grands à partager en famille.';
 
-menus[4].nom := 'Menu Culture et Relaxation Spirituelle';
-setlength(menus[4].preferences,3);
-menus[4].preferences := [Culture,ReligieuxEtSpirituel,Relaxation];
-menus[4].description := 'Alliez découvertes culturelles et moments de paix intérieure';
+  menus[3].nom := 'Menu Vie Nocturne';
+  setlength(menus[3].preferences, 3);
+  menus[3].preferences := [VieNocturne, FestivalsEtEvenements, Luxe];
+  menus[3].description := 'Vivez des soirées inoubliables et profitez d''expériences exclusives';
+
+  menus[4].nom := 'Menu Culture et Relaxation Spirituelle';
+  setlength(menus[4].preferences,3);
+  menus[4].preferences := [Culture, ReligieuxEtSpirituel, Relaxation];
+  menus[4].description := 'Alliez découvertes culturelles et moments de paix intérieure';
+
+  chargerMenus := menus;
 end;
 
 
-procedure choixmenu(menus : TMenus; var choix:TCriteres);
+procedure choixMenu(var choix: TCriteres);
 {Cette procédure permet à l'utilisateur de sélectionner directement un profil de voyages susceptible de correspondre à ses attentes.
  Ce dernier aura le choix entre cette procédure et la procédure choixPreferences, étant ainsi libre de personnaliser ses attentes 
  ou bien de choisir un profil pré-programmé.}
-var i,j:Integer; reponse:String; p: LongInt;
+var i, j: Integer;
+  reponse: String;
+  p: LongInt;
+  menus: TMenus;
 begin
+  menus := chargerMenus();
 
   writeln('');
   writeln('Veuillez choisir votre menu pour votre voyage.');
@@ -278,7 +287,6 @@ end;
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 {Procédure globale regroupant l'ensemble des sous-procédures décrites précédemment.}
 var reponse:String; p: LongInt;
-menus:TMenus;
 begin
   choixPays(choix, listePays);
 
@@ -291,10 +299,7 @@ begin
   if p=1 then
     choixPreferences(choix)
   else
-    begin
-    initialisermenus(menus);
-    choixmenu(menus, choix);
-    end;    
+    choixMenu(choix);
   
   choixDuree(choix);
   choixClimat(choix);
