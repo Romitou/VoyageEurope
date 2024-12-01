@@ -50,7 +50,7 @@ begin
 
             if etape.estActivite then
             begin
-                writeln('> Activités : ', etape.activite.nom, ' (', etape.activite.minutes, ' min ', etape.activite.cout,' euros)');       
+                writeln('> Activités : ', etape.activite.nom, ' (', etape.activite.minutes, ' min - ', etape.activite.cout:0:0,' euros)');       
             end
             else
             begin
@@ -77,8 +77,8 @@ en début de programme, la procédure envoie un message d'alerte signalant la di
 begin
     writeln('Détails du voyage :');
     writeln('> Durée du séjour : ', length(voyage.planning)-1, ' jours');
-    writeln('> Coût total : ', voyage.coutTotal:5:0, ' euros');
-    writeln('> Distance de ',voyage.kmTotal:5:1, ' km en ', voyage.transport ,' à travers l''Europe, depuis ',criteres.paysDepart.nom,' destination ',criteres.paysArrivee.nom);
+    writeln('> Coût total : ', voyage.coutTotal:0:0, ' euros');
+    writeln('> Distance de ',voyage.kmTotal:0:1, ' km en ', voyage.transport ,' à travers l''Europe, depuis ',criteres.paysDepart.nom,' destination ',criteres.paysArrivee.nom);
     writeln();
     if (voyage.coutTotal>criteres.budget) then
         writeln('ATTENTION : Le coût du voyage proposé ci-dessous est supérieur de ', voyage.coutTotal-criteres.budget:5:0, ' euros au coût maximal que vous avez renseigné.');

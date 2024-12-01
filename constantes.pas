@@ -2,28 +2,27 @@ unit constantes;
 
 interface
 
-const 
-//score activité
-coeffPrefMax=1.5;
-coeffPrefMin=1;
-coutMax=50;
+// Scores activités
+const COEFF_PREF_MAX = 1.5;
+    COEFF_PREF_MIN = 1;
+    COUT_MAX = 50;
 
-//pays visités
-divisionDuScore=2;
+// Pays visités
+const DIVISION_SCORE = 2;
 
-//generer étapes
-nbHeuresParJour=10;
+// Génération étapes
+const HEURES_PAR_JOUR = 10;
 
-//choix expérience
-coeffActiviteInitial=1;
-coeffClimatInitial=1;
-intervalleTemperatureInitial=20;
-coeffCoutInitial=0;
+// Choix activité
+const COEFF_ACT_INITIAL = 1;
+    COEFF_CLIMAT_INITIAL = 1;
+    INTERVALLE_TEMP_INITIAL = 20;
+    COEFF_COUT_INITIAL = 0;
 
-coeffActiviteFinal=2;
-coeffClimatFinal=2;
-intervalleTemperatureFinal=15;
-coeffCoutFinal=1;
+const COEFF_ACT_FINAL = 2;
+    COEFF_CLIMAT_FINAL = 2;
+    INTERVALLE_TEMP_FINAL = 15;
+    COEFF_COUT_FINAL = 1;
 
 //cout carbone 
 emissionCO2Train=0.003;
