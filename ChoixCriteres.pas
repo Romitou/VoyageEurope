@@ -3,20 +3,26 @@ unit choixCriteres;
 interface
 uses voyageTypes, utils, sysutils, constantes;
 
-procedure choixPays(var choix: TCriteres; listePays: TEurope);
-procedure choixPreferences(var choix: TCriteres);
-procedure choixDuree(var choix: TCriteres);
-procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
-procedure choixClimat(var choix: TCriteres);
-procedure choixPeriode(var choix: TCriteres);
-procedure choixBudget(var choix: TCriteres);
-procedure choixExperience(var choix: TCriteres);
-procedure initialisermenus(var menus : TMenus);
-procedure choixmenu(menus : TMenus; var choix:TCriteres);
-procedure choixNbVoyageurs(var choix: TCriteres);
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 
 implementation
+
+procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
+{Permet au programme de se référer à la base de données, afin d'associer la réponse de l'utilisateur 
+à un pays si celle-ci correspond au nom d'un pays figurant dans la base de données.}
+var i: Integer;
+begin
+    trouve := false;
+    for i :=1 to (length(listePays)) do
+    begin
+      if CompareText(nomPays, listePays[i].nom) = 0 then
+      begin
+        pays := listePays[i];
+        trouve := true;
+        break;
+      end;
+    end;
+end;
 
 procedure choixPays(var choix: TCriteres; listePays: TEurope);
 {Sélection de pays de départ et de la destination du voyage}
@@ -35,23 +41,6 @@ begin
     readln(arrivee);
     associerPays(arrivee, listePays, choix.paysArrivee, trouve)
   until (trouve); 
-end;
-
-procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
-{Permet au programme de se référer à la base de données, afin d'associer la réponse de l'utilisateur 
-à un pays si celle-ci correspond au nom d'un pays figurant dans la base de données.}
-var i: Integer;
-begin
-    trouve := false;
-    for i :=1 to (length(listePays)) do
-    begin
-      if CompareText(nomPays, listePays[i].nom) = 0 then
-      begin
-        pays := listePays[i];
-        trouve := true;
-        break;
-      end;
-    end;
 end;
 
 procedure choixPreferences(var choix: TCriteres);
@@ -293,8 +282,11 @@ begin
  {Choix du mode de sélection des préférences.}
   repeat
     writeln('Voulez vous choisir individuellement vos préférences concernant les activités (1), ou bien sélectionner parmi des packs de préférences (2) ?');
+    writeln('test');
     readln(reponse);
+    writeln('test');
     TryStrToInt(reponse,p);
+    writeln('test');
   until (p=1)or(p=2);
   if p=1 then
     choixPreferences(choix)
