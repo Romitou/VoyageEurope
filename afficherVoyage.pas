@@ -1,7 +1,7 @@
 ﻿unit afficherVoyage;
 
 interface
-uses constantes, voyageTypes;
+uses constantes, voyageTypes, genererVoyage;
 
 procedure afficher(voyage: TVoyage; criteres: TCriteres);
 procedure afficherInfos(voyage: TVoyage; criteres: TCriteres);
@@ -75,6 +75,10 @@ procedure afficherInfos(voyage: TVoyage; criteres: TCriteres);
 {Cette procédure permet d'afficher dans le terminal les informations relatives au voyage proposé par le programme 
 (durée du séjour, coût total et distance total parcourue). En cas de dépassement du coût maximal rentré par l'utilisateur 
 en début de programme, la procédure envoie un message d'alerte signalant la différence avec le budget rensigné.}
+var 
+  voyageBis: TVoyage;
+  criteresBis: TCriteres;
+  europe: TEurope;
 begin
     writeln('Détails du voyage :');
     writeln('> Durée du séjour : ', length(voyage.planning) - 1, ' jours');
@@ -85,10 +89,21 @@ begin
         writeln('ATTENTION : Le coût du voyage proposé ci-dessous est supérieur de ', (voyage.coutTotal - criteres.budget):5:0, ' euros au coût maximal que vous avez renseigné.');
     writeln('> Coût carbone : ', voyage.carbonImpact:4:0, 'kg de CO2 rejété dans l''atmosphère durant votre voyage');
     writeln();
-    if voyage.modeTransport = TrainEtAvion then
-        writeln('')
+    voyageBis:=voyage;
+    criteresBis:=criteres;
+    if voyage.modeTransport = TrainSeul then
+    begin
+      criteresBis.modeTransport:=TrainEtAvion;
+      voyageBis:=generer(criteresBis, europe);
+      writeln('Ecoresponsabilité : Sachez que votre voyage intégralement en train permet d''éviter le rejet de ', (voyageBis.carbonImpact - voyage.carbonImpact):4:0, ' kg de CO2 dans l''atmosphère par rapport à un voyage en train et avion.'); 
+    end
     else
-        writeln('A noter que votre voyage fait exclusivement en train rejeterait ', (voyage.carbonImpact - voyage.kmTotal * emissionCO2Train):4:0, ' kg de CO2 en moins par rapport à votre voyage.');
+    begin
+      criteresBis.modeTransport:=TrainSeul;
+      voyageBis:=generer(criteresBis, europe);
+      writeln('A noter que votre voyage fait exclusivement en train rejeterait ', (voyage.carbonImpact - voyageBis.carbonImpact):4:0, ' kg de CO2 en moins par rapport à votre voyage.');
+      writeln('Un autre voyage de ', length(voyageBis.planning)-length(voyage.planning), ' jours supplémentaires vous permettrait de réduire de la sorte le coût carbone de votre voyage');
+    end;     
 end;
 
 end.
