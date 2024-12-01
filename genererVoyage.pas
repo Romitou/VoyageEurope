@@ -20,13 +20,17 @@ begin
     criteres.climat:=0;
 
     writeln('Classement activités...');
-    for j:=0 to length(europe)-1 do
+    for i := 0 to length(europe) - 1 do
     begin
-    triActPays(criteres,europe[j]);
+        for j := 0 to length(europe[i].activites) - 1 do
+            scoreActivite(criteres.categories, 0, europe[i].activites[j]);
 
-        for i:=0 to length(europe[j].ordreAct)-1 do
-            writeln(europe[j].activites[europe[j].ordreAct[i]].nom,' : ',europe[j].activites[europe[j].ordreAct[i]].score);
-        writeln('scoreAct : ',scoreActivitePays(europe[j],criteres,3));
+        triActPays(criteres,europe[i]);
+
+        for j := 0 to length(europe[i].ordreAct) - 1 do
+            writeln(europe[i].activites[europe[i].ordreAct[j]].nom,' : ',europe[i].activites[europe[i].ordreAct[j]].score);
+
+        writeln('scoreAct : ',scoreActivitePays(europe[i],criteres,3));
         writeln('');
         writeln('pays suivant');
         writeln('');
