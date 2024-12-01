@@ -4,7 +4,7 @@ interface
 uses sysutils;
 
 type TMode = (TrainSeul, TrainEtAvion);
-type TTransport = (train, avion);
+type TTransport = (Train, Avion);
 type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novembre, Decembre);
 type TPref = (Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education,
     BienEtre, Sport, AventureAquatique, FestivalsEtEvenements, Romantique, EnFamille, EntreAmis, Solo, Luxe, Budget, EcoResponsable,
@@ -47,7 +47,7 @@ type TCriteres = record
     periode: TMois;
     climat: LongInt;
     budget: Real;
-    transport: TMode;
+    modeTransport: TMode;
     coeffClimat: Real;
     coeffActivite: Real;
     coeffCout: Real;
@@ -95,7 +95,7 @@ type TVoyage = record
     kmTotal: Real;
     erreur: Boolean;
     message: String;
-    transport: TMode;
+    modeTransport: TMode;
     carbonImpact: Real;
 end;
 

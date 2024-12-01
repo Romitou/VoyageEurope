@@ -167,7 +167,7 @@ function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour: I
 var
     dureePays, dureeTotale, dureeActivites: Integer;
     totalScores: Real;
-    i, j, nbAct, n: Integer;
+    i, j, k, nbAct, n: Integer;
     etapes: TEtapes;
     activitesUtilisees: array of array of Boolean;
     indexPays: Integer;
@@ -200,7 +200,17 @@ begin
         etapes[n].deplacement.paysDepart := itineraire[j - 1];
         etapes[n].deplacement.paysEtape := itineraire[j];
         etapes[n].deplacement.distance := calculDuneDistance(itineraire[j - 1].latitude, itineraire[j - 1].longitude, itineraire[j].latitude, itineraire[j].longitude);
-        etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, criteres.transport);
+
+        etapes[n].deplacement.transport := Train;
+        if criteres.modeTransport = TrainEtAvion then
+            for k := 0 to length(etapes[n].deplacement.paysDepart.nomAvions) - 1 do
+                if etapes[n].deplacement.paysDepart.nomAvions[k] = etapes[n].deplacement.paysEtape.nom then
+                begin
+                    etapes[n].deplacement.transport := Avion;
+                    break;
+                end;
+
+        etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, etapes[n].deplacement.transport);
         dureeActivites := dureeActivites + etapes[n].deplacement.minutes;
         n := n + 1;
 

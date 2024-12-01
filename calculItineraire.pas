@@ -3,12 +3,12 @@ unit calculItineraire;
 interface
 uses voyageTypes, dijkstra, sysutils, utils, score;
 
-function convertirEuropeAdjacence(europe: TEurope; transport: TTransport): TAdjacenceListe;
-function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; transport: TTransport): TItineraireResult;
+function convertirEuropeAdjacence(europe: TEurope; modeTransport: TMode): TAdjacenceListe;
+function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; modeTransport: TMode): TItineraireResult;
 
 implementation
 
-function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; transport: TTransport): TItineraireResult;
+function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; modeTransport: TMode): TItineraireResult;
 var adjacence: TAdjacenceListe;
 var chemin: TNoeudList;
 var distance: TDistance;
@@ -20,7 +20,7 @@ begin
     setlength(resultat.itineraire, 0);
     resultat.erreur := true;
 
-    adjacence := convertirEuropeAdjacence(paysValables, transport);
+    adjacence := convertirEuropeAdjacence(paysValables, modeTransport);
     if length(adjacence) < 2 then
     begin
         resultat.message := 'Pas assez d''adjacences n''ont été générées.';
@@ -70,7 +70,7 @@ begin
     calculerItineraire := resultat;
 end;
 
-function convertirEuropeAdjacence(europe: TEurope; transport: TTransport): TAdjacenceListe;
+function convertirEuropeAdjacence(europe: TEurope; modeTransport: TMode): TAdjacenceListe;
 var
     listeAdjacence: TAdjacenceListe;
     paysVoisins: TStringArray;
@@ -81,7 +81,7 @@ begin
     begin
         SetLength(listeAdjacence[i], 0);
         paysVoisins := europe[i].nomFrontieres;
-        if transport = TrainEtAvion then
+        if modeTransport = TrainEtAvion then
         begin
             for j := 0 to length(europe[i].nomAvions) - 1 do
             begin

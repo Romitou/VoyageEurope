@@ -18,9 +18,9 @@ function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
 const r= 6371; //km
 const p= (Pi/180);
 var a : Real;
-begin 
+begin
   a:=(1/2)-((Cos((lat2-lat1)*p))/2)+Cos(lat1*p)*Cos(lat2*p)*((1-Cos((lon2-lon1)*p))/2);
-  calculDuneDistance:=2*r*ArcSin(Sqrt(a)); 
+  calculDuneDistance:=2*r*ArcSin(Sqrt(a));
 end;
 
 procedure calculDistanceTotal(var voyage: TVoyage);
@@ -48,25 +48,25 @@ begin
     else
       coutEtape := calculCoutTransport(voyage.etapes[i].deplacement);
     cout := cout + coutEtape;
-  end; 
+  end;
   voyage.coutTotal:=cout;
 end;
 
 function calculCoutTransport(deplacement: TDeplacement): Real;
 {Cette fonction calcule le coût total des trajets effectués durant le voyage, selon les transports utilsées (train, ou bien train et avion).}
 begin
-  if deplacement.transport = train then
+  if deplacement.transport = Train then
     calculCoutTransport := 3 * power(deplacement.distance, 0.5)
-  else 
+  else
     calculCoutTransport := 0.04 * power(deplacement.distance, 1.5);
-  deplacement.cout:=calculCoutTransport;  
+  deplacement.cout:=calculCoutTransport;
 end;
 
 function calculDureeTransport(distance: Real; transport: TTransport): Integer;
 {Cette fonction calcul la durée d'un trajet. Cette dernière sera alors affichée dans le terminal avec son trajet associé.}
 var vitesse: Integer;
 begin
-  if transport = train then
+  if transport = Train then
   begin
     if distance < 200 then
       vitesse := 120
@@ -79,7 +79,7 @@ begin
 end;
 
 procedure calculDistanceTransports(var voyage: TVoyage);
-{Procédure permettant de calculer à la fois la dicstanec parcourue en train et la distance 
+{Procédure permettant de calculer à la fois la dicstanec parcourue en train et la distance
 parcourue en avion au cours du voyage, utile pour le calcul du coût carbone}
 var i: Integer; distanceTrain, distanceAvion: Real;
 begin
@@ -87,20 +87,20 @@ distanceTrain:= 0;
 distanceAvion:= 0;
   for i := 0 to length(voyage.etapes) - 1 do
   begin
-    if voyage.etapes[i].deplacement.transport = train then
+    if voyage.etapes[i].deplacement.transport = Train then
     distanceTrain:= distanceTrain + voyage.etapes[i].deplacement.distance
     else
     distanceAvion:= distanceAvion + voyage.etapes[i].deplacement.distance;
   end;
 voyage.kmTrain:=distanceTrain;
-voyage.kmAvion:=distanceAvion;  
+voyage.kmAvion:=distanceAvion;
 end;
 
 procedure coutCarbone(var voyage: TVoyage);
 {Cette procédure calcul le coût carbone du voyage (kg de CO2 émis). Celui-ci sera affiché dans le terminal en fin de programme.}
 begin
   calculDistanceTransports(voyage);
-  if voyage.transport = TrainSeul then
+  if voyage.modeTransport = TrainSeul then
     voyage.carbonImpact:=emissionCO2Train*voyage.kmTotal
   else
   begin

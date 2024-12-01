@@ -26,6 +26,7 @@ procedure afficher(voyage: TVoyage; criteres: TCriteres);
 la ville d'arrivée, puis une liste d'activités suggérées à l'utilisateur relativement à ses attentes avec le prix et 
 la durée de chaque activité. La procédure affiche également un message d'alerte en cas d'erreur.}
 var
+    transportEmoji: String;
     i, j: Integer;
     etape: TEtape;
 begin
@@ -54,7 +55,10 @@ begin
             end
             else
             begin
-                writeln('   🚆 Voyage depuis ', etape.deplacement.paysDepart.capitale, ' jusqu’à ', etape.deplacement.paysEtape.capitale, '.');
+                transportEmoji := '🚆';
+                if etape.deplacement.transport = Avion then
+                    transportEmoji := '✈️ ';
+                writeln('   ', transportEmoji, ' Voyage depuis ', etape.deplacement.paysDepart.capitale, ' jusqu’à ', etape.deplacement.paysEtape.capitale, '.');
                 writeln('   📍 Arrivée à ', etape.deplacement.paysEtape.nom,  ' (', etape.deplacement.paysEtape.capitale, ') - ', etape.deplacement.minutes, ' minutes');
                 if etape.deplacement.paysEtape.nom = criteres.paysArrivee.nom then
                     writeln('   🌟 Journée dans le pays de destination : ', etape.deplacement.paysEtape.nom, '.');
@@ -78,17 +82,17 @@ begin
     writeln('Détails du voyage :');
     writeln('> Durée du séjour : ', length(voyage.planning)-1, ' jours');
     writeln('> Coût total : ', voyage.coutTotal:0:0, ' euros');
-    writeln('> Distance de ',voyage.kmTotal:0:1, ' km en ', voyage.transport ,' à travers l''Europe, depuis ',criteres.paysDepart.nom,' destination ',criteres.paysArrivee.nom);
+    writeln('> Distance de ',voyage.kmTotal:0:1, ' km en ', voyage.modeTransport ,' à travers l''Europe, depuis ',criteres.paysDepart.nom,' destination ',criteres.paysArrivee.nom);
     writeln();
     if (voyage.coutTotal>criteres.budget) then
         writeln('ATTENTION : Le coût du voyage proposé ci-dessous est supérieur de ', voyage.coutTotal-criteres.budget:5:0, ' euros au coût maximal que vous avez renseigné.');
     writeln('> Coût carbone : ', voyage.carbonImpact:4:0, 'kg de CO2 rejété dans l''atmosphère durant votre voyage');
     writeln();
-    if voyage.transport = Train then
+    if voyage.modeTransport = TrainEtAvion then
     writeln('')
     else 
     begin
-      writeln('A noter que votre voyage fait exclusivement en train rejeterait ', (voyage.carbonImpact:4:0)-(voyage.kmTotal*emissionCO2Train):4:0, ' kg de CO2 en moins par rapport à votre voyage.' )    
+      writeln('A noter que votre voyage fait exclusivement en train rejeterait ', (voyage.carbonImpact - voyage.kmTotal*emissionCO2Train):4:0, ' kg de CO2 en moins par rapport à votre voyage.' )    
     end;
 end;
 

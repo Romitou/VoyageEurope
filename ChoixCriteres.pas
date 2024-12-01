@@ -153,7 +153,7 @@ begin
   choix.coeffClimat := COEFF_CLIMAT_INITIAL;
   choix.coeffCout := COEFF_COUT_INITIAL;
   choix.intervalleTemperature := INTERVALLE_TEMP_INITIAL;
-  choix.transport:=TrainAvion;
+  choix.modeTransport:= TrainEtAvion;
 
   expLength := ord(high(TExperience)) + 1;
 
@@ -173,7 +173,7 @@ begin
 
   case  p of
     1 : choix.coeffCout := COEFF_COUT_FINAL;
-    2 : choix.transport:=Train;
+    2 : choix.modeTransport:=TrainSeul;
     3 : begin
         choix.coeffClimat := COEFF_CLIMAT_FINAL;
         choix.intervalleTemperature := INTERVALLE_TEMP_FINAL;

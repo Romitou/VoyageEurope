@@ -12,7 +12,7 @@ var aller,retour: TItineraireResult;
     voyage:TVoyage;
     i,j:Integer;
 begin
-    voyage.transport := criteres.transport;
+    voyage.modeTransport := criteres.modeTransport;
     voyage.erreur := false;
     voyage.message := '';
 
@@ -51,7 +51,7 @@ begin
     // ** Génération itinéraire aller **
     //
     writeln('Calcul de l''itinéraire aller...');
-    aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee, criteres.transport);
+    aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee, criteres.modeTransport);
     if aller.erreur then
     begin
         voyage.erreur := true;
@@ -73,7 +73,7 @@ begin
     // ** Génération itinéraire retour **
     //
     writeln('Calcul de l''itinéraire retour...');
-    retour:=calculerItineraire(europe, criteres.paysArrivee, criteres.paysDepart, criteres.transport);
+    retour:=calculerItineraire(europe, criteres.paysArrivee, criteres.paysDepart, criteres.modeTransport);
     if retour.erreur then
     begin
         voyage.erreur := true;
