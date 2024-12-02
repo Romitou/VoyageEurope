@@ -1,79 +1,45 @@
-﻿unit utils;
+﻿{$H+}
+
+unit utils;
 
 interface
 uses sysutils, voyageTypes;
 
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
-function splitStringQuotes(value: string; delimiter: string): TStringArray;
-function splitString(value: string; delimiter: string): TStringArray;
+function splitLigneCsv(ligne: string; delimiteur: char): TStringArray;
 function demanderEntier(): Integer;
 
 implementation
 
-function splitStringQuotes(value: string; delimiter: string): TStringArray;
+function splitLigneCsv(ligne: string; delimiteur: char): TStringArray;
 var
-    resultArray: TStringArray;
-    i, startPos, delimLength: Integer;
-    inQuotes: Boolean;
-    currentSegment: string;
+  i: integer;
+  valeur: string;
+  inside_quotes: boolean;
+  resultat: TStringArray;
 begin
-    i := 0;
-    startPos := 1;
-    delimLength := Length(delimiter);
-    SetLength(resultArray, 0);
-    inQuotes := False;
-    currentSegment := '';
+  valeur := '';
+  inside_quotes := False;
+  SetLength(resultat, 0);
 
-    while startPos <= Length(value) do
+  writeln('splitLigneCsv: ', ligne);
+
+  for i := 1 to Length(ligne) - 1 do
+  begin
+    if ligne[i] = '"' then
+      inside_quotes := not inside_quotes
+    else if (ligne[i] = delimiteur) and not inside_quotes then
     begin
-        if value[startPos] = '"' then
-            inQuotes := not inQuotes
-        else if (not inQuotes) and (Copy(value, startPos, delimLength) = delimiter) then
-        begin
-            SetLength(resultArray, i + 1);
-            resultArray[i] := currentSegment;
-            Inc(i);
-            currentSegment := '';
-            Inc(startPos, delimLength - 1);
-        end
-        else
-            currentSegment := currentSegment + value[startPos];
-
-        Inc(startPos);
-    end;
-
-    SetLength(resultArray, i + 1);
-    resultArray[i] := currentSegment;
-
-    splitStringQuotes := resultArray;
-end;
-
-function splitString(value: string; delimiter: string): TStringArray;
-var resultArray: TStringArray;
-    i, startPos, delimLength: Integer;
-    foundPos: Integer;
-begin
-    i := 0;
-    startPos := 1;
-    delimLength := length(delimiter);
-    setlength(resultArray, 0);
-
-    repeat
-        foundPos := pos(delimiter, value);
-        setlength(resultArray, i + 1);
-
-        if foundPos > 0 then
-        begin
-            resultArray[i] := copy(value, startPos, foundPos - startPos);
-            value := copy(value, foundPos + delimLength, Length(value) - foundPos - delimLength + 1);
-        end
-        else
-            resultArray[i] := value;
-
-        i := i + 1;
-    until foundPos = 0;
-
-    splitString := resultArray;
+      SetLength(resultat, Length(resultat) + 1);
+      resultat[High(resultat)] := Trim(valeur);
+      valeur := '';
+    end
+    else
+      valeur := valeur + ligne[i];
+  end;
+  SetLength(resultat, Length(resultat) + 1);
+  resultat[High(resultat)] := Trim(valeur);
+  splitLigneCsv := resultat;
 end;
 
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
