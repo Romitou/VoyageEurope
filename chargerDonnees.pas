@@ -1,14 +1,22 @@
 ﻿{$H+}
 
+{ Chargement et traitement des données depuis les fichiers CSV }
 unit chargerDonnees;
 
 interface
 uses strutils, sysutils, utils, voyageTypes;
 
+{ Charge l'ensemble des pays et activités associées
+    @return(Un tableau de pays complétés)
+}
 function chargerEurope(): TEurope;
 
 implementation
 
+{ Désérialise une ligne CSV en un objet TFilePays
+    @param(valeur La ligne CSV à désérialiser)
+    @return(Un objet TFilePays)
+}
 function deserialiserPays(valeur: String): TFilePays;
 var split, latlngString: TStringArray;
 var i: Integer;
@@ -185,24 +193,5 @@ begin
     chargerEurope := europe;
 
 end;
-
-
-// procedure sauvegarderPays(europe: TEurope);
-// var
-//   fichierPays: Text;
-//   i: Integer;
-// begin
-//   assign(fichierPays, 'data/pays.csv');
-//   rewrite(fichierPays);
-
-//   writeln(length(europe));
-//   for i := 0 to length(europe) - 1 do
-//   begin
-//     writeln(fichierPays, serialiserPays(europe[i]));
-//     writeln('ok ', i);
-//   end;
-
-//   close(fichierPays);
-// end;
 
 end.
