@@ -290,7 +290,6 @@ begin
     else
         choixMenu(choix);
 
-    choixDuree(choix);
     choixClimat(choix);
     choixPeriode(choix);
     choixBudget(choix);
