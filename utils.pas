@@ -6,6 +6,7 @@ uses sysutils, voyageTypes;
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
 function splitStringQuotes(value: string; delimiter: string): TStringArray;
 function splitString(value: string; delimiter: string): TStringArray;
+function demanderEntier(): Integer;
 
 implementation
 
@@ -83,6 +84,22 @@ begin
         if europe[i].nom = nom then
             Exit(i);
     Exit(-1);
+end;
+
+function demanderEntier(): Integer;
+var
+    input: string;
+    value: LongInt;
+    success: Boolean;
+begin
+    repeat
+        readln(input);
+        success := TryStrToInt(input, value);
+        writeln(success);
+        if not success then
+            writeln('Veuillez entrer un nombre entier.');
+    until success;
+    demanderEntier := value;
 end;
 
 end.

@@ -1,7 +1,7 @@
 ﻿unit choixCriteres;
 
 interface
-uses constantes, sysutils, utils, voyageTypes;
+uses constantes, genererVoyage, sysutils, utils, voyageTypes;
 
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 
@@ -45,9 +45,7 @@ procedure choixPreferences(var choix: TCriteres);
 {Permet à l'utilisateur de sélectionner manuellement ses préférences pour son voyage (sélection personnalisée).}
 var
     prefUser: array of TPref;
-    prefLength, i, n: Integer;
-    j: String;
-    p: LongInt;
+    prefLength, i, n, indexChoix: Integer;
 begin
     setlength(prefUser, 0);
     n := 0;
@@ -63,88 +61,64 @@ begin
     repeat
         repeat
             writeln('Veuillez saisir un chiffre associé à une préférence :');
-            readln(j);
-            TryStrToInt(j, p);
-        until (p >= 0) and (p <= prefLength);
+            indexChoix := demanderEntier();
+        until (indexChoix >= 0) and (indexChoix <= prefLength);
 
-        if (p > 0) then
+        if (indexChoix > 0) then
         begin
             setlength(prefUser, n + 1);
-            prefUser[n] := TPref(p - 1);
+            prefUser[n] := TPref(indexChoix - 1);
             n := n + 1;
         end;
-    until (p = 0) and (n >= 2);
+    until (indexChoix = 0) and (n >= 2);
 
     setlength(choix.categories, n);
     for i := 0 to n - 1 do
         choix.categories[i] := prefUser[i];
 end;
 
-procedure choixDuree(var choix: TCriteres);
 {L'utilisateur renseigne ici la durée de son voyage.}
-var temps: String; p: LongInt;
+procedure choixDuree(var choix: TCriteres; listePays: TEurope);
 begin
-    repeat
-        writeln('Quelle durée souhaitez-vous pour votre voyage ?');
-        readln(temps);
-        TryStrToInt(temps, p);
-    until (TryStrToInt(temps, p) = True);
-    choix.duree := p;
+    writeln('Quelle durée souhaitez-vous pour votre voyage ?');
+    choix.duree := demanderEntier();
 end;
 
+{L'utilisateur renseigne ici la température qu'il souhaiterait avoir lors de son voyage.}
 procedure choixClimat(var choix: TCriteres);
-{L'utilisateur renseigne ici la température qu'il souhaiterait avoir lors de son voayge.}
-var temperature: String; p: LongInt;
 begin
-    repeat
-        writeln('Quelle est la température souhaitée pour votre voyage ?');
-        readln(temperature);
-        TryStrToInt(temperature, p);
-    until (TryStrToInt(temperature, p) = True);
-    choix.climat := p;
+    writeln('Quelle est la température souhaitée pour votre voyage ?');
+    choix.climat := demanderEntier();
 end;
 
-procedure choixPeriode(var choix: TCriteres);
 {En affichant les températures moyennes de chaque mois de l'année dans le pays de destination rensignée précédemment,
 cette procédure permet à l'utilisateur d'indiquer le mois de l'année où il souhaite effectuer son voyage.}
-var indexChoix: String;
-var i: Integer;
-var p: LongInt;
+procedure choixPeriode(var choix: TCriteres);
+var i, indexChoix: LongInt;
 begin
-    indexChoix := ' ';
     writeln('Le climat du pays principal de votre voyage est le suivant :');
     for i := 0 to length(choix.paysArrivee.climat) - 1 do
         writeln('[', i, '] ', TMois(i), ' : ', choix.paysArrivee.climat[TMois(i)], '°C');
     writeln(' ');
     repeat
         writeln('Au vu de ces températures, durant quel mois de l''année souhaitez-vous effectuer votre voyage ? (Vueillez entrer le numéro du mois)');
-        readln(indexChoix);
-        TryStrToInt(indexChoix, p);
-    until (0 < p) and (p < 12);
-    choix.periode := TMois(p);
+        indexChoix := demanderEntier();
+    until (0 < indexChoix) and (indexChoix < 12);
+    choix.periode := TMois(indexChoix);
 end;
 
-procedure choixBudget(var choix: TCriteres);
 {L'utilisateur renseigne ici son budget pour le voyage.}
-var coutLimite: String; p: LongInt;
+procedure choixBudget(var choix: TCriteres);
 begin
-    repeat
-        writeln('Quel est le coût maximal que souhatez fixer pour votre voyage ?');
-        readln(coutLimite);
-        TryStrToInt(coutLimite, p);
-    until (TryStrToInt(coutLimite, p) = True);
-    choix.budget := p;
+    writeln('Quel est le coût maximal que souhatez fixer pour votre voyage ?');
+    choix.budget := demanderEntier();
 end;
 
-
-procedure choixExperience(var choix: TCriteres);
 {Cette procédure permet à l'utilisateur d'influencer le calcul des scores qui aura lieu plus tard lors de la génération du voyage.
 En effet, en choisissant une des propositions affichées ici, il peut alors faire savoir au programme l'importance qu'il accorde
 aux activités, au coût, à la température, ou bien à l'aspect écologique de son voyage}
-var
-    expLength, i: Integer;
-    reponse: String;
-    p: LongInt;
+procedure choixExperience(var choix: TCriteres);
+var expLength, i, indexChoix: Integer;
 begin
     choix.coeffActivite := COEFF_ACT_INITIAL;
     choix.coeffClimat := COEFF_CLIMAT_INITIAL;
@@ -157,18 +131,15 @@ begin
     writeln('');
     writeln('Voici quelques propositions caractéristiques d''un voyage.');
     writeln('');
-
+    for i := 1 to expLength do
+        writeln('[', i, '] ', TExperience(i - 1));
+    writeln('');
     repeat
-        writeln('');
-        for i := 1 to expLength do
-            writeln('[', i, '] ', TExperience(i - 1));
-        writeln('');
         writeln('Veuillez choisir votre proposition préférée.');
-        readln(reponse);
-        TryStrToInt(reponse, p);
-    until (0 < p) and (p < 5);
+        indexChoix := demanderEntier();
+    until (0 < indexChoix) and (indexChoix < expLength);
 
-    case p of
+    case indexChoix of
     1: choix.coeffCout := COEFF_COUT_FINAL;
     2: choix.modeTransport := TrainSeul;
     3: begin
@@ -181,10 +152,10 @@ begin
 
 end;
 
-function chargerMenus(): TMenus;
-var menus: TMenus;
 {Définitions des menus caractéristiques du prgramme; un menu étant en quelque sorte un package
 contenant des préférences pré-sélectionnées et correspondant chacun à un profil de voyages.}
+function chargerMenus(): TMenus;
+var menus: TMenus;
 begin
     setlength(menus, 5);
 
@@ -222,8 +193,7 @@ procedure choixMenu(var choix: TCriteres);
  Ce dernier aura le choix entre cette procédure et la procédure choixPreferences, étant ainsi libre de personnaliser ses attentes
  ou bien de choisir un profil pré-programmé.}
 var i, j: Integer;
-    reponse: String;
-    p: LongInt;
+    indexChoix: LongInt;
     menus: TMenus;
 begin
     menus := chargerMenus();
@@ -244,48 +214,39 @@ begin
         writeln('Desciption : ', menus[i - 1].description);
         writeln('');
     end;
+
     repeat
-        writeln('Saisissez votre choix en indicant le nuléro du menu.');
-        readln(reponse);
-        TryStrToInt(reponse, p);
-    until (0 < p) and (p < (length(menus) + 1));
+        writeln('Saisissez votre choix en indicant le numéro du menu.');
+        indexChoix := demanderEntier();
+    until (0 < indexChoix) and (indexChoix < (length(menus) + 1));
 
     {Affectation des préférences du menu aux critères de l'utilisateur.}
-    setlength(choix.categories, length(menus[p - 1].preferences));
-    choix.categories := menus[p - 1].preferences;
+    setlength(choix.categories, length(menus[indexChoix - 1].preferences));
+    choix.categories := menus[indexChoix - 1].preferences;
     writeln('');
 
 end;
 
-procedure choixNbVoyageurs(var choix: TCriteres);
 {L'utilisateur renseigne ici le nombre de personnes participant au voyage.}
-var nbPersonnes: String; p: LongInt;
+procedure choixNbVoyageurs(var choix: TCriteres);
 begin
-    repeat
-        writeln('Combien de personnes feront parties du voyage ?');
-        readln(nbPersonnes);
-        TryStrToInt(nbPersonnes, p);
-    until (TryStrToInt(nbPersonnes, p) = True);
-    choix.nbVoyageurs := p;
+    writeln('Combien de personnes feront parties du voyage ?');
+    choix.nbVoyageurs := demanderEntier();
 end;
 
 
-procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 {Procédure globale regroupant l'ensemble des sous-procédures décrites précédemment.}
-var reponse: String; p: LongInt;
+procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
+var reponse: Integer;
 begin
     choixPays(choix, listePays);
 
     {Choix du mode de sélection des préférences.}
     repeat
         writeln('Voulez vous choisir individuellement vos préférences concernant les activités (1), ou bien sélectionner parmi des packs de préférences (2) ?');
-        writeln('test');
-        readln(reponse);
-        writeln('test');
-        TryStrToInt(reponse, p);
-        writeln('test');
-    until (p = 1) or (p = 2);
-    if p = 1 then
+        reponse := demanderEntier();
+    until (reponse = 1) or (reponse = 2);
+    if reponse = 1 then
         choixPreferences(choix)
     else
         choixMenu(choix);
@@ -295,7 +256,7 @@ begin
     choixBudget(choix);
     choixExperience(choix);
     choixNbVoyageurs(choix);
-    choixDuree(choix);
+    choixDuree(choix, listePays);
 
 end;
 
