@@ -61,7 +61,6 @@ begin
     repeat
         readln(input);
         success := TryStrToInt(input, value);
-        writeln(success);
         if not success then
             writeln('Veuillez entrer un nombre entier.');
     until success;
