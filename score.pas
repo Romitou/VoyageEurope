@@ -10,7 +10,8 @@ function scoreActivitePays(pays: TPays; criteres: TCriteres; nbActParJour: Integ
 procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; nbActParJour: Integer; intervalleTemp: Real; var pays: TPays);
 function poidsChemin(pays1: TPays; pays2: TPays): Real;
 procedure paysVisites(inputPays: TEurope; var europe: TEurope);
-function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour: Integer): TEtapes;
+
+function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
 function genererJournees(etapes: TEtapes): TJournees;
 
 implementation
@@ -157,7 +158,7 @@ end;
 // L'idée ici serait de calculer le temps total pouvant être alloué aux transports et aux activités en fonction de la durée du voyage des critères
 // Notons dureeTotale cette durée. Afin d'augmenter la quantité d'activités "préférées" (= meilleur score), il faudrait attribuer une durée dans
 // chaque pays proportionnelle au score. CàD : dureePays = (scorePays/totalScores) * dureeTotale
-function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour: Integer): TEtapes;
+function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
 var
     dureePays, dureeTotale, dureeActivites: Integer;
     totalScores: Real;
