@@ -31,7 +31,7 @@ begin
     deserialiserPays.codeAvions := splitString(split[4], ',');
     deserialiserPays.climatString := splitString(split[7], ',');
     latlngString := splitString(split[6], ',');
-    DecimalSeparator := '.';
+    DefaultFormatSettings.DecimalSeparator := '.';
     deserialiserPays.latitude := StrToFloat(latlngString[0]);
     deserialiserPays.longitude := StrToFloat(latlngString[1]);
 end;
@@ -44,7 +44,7 @@ begin
     split := splitLigneCsv(valeur, ',');
     deserialiserActivite.nom := split[0];
     deserialiserActivite.pays := split[1];
-    DecimalSeparator := '.';
+    DefaultFormatSettings.DecimalSeparator := '.';
     deserialiserActivite.minutes := round(StrToFloat(split[3]));
     deserialiserActivite.cout := StrToFloat(split[4]);
     categories := splitString(split[6], ',');
