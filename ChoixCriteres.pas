@@ -1,4 +1,4 @@
-﻿unit choixCriteres;
+unit choixCriteres;
 
 interface
 uses constantes, genererVoyage, sysutils, utils, voyageTypes;
@@ -8,9 +8,9 @@ procedure modifierCriteres(var choix : TCriteres;europe : TEurope; var quitter:B
 
 implementation
 
-procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
 {Permet au programme de se référer à la base de données, afin d'associer la réponse de l'utilisateur
 à un pays si celle-ci correspond au nom d'un pays figurant dans la base de données.}
+procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
 var i: Integer;
 begin
     trouve := false;
@@ -23,20 +23,20 @@ begin
         end;
 end;
 
-procedure choixPays(var choix: TCriteres; listePays: TEurope);
 {Sélection de pays de départ et de la destination du voyage}
+procedure choixPays(var choix: TCriteres; listePays: TEurope);
 var depart, arrivee: String;
 var trouve: Boolean;
 begin
     trouve := false;
     repeat
-        writeln('Dans quel pays commence votre voyage ?');
+        writeln('🌍 Dans quel pays commence votre voyage ?');
         readln(depart);
         associerPays(depart, listePays, choix.paysDepart, trouve)
     until (trouve);
     trouve := false;
     repeat
-        writeln('Quel pays souhaitez-vous absolument traverser durant votre voyage ?');
+        writeln('🏁 Quel pays principal souhaitez-vous absolument traverser durant votre voyage ?');
         readln(arrivee);
         associerPays(arrivee, listePays, choix.paysArrivee, trouve)
     until (trouve);
@@ -52,16 +52,16 @@ begin
     n := 0;
     prefLength := ord(high(TPref)) + 1;
 
-    writeln('Veuillez choisir vos préférences pour les activités de votre voyage.');
+    writeln('🎯 Veuillez choisir vos préférences pour les activités de votre voyage.');
     writeln('Sélectionnez au moins 2 préférences en entrant leurs numéros associés.');
     writeln('Pensez à sélectionner vos préférences par ordre de priorité.');
     for i := 1 to prefLength do
-        writeln('[', i, '] ', TPref(i - 1));
-    writeln('Tapez 0 quand vous aurez terminé votre saisie.');
+        writeln('➡️  [', i, '] ', TPref(i - 1));
+    writeln('👉 Entrez 0 afin de terminer votre saisie.');
 
     repeat
         repeat
-            writeln('Veuillez saisir un chiffre associé à une préférence :');
+            writeln('🎯 Veuillez saisir un numéro associé à une préférence :');
             indexChoix := demanderEntier();
         until (indexChoix >= 0) and (indexChoix <= prefLength);
 
@@ -83,9 +83,9 @@ procedure choixDuree(var choix: TCriteres; listePays: TEurope);
 var dureeMinimale: Integer;
 begin
     dureeMinimale := calculDureeMinimale(choix, listePays);
-    writeln('La durée minimale de votre voyage est de ', dureeMinimale, ' jours.');
     repeat
-        writeln('Quelle durée souhaitez-vous pour votre voyage ?');
+        writeln('🛏️ Combien de jours souhaitez-vous voyager (au maximum) ?');
+        writeln('👉 La durée minimale de votre voyage est de ', dureeMinimale, ' jours.');
         choix.duree := demanderEntier();
     until (choix.duree >= dureeMinimale);
 end;
@@ -93,7 +93,7 @@ end;
 {L'utilisateur renseigne ici la température qu'il souhaiterait avoir lors de son voyage.}
 procedure choixClimat(var choix: TCriteres);
 begin
-    writeln('Quelle est la température souhaitée pour votre voyage ?');
+    writeln('🌡️  Quelle serait votre température ambiante idéale (en °C) ?');
     choix.climat := demanderEntier();
 end;
 
@@ -102,12 +102,12 @@ cette procédure permet à l'utilisateur d'indiquer le mois de l'année où il s
 procedure choixPeriode(var choix: TCriteres);
 var i, indexChoix: LongInt;
 begin
-    writeln('Le climat du pays principal de votre voyage est le suivant :');
+    writeln('🌱 Le climat du pays principal de votre voyage est le suivant :');
     for i := 0 to length(choix.paysArrivee.climat) - 1 do
         writeln('[', i, '] ', TMois(i), ' : ', choix.paysArrivee.climat[TMois(i)], '°C');
     writeln(' ');
     repeat
-        writeln('Au vu de ces températures, durant quel mois de l''année souhaitez-vous effectuer votre voyage ? (Vueillez entrer le numéro du mois)');
+        writeln('📅 Saisissez le numéro du mois correspondant à votre période de voyage.');
         indexChoix := demanderEntier();
     until (0 < indexChoix) and (indexChoix < 12);
     choix.periode := TMois(indexChoix);
@@ -116,7 +116,7 @@ end;
 {L'utilisateur renseigne ici son budget pour le voyage.}
 procedure choixBudget(var choix: TCriteres);
 begin
-    writeln('Quel est le coût maximal que souhatez fixer pour votre voyage ?');
+    writeln('💲 Quel est votre budget pour ce voyage ?');
     choix.budget := demanderEntier();
 end;
 
@@ -136,13 +136,13 @@ begin
     expLength := ord(high(TExperience)) + 1;
 
     writeln('');
-    writeln('Voici quelques propositions caractéristiques d''un voyage.');
+    writeln('✨ Voici quelques propositions caractéristiques d''un voyage.');
     writeln('');
     for i := 1 to expLength do
         writeln('[', i, '] ', TExperience(i - 1));
     writeln('');
     repeat
-        writeln('Veuillez choisir votre proposition préférée.');
+        writeln('✨ Veuillez choisir votre proposition préférée.');
         indexChoix := demanderEntier();
     until (0 < indexChoix) and (indexChoix <= expLength);
 
@@ -206,7 +206,7 @@ begin
     menus := chargerMenus();
 
     writeln('');
-    writeln('Veuillez choisir votre menu pour votre voyage.');
+    writeln('📋 Veuillez choisir votre menu pour votre voyage.');
     writeln('');
 
     {Affichage des menus.}
@@ -223,7 +223,7 @@ begin
     end;
 
     repeat
-        writeln('Saisissez votre choix en indicant le numéro du menu.');
+        writeln('📋 Saisissez votre choix en indiquant le numéro du menu.');
         indexChoix := demanderEntier();
     until (0 < indexChoix) and (indexChoix < (length(menus) + 1));
 
@@ -236,23 +236,25 @@ end;
 {L'utilisateur renseigne ici le nombre de personnes participant au voyage.}
 procedure choixNbVoyageurs(var choix: TCriteres);
 begin
-    writeln('Combien de personnes feront parties du voyage ?');
+    writeln('👥 Combien de personnes feront parties du voyage ?');
     choix.nbVoyageurs := demanderEntier();
 end;
 
 procedure choixPreferences(var choix : TCriteres);
-var reponse : String;
-p : LongInt;
+var indexChoix: Integer;
 begin
-repeat
-    writeln('Voulez vous choisir individuellement vos préférences concernant les activités (1), ou bien sélectionner parmi des packs de préférences (2) ?');
-    readln(reponse);
-    TryStrToInt(reponse, p);
-until (p = 1) or (p = 2);
-    if p = 1 then
-        choixPreferencesIndividuelles(choix)
+    writeln('📋 [1] Des menus prédéfinis existent afin de générer rapidement un voyage correspondant à certains profils.');
+    writeln('✏️  [2] Vous pouvez également choisir vos préférences manuellement.');
+    writeln();
+
+    repeat
+        writeln('🤔 Saisissez votre choix en indiquant le numéro correspondant.');
+        indexChoix := demanderEntier();
+    until (indexChoix = 1) or (indexChoix = 2);
+    if indexChoix = 1 then
+        choixMenu(choix)
     else
-        choixMenu(choix);
+        choixPreferencesIndividuelles(choix);
 end;
 
 
