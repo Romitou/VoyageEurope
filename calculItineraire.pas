@@ -44,7 +44,7 @@ begin
     noeudDepart := trouverIndexPays(paysDepart.nom, paysValables);
     if noeudDepart = -1 then
     begin
-        resultat.message := 'Impossible de trouver le pays de départ "' + paysDepart.nom + '".';
+        resultat.message := string('Impossible de trouver le pays de départ "') + paysDepart.nom + string('".');
         exit(resultat);
     end;
 
@@ -52,7 +52,7 @@ begin
     noeudFin := trouverIndexPays(paysArrivee.nom, paysValables);
     if noeudFin = -1 then
     begin
-        resultat.message := 'Impossible de trouver le pays d''arrivée "' + paysArrivee.nom + '".';
+        resultat.message := string('Impossible de trouver le pays d''arrivée "') + paysArrivee.nom + string('".');
         exit(resultat);
     end;
 
@@ -71,7 +71,7 @@ begin
     // Dijkstra peut indiquer que la distance est infinie (aucun chemin possible) ou un chemin vide
     if (distance = INFINITY) or (length(chemin) = 0) then
     begin
-        resultat.message := 'Aucun chemin n''a été trouvé entre "' + paysDepart.nom + '" et "' + paysArrivee.nom + '".';
+        resultat.message := string('Aucun chemin n''a été trouvé entre "') + paysDepart.nom + string('" et "') + paysArrivee.nom + string('".');
         exit(resultat);
     end;
 

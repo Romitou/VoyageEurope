@@ -51,7 +51,7 @@ begin
     if aller.erreur then
     begin
         voyage.erreur := true;
-        voyage.message := 'Une erreur est survenue lors de la génération de l''itinéraire : ' + aller.message;
+        voyage.message := string('Une erreur est survenue lors de la génération de l''itinéraire : ') + aller.message;
         exit(voyage);
     end;
 
@@ -71,7 +71,7 @@ begin
     if retour.erreur then
     begin
         voyage.erreur := true;
-        voyage.message := 'Une erreur est survenue lors de la génération de l''itinéraire : ' + retour.message;
+        voyage.message := string('Une erreur est survenue lors de la génération de l''itinéraire : ') + retour.message;
         exit(voyage);
     end;
 
