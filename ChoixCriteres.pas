@@ -41,7 +41,7 @@ begin
     until (trouve);
 end;
 
-procedure choixPreferences(var choix: TCriteres);
+procedure choixPreferencesIndividuelles(var choix: TCriteres);
 {Permet à l'utilisateur de sélectionner manuellement ses préférences pour son voyage (sélection personnalisée).}
 var
     prefUser: array of TPref;
@@ -117,6 +117,7 @@ end;
 {Cette procédure permet à l'utilisateur d'influencer le calcul des scores qui aura lieu plus tard lors de la génération du voyage.
 En effet, en choisissant une des propositions affichées ici, il peut alors faire savoir au programme l'importance qu'il accorde
 aux activités, au coût, à la température, ou bien à l'aspect écologique de son voyage}
+
 procedure choixExperience(var choix: TCriteres);
 var expLength, i, indexChoix: Integer;
 begin
@@ -137,7 +138,7 @@ begin
     repeat
         writeln('Veuillez choisir votre proposition préférée.');
         indexChoix := demanderEntier();
-    until (0 < indexChoix) and (indexChoix < expLength);
+    until (0 < indexChoix) and (indexChoix <= expLength);
 
     case indexChoix of
     1: choix.coeffCout := COEFF_COUT_FINAL;
@@ -223,7 +224,7 @@ begin
     {Affectation des préférences du menu aux critères de l'utilisateur.}
     setlength(choix.categories, length(menus[indexChoix - 1].preferences));
     choix.categories := menus[indexChoix - 1].preferences;
-    writeln('');
+    writeln(length(choix.categories));
 
 end;
 
@@ -234,23 +235,89 @@ begin
     choix.nbVoyageurs := demanderEntier();
 end;
 
+procedure choixPreferences(var choix : TCriteres);
+var reponse : String;
+p : LongInt;
+begin
+repeat
+    writeln('Voulez vous choisir individuellement vos préférences concernant les activités (1), ou bien sélectionner parmi des packs de préférences (2) ?');
+    readln(reponse);
+    TryStrToInt(reponse, p);
+until (p = 1) or (p = 2);
+    if p = 1 then
+        choixPreferencesIndividuelles(choix)
+    else
+        choixMenu(choix);
+end;
+
+
+function modifierCriteres(choix : TCriteres;europe : TEurope): Boolean;
+var reponse : String;
+p,n : LongInt;
+begin
+
+    //cette boucle permet de demander autant de fois que veut l'utilisateur de modifier ses critères
+    repeat
+
+    repeat
+        writeln('Voulez-vous modifier l''un / un autre de vos critères ? oui(1) / non(2)');
+        readln(reponse);
+        TryStrToInt(reponse, p);
+    until (TryStrToInt(reponse, p) = True);
+
+    if p=1 then
+        begin
+            repeat
+            writeln('Lequel voulez-vous modifier ?');
+            writeln('');
+            writeln('[1] Préférences');
+            writeln('[2] Durée');
+            writeln('[3] Période');
+            writeln('[4] Pays de départ et/ou d''arrivée');
+            writeln('[5] Budget');
+            writeln('[6] Expérience');
+            writeln('[7] Nombre de voyageurs');
+            writeln('[8] Tous');
+            writeln('');
+            readln(reponse);
+            TryStrToInt(reponse, n);
+            until (TryStrToInt(reponse, n) = True);
+
+            case n of
+            1 : choixPreferences(choix);
+            2 : choixDuree(choix,europe);
+            3 : choixPeriode(choix);
+            4 : choixPays(choix,europe);
+            5 : choixBudget(choix);
+            6 : choixExperience(choix);
+            7 : choixNbVoyageurs(choix);
+            8 : demanderCriteres(choix,europe);
+            end;
+        end;
+
+    until p=2;    
+    
+    repeat
+        writeln('Voulez-vous générer de nouveau le voyage ? oui(1) / non(2)');
+        readln(reponse);
+        TryStrToInt(reponse, p);
+    until (TryStrToInt(reponse, p) = True);
+
+    if p=1 then 
+        modifierCriteres:=False
+    else
+        modifierCriteres:=True;    
+
+end;
+
+
+
 
 {Procédure globale regroupant l'ensemble des sous-procédures décrites précédemment.}
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
-var reponse: Integer;
 begin
     choixPays(choix, listePays);
-
-    {Choix du mode de sélection des préférences.}
-    repeat
-        writeln('Voulez vous choisir individuellement vos préférences concernant les activités (1), ou bien sélectionner parmi des packs de préférences (2) ?');
-        reponse := demanderEntier();
-    until (reponse = 1) or (reponse = 2);
-    if reponse = 1 then
-        choixPreferences(choix)
-    else
-        choixMenu(choix);
-
+    choixPreferences(choix);
     choixClimat(choix);
     choixPeriode(choix);
     choixBudget(choix);

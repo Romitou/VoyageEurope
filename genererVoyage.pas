@@ -16,9 +16,6 @@ begin
     voyage.erreur := false;
     voyage.message := '';
 
-    writeln('climat', criteres.climat);
-    criteres.climat := 0;
-
     writeln('Classement activités...');
     for i := 0 to length(europe) - 1 do
     begin
