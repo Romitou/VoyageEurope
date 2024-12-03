@@ -5,7 +5,7 @@ https://github.com/pasdoc/pasdoc
 
 Executéer cette commande afin de générer la documentation pour toutes les unités Pascal du projet. Le programme va créer des fichiers HTML disponibles dans le dossier `doc` où vous trouverez un fichier `index.html` qui pourra être ouvert dans le navigateur pour visualiser la documentation générée.
 ```
-bin/pasdoc.exe --output doc/ *.pas
+bin/pasdoc.exe --implementation-comments=prefer-implementation --output doc/ *.pas
 ```
 
 ### Pascal Format
