@@ -6,12 +6,24 @@ uses sysutils;
 type TMode = (TrainSeul, TrainEtAvion);
 type TTransport = (Train, Avion);
 type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novembre, Decembre);
-type TPref = (Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education,
-    BienEtre, Sport, AventureAquatique, FestivalsEtEvenements, Romantique, EnFamille, EntreAmis, Solo, Luxe, Budget, EcoResponsable,
-    Immersif, Authentique, RoadTrip, VoyageEnTrain, CourtTerme, JourneeComplete, MultiJours, Relaxant, Actif, Intensif, Modere,
-    Debutant, Histoire, ArtisanatLocal, Photographie, ObservationFaune, Agritourisme,
-    Mystere, CinemaEtTelevision, ReligieuxEtSpirituel, Enfants, MobiliteReduite, TouteAnnee, ActiviteSaisonniere, Climatisation,
-    TemperatureDouce, Guide, NonGuide, Hiver, Printemps, Ete, Automne, TouteSaison, SaisonFestivals);
+type TPref = (
+    // Type d'activité
+    Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education,
+    BienEtre, Sport, Aquatique, FestivalsEtEvenements, Histoire, ArtisanatLocal, Photographie,
+    ObservationFaune, Mystere, CinemaEtTelevision, ReligieuxEtSpirituel, Authentique, Immersif,
+    
+    // Occasion
+    Romantique, EnFamille, EntreAmis, Solo,
+
+    // Type de séjour
+    Luxe, EcoResponsable,
+
+    // Qualification de l'activité
+    Guide, Actif, Intensif, Modere, MobiliteReduite,
+    
+    // Saison
+    Hiver, Printemps, Ete, Automne, TouteSaison, SaisonFestivals);
+
 type TExperience = (Economique, Ecologique, RespectDesTemperatures, RespectDesActivites);
 
 
