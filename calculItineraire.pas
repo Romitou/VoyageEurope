@@ -8,25 +8,39 @@ function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPay
 
 implementation
 
+{ Permet de calculer un itinéraire entre deux pays avec l'algorithme de Dijkstra
+    @param(paysValables La liste des pays possibles pour le trajet)
+    @param(paysDepart Le pays de départ)
+    @param(paysArrivee Le pays de destination)
+    @param(modeTransport Le mode de transport sélectionné)
+    @return(Le résultat de la génération du voyage incluant l'itinéraire)
+}
 function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; modeTransport: TMode): TItineraireResult;
 var adjacence: TAdjacenceListe;
-var chemin: TNoeudList;
-var distance: TDistance;
-var i, indexPays: Integer;
-var noeudDepart, noeudFin: Integer;
-var cheminPays: TEurope;
-var resultat: TItineraireResult;
+    chemin: TNoeudList;
+    distance: TDistance;
+    i, indexPays: Integer;
+    noeudDepart, noeudFin: Integer;
+    cheminPays: TEurope;
+    resultat: TItineraireResult;
 begin
     setlength(resultat.itineraire, 0);
+
+    // On initialise le résultat comme comportant une erreur
+    // On annulera cet état à la fin du programme
     resultat.erreur := true;
 
+    // On convertit la liste des pays valables en une liste d'adjacence de Dijkstra
+    // Vérification que l'adjacence comporte au moins 2 noeuds
     adjacence := convertirEuropeAdjacence(paysValables, modeTransport);
-    if length(adjacence) < 2 then
+    if length(adjacence) <= 2 then
     begin
         resultat.message := 'Pas assez d''adjacences n''ont été générées.';
         exit(resultat);
     end;
 
+    // Dijkstra fonctionnant avec des noeuds représentés par des entiers, on attribue à chaque pays un entier caractéristique
+    // Cet entier correspond à l'index du pays dans la liste des pays valables en entrée
     noeudDepart := trouverIndexPays(paysDepart.nom, paysValables);
     if noeudDepart = -1 then
     begin
@@ -34,6 +48,7 @@ begin
         exit(resultat);
     end;
 
+    // On réalise la même méthode pour le noeud de fin
     noeudFin := trouverIndexPays(paysArrivee.nom, paysValables);
     if noeudFin = -1 then
     begin
@@ -41,21 +56,26 @@ begin
         exit(resultat);
     end;
 
-    writeln('length(adjacence):', length(adjacence), 'noeudDepart:', noeudDepart, 'noeudFin:', noeudFin);
+    // Utilisation de la procédure shortestPath provenant de Dijkstra avec les différents paramètres déterminés :
+    // adjacence, length(adjacence), noeudFin et noeudDepart
+    // La procédure modifiera les valeurs de chemin et distance que nous utiliserons par la suite
     shortestPath(adjacence, length(adjacence), noeudFin, noeudDepart, chemin, distance);
 
+    // Dijkstra peut renvoyer une distance négative en cas de chemin impossible
     if distance <= 0 then
     begin
         resultat.message := 'Dijkstra a renvoyé une distance invalide.';
         exit(resultat);
     end;
 
+    // Dijkstra peut indiquer que la distance est infinie (aucun chemin possible) ou un chemin vide
     if (distance = INFINITY) or (length(chemin) = 0) then
     begin
         resultat.message := 'Aucun chemin n''a été trouvé entre "' + paysDepart.nom + '" et "' + paysArrivee.nom + '".';
         exit(resultat);
     end;
 
+    // On a un chemin représentant l'identifiant entier de chaque pays. On 
     setlength(cheminPays, length(chemin));
     for i := 0 to length(chemin) - 1 do
     begin
