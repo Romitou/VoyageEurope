@@ -4,8 +4,7 @@ interface
 uses calculCout, constantes, utils, voyageTypes;
 
 procedure scoreActivite(pref: array of TPref; coeffCout: Real; var activite: TActivite);
-procedure triActPays(criteres: TCriteres; var pays: TPays);
-function scoreClimat(climat: Real; periode: TMois; pays: Tpays; fourchette: Real): Real;
+procedure triActPays(var pays: TPays);
 function scoreActivitePays(pays: TPays; criteres: TCriteres; nbActParJour: Integer): Real;
 procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; nbActParJour: Integer; intervalleTemp: Real; var pays: TPays);
 function poidsChemin(pays1: TPays; pays2: TPays): Real;
@@ -16,6 +15,12 @@ function genererJournees(etapes: TEtapes): TJournees;
 
 implementation
 
+
+{ Permet de calculer le score d'une activité en pourcentage, basé sur le respect des préférences et éventuellement du coût de l'activité
+    @param(pref Le tableau des préférences choisies)
+    @param(coeffCout Le coefficient qui permet de calculer la moyenne pondérée entre le scorePref et le scoreCout)
+    @param(europe Le tableau de pays dans lequel chercher)
+}
 procedure scoreActivite(pref: array of TPref; coeffCout: Real; var activite: TActivite);
 var i, j: Integer;
     scorePref, scoreCout, pasCoeff, somme, sommeCoeff: Real;
@@ -25,6 +30,9 @@ begin
     somme := 0;
     sommeCoeff := 0;
 
+    {Le scorePref est calculé sur le principe du nombre de critères respectés pondérés divisés par le nombre de critères pondéré.
+    En effet on donne plus d'importance aux premiers critères, en lui donnant un poids plus élevé.
+    pasCoeff permet de calculer le poids de chaque critère}
     pasCoeff := (COEFF_PREF_MAX - COEFF_PREF_MIN) / (length(pref) - 1);
 
     for i := 0 to length(pref) - 1 do
@@ -42,9 +50,9 @@ begin
     scorePref := somme / sommeCoeff;
 
 
-    {score en fonction du coût, dans le cas où l'utilisateur a sélectionné l'option budget
-    comme pour le score du climat, on utilise une parabole, cette fois plus simple car pas de modification de paramètres
-    f(cout)=1-(cout/100)² donc le score est nul pour les activités dont le couût est > à 100€}
+    {Permet de calcuer scoreCout, dans le cas où l'utilisateur a sélectionné l'option budget
+    Comme pour le score du climat, on utilise une parabole,f(cout)=1-(cout/100)² 
+    donc le score est nul pour les activités dont le coût est supérieur à COUT_MAX}
     scoreCout := 1 - (activite.cout / COUT_MAX) * (activite.cout / COUT_MAX);
     if scoreCout < 0 then
         scoreCout := 0;
@@ -54,25 +62,29 @@ begin
 
 end;
 
-{On utilise une fonction parabolique de la forme f(x)=a(x-xo)²+c
-avec c=1 et a<0 car le score diminue plus il s'éloigne de xo.
-xo correspond à la température souhaitée soit climat ici.
-x correspond au climat du pays, donc pays.climat[periode] ici.
-a=-4/F² avec F la fourchette (la distance entre les deux racines) des valeurs qu'on veut regarder
-on trouve cela en calculant les racines du polynome}
 
-function scoreClimat(climat: Real; periode: TMois; pays: Tpays; fourchette: Real): Real;
+{ Permet de calculer le score lié au climat, en pourcentage, basé sur une fonction parabolique de la forme f(x)=a(x-xo)²+c (voir explication dans le rapport)
+    @param(climat La température choisie)
+    @param(periode La période choisie)
+    @param(pays Le pays concerné)
+    @param(intervalleTemp Fourchette de températures considérées)
+    @return(Le score en pourcentage)
+}
+function scoreClimat(climat: Real; periode: TMois; pays: Tpays; intervalleTemp: Real): Real;
 var a: Real;
 begin
-    a := -4 / (fourchette * fourchette);
+    a := -4 / (intervalleTemp * intervalleTemp);
     scoreClimat := a * (pays.climat[periode] - climat) * (pays.climat[periode] - climat) + 1;
-    //cas où la température du pays sort de la fourchette, donc quand la fonction renvoit
+    //cas où la température du pays sort de l'intervalle, donc quand la fonction renvoit
     //une valeur négative
     if scoreClimat < 0 then
         scoreClimat := 0;
 end;
 
-procedure triActPays(criteres: TCriteres; var pays: TPays);
+{ Permet de remplir le champ ordreAct dans un pays, qui stocke les indices des activités du pays dans l'ordre du meilleur score au moins bon
+    @param(pays Le pays concerné)
+}
+procedure triActPays(var pays: TPays);
 var
     tabIndice: array of Integer;
     indiceMax: Integer;
@@ -114,7 +126,12 @@ begin
 
 end;
 
-
+{ Permet de calculer le score lié aux activités du pays, en pourcentage, basé sur la moyenne des scores des nbActParJour meilleures activités 
+    @param(pays Le pays concerné)
+    @param(criteres Les choix de l'utilisateur)
+    @param(nbActParJour Nombre d'activités considérées pour le calcul)
+    @return(Le score en pourcentage)
+}
 function scoreActivitePays(pays: TPays; criteres: TCriteres; nbActParJour: Integer): Real;
 var
     somme: Real;
@@ -126,6 +143,10 @@ begin
     scoreActivitePays := somme / nbActParJour;
 end;
 
+{ Permet de calculer le nouveau score des pays traversés à l'aller, en les divisant par DIVISION_SCORE 
+    @param(inputPays Les pays traversés pendant le trajet aller)
+    @param(europe Tous les pays)
+}
 procedure paysVisites(inputPays: TEurope; var europe: TEurope);
 var
     i, j: Integer;
@@ -137,13 +158,25 @@ begin
                 europe[j].score := europe[j].score / DIVISION_SCORE;
 end;
 
+{ Permet de calculer le score d'un pays, en pourcentage, basé sur la moyenne pondérée entre le score des activités du pays et le score du climat 
+    @param(coeffAct Le pays concerné)
+    @param(coeffClim Les choix de l'utilisateur)
+    @param(criteres Les choix de l'utilisateur)
+    @param(nbActParJour Nombre d'activités considérées pour le calcul)
+    @param(intervalleTemp Fourchette de températures considérées))
+    @param(pays Le pays concerné)
+}
 procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; nbActParJour: Integer; intervalleTemp: Real; var pays: TPays);
 begin
     pays.score := (scoreActivitePays(pays, criteres, nbActParJour) * coeffAct + scoreClimat(criteres.climat, criteres.periode, pays, intervalleTemp) * coeffClim) / (coeffAct + coeffClim);
 end;
 
 
-{pour l'instant, on prend la moyenne comme fonction, mais quand on changera de fonction math, poidsChemin aura plus d'intérêt}
+{ Permet de calculer le poids du chemin entre deux pays, en pourcentage, basé sur la moyenne des scores des deux pays 
+    @param(pays1 Permier pays)
+    @param(pays2 Deuxième pays)
+    @return(Le score en pourcentage)
+}
 function poidsChemin(pays1: TPays; pays2: TPays): Real;
 var poids: Real;
 begin
