@@ -1,4 +1,4 @@
-﻿unit calculItineraire;
+unit calculItineraire;
 
 interface
 uses dijkstra, score, sysutils, utils, voyageTypes;
@@ -59,7 +59,7 @@ begin
     // Utilisation de la procédure shortestPath provenant de Dijkstra avec les différents paramètres déterminés :
     // adjacence, length(adjacence), noeudFin et noeudDepart
     // La procédure modifiera les valeurs de chemin et distance que nous utiliserons par la suite
-    shortestPath(adjacence, length(adjacence), noeudFin, noeudDepart, chemin, distance);
+    shortestPath(adjacence, noeudFin, noeudDepart, chemin, distance);
 
     // Dijkstra peut renvoyer une distance négative en cas de chemin impossible
     if distance <= 0 then

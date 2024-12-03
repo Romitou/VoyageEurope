@@ -18,7 +18,7 @@ type
     TPrecedentDict = array of TNoeud;
 
 
-procedure shortestPath(listeAdjacence: TAdjacenceListe; nbNoeuds: Integer; noeudDepart, noeudFin: TNoeud; var chemin: TNoeudList; var distance: TDistance);
+procedure shortestPath(listeAdjacence: TAdjacenceListe; noeudDepart, noeudFin: TNoeud; var chemin: TNoeudList; var distance: TDistance);
 
 implementation
 
@@ -36,7 +36,7 @@ begin
     end;
 end;
 
-procedure shortestPath(listeAdjacence: TAdjacenceListe; nbNoeuds: Integer; noeudDepart, noeudFin: TNoeud; var chemin: TNoeudList; var distance: TDistance);
+procedure shortestPath(listeAdjacence: TAdjacenceListe; noeudDepart, noeudFin: TNoeud; var chemin: TNoeudList; var distance: TDistance);
 var
     noeudsInitial: TNoeudList;
     distanceDepart: TDistanceDict;
@@ -45,11 +45,11 @@ var
     nouveauChemin, minDist: TDistance;
 begin
     // afficherAdjacence(listeAdjacence);
-    SetLength(noeudsInitial, nbNoeuds);
-    SetLength(distanceDepart, nbNoeuds);
-    SetLength(noeudPrecedent, nbNoeuds);
+    SetLength(noeudsInitial, length(listeAdjacence));
+    SetLength(distanceDepart, length(listeAdjacence));
+    SetLength(noeudPrecedent, length(listeAdjacence));
 
-    for i := 0 to nbNoeuds - 1 do
+    for i := 0 to length(listeAdjacence) - 1 do
     begin
         noeudsInitial[i] := i;
         if i = noeudDepart then
