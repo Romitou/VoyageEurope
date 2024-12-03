@@ -1,3 +1,4 @@
+﻿{ Calcul d'itinéraire entre deux pays en utilisant l'algorithme de Dijkstra (voir l'unité dijkstra) }
 unit calculItineraire;
 
 interface
@@ -19,7 +20,7 @@ function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPay
 var adjacence: TAdjacenceListe;
     chemin: TNoeudList;
     distance: TDistance;
-    i, indexPays: Integer;
+    i: Integer;
     noeudDepart, noeudFin: Integer;
     cheminPays: TEurope;
     resultat: TItineraireResult;
@@ -57,7 +58,7 @@ begin
     end;
 
     // Utilisation de la procédure shortestPath provenant de Dijkstra avec les différents paramètres déterminés :
-    // adjacence, length(adjacence), noeudFin et noeudDepart
+    // adjacence, noeudFin et noeudDepart
     // La procédure modifiera les valeurs de chemin et distance que nous utiliserons par la suite
     shortestPath(adjacence, noeudFin, noeudDepart, chemin, distance);
 
@@ -75,32 +76,42 @@ begin
         exit(resultat);
     end;
 
-    // On a un chemin représentant l'identifiant entier de chaque pays. On 
+    // On a un chemin composé des identifiants entiers de chaque pays. On les convertit en pays "réels" via leur index 
     setlength(cheminPays, length(chemin));
     for i := 0 to length(chemin) - 1 do
-    begin
-        // TODO: expliquer destructuration obligatoire
-        indexPays := chemin[i];
-        cheminPays[i] := paysValables[indexPays];
-    end;
+        cheminPays[i] := paysValables[chemin[i]];
 
+    // On a trouvé un chemin valide, on peut donc renvoyer le résultat sans erreur et avec l'itinéraire
     resultat.erreur := false;
     resultat.itineraire := cheminPays;
 
     calculerItineraire := resultat;
 end;
 
+{ Permet de convertir une liste de pays en une liste d'adjacence pour l'algorithme de Dijkstra.
+  Deux modes de transport sont possibles : Train seul ou Train et Avion. Dans le second cas, les pays
+  reliés par un vol direct sont également reliés directement.
+    @param(europe La liste des pays à convertir)
+    @param(modeTransport Le mode de transport sélectionné)
+    @return(La liste d'adjacence générée)
+}
 function convertirEuropeAdjacence(europe: TEurope; modeTransport: TMode): TAdjacenceListe;
 var
     listeAdjacence: TAdjacenceListe;
     paysVoisins: TStringArray;
     i, j, n, voisinIndex: Integer;
 begin
-    SetLength(listeAdjacence, Length(europe));
+    // On initialise la liste d'adjacence avec la taille de la liste des pays
+    setlength(listeAdjacence, length(europe));
+
     for i := 0 to length(europe) - 1 do
     begin
-        SetLength(listeAdjacence[i], 0);
+        setlength(listeAdjacence[i], 0);
+
+        // Dans les deux cas (Train seul ou Train et Avion), on ajoute les pays voisins par train
         paysVoisins := europe[i].nomFrontieres;
+
+        // En cas de Train et Avion, on ajoute également les pays voisins par avion
         if modeTransport = TrainEtAvion then
             for j := 0 to length(europe[i].nomAvions) - 1 do
             begin
@@ -111,14 +122,20 @@ begin
                 paysVoisins[length(paysVoisins) - 1] := europe[i].nomAvions[j];
             end;
 
+        // On ajoute les voisins à la liste d'adjacence
+        // Pour rappel, on identifie les voisins par leur index dans la liste des pays en entrée
         for j := 0 to length(paysVoisins) - 1 do
         begin
+            // Récupération de l'index du voisin
             voisinIndex := trouverIndexPays(paysVoisins[j], europe);
             if voisinIndex <> -1 then
             begin
                 n := length(listeAdjacence[i]);
                 SetLength(listeAdjacence[i], n + 1);
                 listeAdjacence[i][n].voisin := voisinIndex;
+
+                // Le poids du chemin est détaillé dans l'unité score.pas. Cette valeur étant comprise entre 0 et 1, on la convertit en distance
+                // On utilise une distance de 100 - score pour obtenir une distance plus grande pour les scores plus faibles
                 listeAdjacence[i][n].distance := 100 - round(100 * poidsChemin(europe[i], europe[voisinIndex]));
             end;
         end;
