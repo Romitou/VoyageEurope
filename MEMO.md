@@ -22,6 +22,7 @@
 - important à mettre dans le rapport : le renommage de types en voyageTypes => conflit avec les types de pascal ce qui empêchait l'import de certaines librairies
 - il est important de respecter le camelCase dans le nommage des fichiers et unités afin que tout le monde puisse le compiler sans problème et avoir une convention. si jamais ça compile pas de votre côté il faut supprimer tous les fichiers compilés type .o .ppu
 - à réfléchir pour bientôt : voir pour intégrer une librairie d'image afin de générer une sortie plus visuelle de l'itinéraire proposé et des activités (HTML ?)
+- problème avec pascal de longueur des strings
 
 -au moment de rentrer les poids des chemins dans calculItineraire, le fait d'arondir peut être une cause de manque de prcision dans certains cas. Parce que dans les faits, on voit souvent des pays avec des scores proches.
 -impact de mettre les poids sur une référence de 1000 ? ferait resortir les différences ?
