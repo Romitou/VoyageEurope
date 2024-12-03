@@ -98,9 +98,6 @@ procedure coutCarbone(var voyage: TVoyage);
 {Cette procédure calcul le coût carbone du voyage (kg de CO2 émis). Celui-ci sera affiché dans le terminal en fin de programme.}
 begin
     calculDistanceTransports(voyage);
-    if voyage.modeTransport = TrainSeul then
-        voyage.carbonImpact := emissionCO2Train * voyage.kmTotal
-    else
-        voyage.carbonImpact := emissionCO2Train * voyage.kmAvion + emissionCO2Train * voyage.kmTrain;
+    voyage.carbonImpact := emissionCO2Avion * voyage.kmAvion + emissionCO2Train * voyage.kmTrain;
 end;
 end.
