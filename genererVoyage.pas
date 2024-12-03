@@ -22,7 +22,7 @@ begin
         for j := 0 to length(europe[i].activites) - 1 do
             scoreActivite(criteres.categories, 0, europe[i].activites[j]);
 
-        triActPays(criteres, europe[i]);
+        triActPays(europe[i]);
 
         for j := 0 to length(europe[i].ordreAct) - 1 do
             writeln(europe[i].activites[europe[i].ordreAct[j]].nom, ' : ', europe[i].activites[europe[i].ordreAct[j]].score);
