@@ -6,6 +6,7 @@ interface
 const COEFF_PREF_MAX = 1.5;
     COEFF_PREF_MIN = 1;
     COUT_MAX = 50;
+    NB_ACT_PAR_JOUR = 3;
 
 // Pays visités
 const DIVISION_SCORE = 2;
