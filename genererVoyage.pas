@@ -1,11 +1,135 @@
 ﻿unit genererVoyage;
 
 interface
-uses calculCout, calculItineraire, score, voyageTypes;
+uses calculCout, calculItineraire, score, voyageTypes, constantes, utils;
 
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 
 implementation
+
+// L'idée ici serait de calculer le temps total pouvant être alloué aux transports et aux activités en fonction de la durée du voyage des critères
+// Notons dureeTotale cette durée. Afin d'augmenter la quantité d'activités "préférées" (= meilleur score), il faudrait attribuer une durée dans
+// chaque pays proportionnelle au score. CàD : dureePays = (scorePays/totalScores) * dureeTotale
+function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
+var
+    dureePays, dureeTotale, dureeActivites: Integer;
+    totalScores: Real;
+    i, j, k, nbAct, n: Integer;
+    etapes: TEtapes;
+    activitesUtilisees: array of array of Boolean;
+    indexPays: Integer;
+begin
+    dureeTotale := criteres.duree * HEURES_PAR_JOUR * 60;
+
+    totalScores := 0;
+    for i := 1 to length(itineraire) - 1 do
+        totalScores := totalScores + itineraire[i].score;
+
+    n := 0;
+    setlength(etapes, 0);
+    setlength(activitesUtilisees, length(itineraire));
+    for i := 0 to length(itineraire) - 1 do
+        setlength(activitesUtilisees[i], length(itineraire[i].activites));
+
+    for j := 1 to length(itineraire) - 1 do
+    begin
+        indexPays := trouverIndexPays(itineraire[j].nom, itineraire);
+        dureePays := round((itineraire[j].score / totalScores) * dureeTotale);
+
+        dureeActivites := 0;
+        nbAct := 0;
+        // Si on souhaite éviter les doublons (si besoin dans un cas futur)
+        if ((itineraire[j - 1].nom = itineraire[j].nom)) then
+            continue;
+
+        setlength(etapes, n + 1);
+        etapes[n].estActivite := false;
+        etapes[n].deplacement.paysDepart := itineraire[j - 1];
+        etapes[n].deplacement.paysEtape := itineraire[j];
+        etapes[n].deplacement.distance := calculDuneDistance(itineraire[j - 1].latitude, itineraire[j - 1].longitude, itineraire[j].latitude, itineraire[j].longitude);
+
+        etapes[n].deplacement.transport := Train;
+        if criteres.modeTransport = TrainEtAvion then
+            for k := 0 to length(etapes[n].deplacement.paysDepart.nomAvions) - 1 do
+                if etapes[n].deplacement.paysDepart.nomAvions[k] = etapes[n].deplacement.paysEtape.nom then
+                begin
+                    etapes[n].deplacement.transport := Avion;
+                    break;
+                end;
+
+        etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, etapes[n].deplacement.transport);
+        dureeActivites := dureeActivites + etapes[n].deplacement.minutes;
+        n := n + 1;
+
+        repeat
+            while (nbAct < length(itineraire[j].activites)) and (activitesUtilisees[indexPays][itineraire[j].ordreAct[nbAct]]) do
+                nbAct := nbAct + 1;
+
+            if nbAct >= length(itineraire[j].activites) then
+                break;
+
+            setlength(etapes, n + 1);
+            etapes[n].estActivite := true;
+            etapes[n].activite := itineraire[j].activites[itineraire[j].ordreAct[nbAct]];
+
+            activitesUtilisees[indexPays][itineraire[j].ordreAct[nbAct]] := true;
+
+            dureeActivites := dureeActivites + etapes[n].activite.minutes;
+            n := n + 1;
+            nbAct := nbAct + 1;
+        until (dureeActivites >= (dureePays - 180));
+    end;
+
+    genererEtapes := etapes;
+end;
+
+function genererJournees(etapes: TEtapes): TJournees;
+var
+    i, nJour, tempsAccumule, dureeEtape: Integer;
+    journee: TJournee;
+    journees: TJournees;
+begin
+    nJour := 0;
+    tempsAccumule := 0;
+    setlength(journees, 0);
+
+    setlength(journee.etapes, 0);
+
+    for i := 0 to length(etapes) - 1 do
+    begin
+        if etapes[i].estActivite then
+            dureeEtape := etapes[i].activite.minutes
+        else
+            dureeEtape := etapes[i].deplacement.minutes;
+
+        if tempsAccumule + dureeEtape <= 10 * 60 then // 10h
+        begin
+            setlength(journee.etapes, length(journee.etapes) + 1);
+            journee.etapes[length(journee.etapes) - 1] := etapes[i];
+            tempsAccumule := tempsAccumule + dureeEtape;
+        end
+        else begin
+            journee.jour := nJour + 1;
+            setlength(journees, length(journees) + 1);
+            journees[length(journees) - 1] := journee;
+
+            nJour := nJour + 1;
+            tempsAccumule := dureeEtape;
+
+            setlength(journee.etapes, 1);
+            journee.etapes[0] := etapes[i];
+        end;
+    end;
+
+    if length(journee.etapes) > 0 then
+    begin
+        journee.jour := nJour + 1;
+        setlength(journees, length(journees) + 1);
+        journees[length(journees) - 1] := journee;
+    end;
+
+    genererJournees := journees;
+end;
 
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 var aller, retour: TItineraireResult;
@@ -20,10 +144,11 @@ begin
     for i := 0 to length(europe) - 1 do
     begin
         for j := 0 to length(europe[i].activites) - 1 do
-            scoreActivite(criteres.categories, 0, europe[i].activites[j]);
+            scoreActivite(criteres.categories, criteres.coeffCout, europe[i].activites[j]);
 
-        triActPays(criteres, europe[i]);
+        triActPays(europe[i]);
 
+        //debug
         for j := 0 to length(europe[i].ordreAct) - 1 do
             writeln(europe[i].activites[europe[i].ordreAct[j]].nom, ' : ', europe[i].activites[europe[i].ordreAct[j]].score);
 
@@ -38,8 +163,8 @@ begin
     writeln('Calcul des scores des pays...');
     for i := 0 to length(europe) - 1 do
     begin
-        //attention, coeff non définitif, utilisés pour test, remettre à 1,1,criteres,2,20,europe[i] pour les critères de base
-        scorePays(1, 0, criteres, 2, 20, europe[i]);
+        scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, 3, criteres.intervalleTemperature, europe[i]);
+        //debug
         writeln(europe[i].nom, ' : ', europe[i].score);
     end;
 

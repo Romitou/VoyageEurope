@@ -1,21 +1,23 @@
 ﻿unit score;
 
 interface
-uses calculCout, constantes, utils, voyageTypes;
+uses constantes, voyageTypes;
 
 procedure scoreActivite(pref: array of TPref; coeffCout: Real; var activite: TActivite);
-procedure triActPays(criteres: TCriteres; var pays: TPays);
-function scoreClimat(climat: Real; periode: TMois; pays: Tpays; fourchette: Real): Real;
+procedure triActPays(var pays: TPays);
 function scoreActivitePays(pays: TPays; criteres: TCriteres; nbActParJour: Integer): Real;
 procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; nbActParJour: Integer; intervalleTemp: Real; var pays: TPays);
 function poidsChemin(pays1: TPays; pays2: TPays): Real;
 procedure paysVisites(inputPays: TEurope; var europe: TEurope);
 
-function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
-function genererJournees(etapes: TEtapes): TJournees;
-
 implementation
 
+
+{ Permet de calculer le score d'une activité en pourcentage, basé sur le respect des préférences et éventuellement du coût de l'activité
+    @param(pref Le tableau des préférences choisies)
+    @param(coeffCout Le coefficient qui permet de calculer la moyenne pondérée entre le scorePref et le scoreCout)
+    @param(europe Le tableau de pays dans lequel chercher)
+}
 procedure scoreActivite(pref: array of TPref; coeffCout: Real; var activite: TActivite);
 var i, j: Integer;
     scorePref, scoreCout, pasCoeff, somme, sommeCoeff: Real;
@@ -25,6 +27,9 @@ begin
     somme := 0;
     sommeCoeff := 0;
 
+    {Le scorePref est calculé sur le principe du nombre de critères respectés pondérés divisés par le nombre de critères pondéré.
+    En effet on donne plus d'importance aux premiers critères, en lui donnant un poids plus élevé.
+    pasCoeff permet de calculer le poids de chaque critère}
     pasCoeff := (COEFF_PREF_MAX - COEFF_PREF_MIN) / (length(pref) - 1);
 
     for i := 0 to length(pref) - 1 do
@@ -42,9 +47,9 @@ begin
     scorePref := somme / sommeCoeff;
 
 
-    {score en fonction du coût, dans le cas où l'utilisateur a sélectionné l'option budget
-    comme pour le score du climat, on utilise une parabole, cette fois plus simple car pas de modification de paramètres
-    f(cout)=1-(cout/100)² donc le score est nul pour les activités dont le couût est > à 100€}
+    {Permet de calcuer scoreCout, dans le cas où l'utilisateur a sélectionné l'option budget
+    Comme pour le score du climat, on utilise une parabole,f(cout)=1-(cout/100)² 
+    donc le score est nul pour les activités dont le coût est supérieur à COUT_MAX}
     scoreCout := 1 - (activite.cout / COUT_MAX) * (activite.cout / COUT_MAX);
     if scoreCout < 0 then
         scoreCout := 0;
@@ -54,25 +59,29 @@ begin
 
 end;
 
-{On utilise une fonction parabolique de la forme f(x)=a(x-xo)²+c
-avec c=1 et a<0 car le score diminue plus il s'éloigne de xo.
-xo correspond à la température souhaitée soit climat ici.
-x correspond au climat du pays, donc pays.climat[periode] ici.
-a=-4/F² avec F la fourchette (la distance entre les deux racines) des valeurs qu'on veut regarder
-on trouve cela en calculant les racines du polynome}
 
-function scoreClimat(climat: Real; periode: TMois; pays: Tpays; fourchette: Real): Real;
+{ Permet de calculer le score lié au climat, en pourcentage, basé sur une fonction parabolique de la forme f(x)=a(x-xo)²+c (voir explication dans le rapport)
+    @param(climat La température choisie)
+    @param(periode La période choisie)
+    @param(pays Le pays concerné)
+    @param(intervalleTemp Fourchette de températures considérées)
+    @return(Le score en pourcentage)
+}
+function scoreClimat(climat: Real; periode: TMois; pays: Tpays; intervalleTemp: Real): Real;
 var a: Real;
 begin
-    a := -4 / (fourchette * fourchette);
+    a := -4 / (intervalleTemp * intervalleTemp);
     scoreClimat := a * (pays.climat[periode] - climat) * (pays.climat[periode] - climat) + 1;
-    //cas où la température du pays sort de la fourchette, donc quand la fonction renvoit
+    //cas où la température du pays sort de l'intervalle, donc quand la fonction renvoit
     //une valeur négative
     if scoreClimat < 0 then
         scoreClimat := 0;
 end;
 
-procedure triActPays(criteres: TCriteres; var pays: TPays);
+{ Permet de remplir le champ ordreAct dans un pays, qui stocke les indices des activités du pays dans l'ordre du meilleur score au moins bon
+    @param(pays Le pays concerné)
+}
+procedure triActPays(var pays: TPays);
 var
     tabIndice: array of Integer;
     indiceMax: Integer;
@@ -114,7 +123,12 @@ begin
 
 end;
 
-
+{ Permet de calculer le score lié aux activités du pays, en pourcentage, basé sur la moyenne des scores des nbActParJour meilleures activités 
+    @param(pays Le pays concerné)
+    @param(criteres Les choix de l'utilisateur)
+    @param(nbActParJour Nombre d'activités considérées pour le calcul)
+    @return(Le score en pourcentage)
+}
 function scoreActivitePays(pays: TPays; criteres: TCriteres; nbActParJour: Integer): Real;
 var
     somme: Real;
@@ -126,6 +140,10 @@ begin
     scoreActivitePays := somme / nbActParJour;
 end;
 
+{ Permet de calculer le nouveau score des pays traversés à l'aller, en les divisant par DIVISION_SCORE 
+    @param(inputPays Les pays traversés pendant le trajet aller)
+    @param(europe Tous les pays)
+}
 procedure paysVisites(inputPays: TEurope; var europe: TEurope);
 var
     i, j: Integer;
@@ -137,13 +155,25 @@ begin
                 europe[j].score := europe[j].score / DIVISION_SCORE;
 end;
 
+{ Permet de calculer le score d'un pays, en pourcentage, basé sur la moyenne pondérée entre le score des activités du pays et le score du climat 
+    @param(coeffAct Le pays concerné)
+    @param(coeffClim Les choix de l'utilisateur)
+    @param(criteres Les choix de l'utilisateur)
+    @param(nbActParJour Nombre d'activités considérées pour le calcul)
+    @param(intervalleTemp Fourchette de températures considérées))
+    @param(pays Le pays concerné)
+}
 procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; nbActParJour: Integer; intervalleTemp: Real; var pays: TPays);
 begin
     pays.score := (scoreActivitePays(pays, criteres, nbActParJour) * coeffAct + scoreClimat(criteres.climat, criteres.periode, pays, intervalleTemp) * coeffClim) / (coeffAct + coeffClim);
 end;
 
 
-{pour l'instant, on prend la moyenne comme fonction, mais quand on changera de fonction math, poidsChemin aura plus d'intérêt}
+{ Permet de calculer le poids du chemin entre deux pays, en pourcentage, basé sur la moyenne des scores des deux pays 
+    @param(pays1 Permier pays)
+    @param(pays2 Deuxième pays)
+    @return(Le score en pourcentage)
+}
 function poidsChemin(pays1: TPays; pays2: TPays): Real;
 var poids: Real;
 begin
@@ -153,130 +183,6 @@ begin
     //poids:=(pays1.score*pays2.score*2)/(pays1.score+pays2.score);
     //poidsChemin:=poids;
 
-end;
-
-// L'idée ici serait de calculer le temps total pouvant être alloué aux transports et aux activités en fonction de la durée du voyage des critères
-// Notons dureeTotale cette durée. Afin d'augmenter la quantité d'activités "préférées" (= meilleur score), il faudrait attribuer une durée dans
-// chaque pays proportionnelle au score. CàD : dureePays = (scorePays/totalScores) * dureeTotale
-function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
-var
-    dureePays, dureeTotale, dureeActivites: Integer;
-    totalScores: Real;
-    i, j, k, nbAct, n: Integer;
-    etapes: TEtapes;
-    activitesUtilisees: array of array of Boolean;
-    indexPays: Integer;
-begin
-    dureeTotale := criteres.duree * HEURES_PAR_JOUR * 60;
-
-    totalScores := 0;
-    for i := 1 to length(itineraire) - 1 do
-        totalScores := totalScores + itineraire[i].score;
-
-    n := 0;
-    setlength(etapes, 0);
-    setlength(activitesUtilisees, length(itineraire));
-    for i := 0 to length(itineraire) - 1 do
-        setlength(activitesUtilisees[i], length(itineraire[i].activites));
-
-    for j := 1 to length(itineraire) - 1 do
-    begin
-        indexPays := trouverIndexPays(itineraire[j].nom, itineraire);
-        dureePays := round((itineraire[j].score / totalScores) * dureeTotale);
-
-        dureeActivites := 0;
-        nbAct := 0;
-        // Si on souhaite éviter les doublons (si besoin dans un cas futur)
-        if ((itineraire[j - 1].nom = itineraire[j].nom)) then
-            continue;
-
-        setlength(etapes, n + 1);
-        etapes[n].estActivite := false;
-        etapes[n].deplacement.paysDepart := itineraire[j - 1];
-        etapes[n].deplacement.paysEtape := itineraire[j];
-        etapes[n].deplacement.distance := calculDuneDistance(itineraire[j - 1].latitude, itineraire[j - 1].longitude, itineraire[j].latitude, itineraire[j].longitude);
-
-        etapes[n].deplacement.transport := Train;
-        if criteres.modeTransport = TrainEtAvion then
-            for k := 0 to length(etapes[n].deplacement.paysDepart.nomAvions) - 1 do
-                if etapes[n].deplacement.paysDepart.nomAvions[k] = etapes[n].deplacement.paysEtape.nom then
-                begin
-                    etapes[n].deplacement.transport := Avion;
-                    break;
-                end;
-
-        etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, etapes[n].deplacement.transport);
-        dureeActivites := dureeActivites + etapes[n].deplacement.minutes;
-        n := n + 1;
-
-        repeat
-            while (nbAct < length(itineraire[j].activites)) and (activitesUtilisees[indexPays][itineraire[j].ordreAct[nbAct]]) do
-                nbAct := nbAct + 1;
-
-            if nbAct >= length(itineraire[j].activites) then
-                break;
-
-            setlength(etapes, n + 1);
-            etapes[n].estActivite := true;
-            etapes[n].activite := itineraire[j].activites[itineraire[j].ordreAct[nbAct]];
-
-            activitesUtilisees[indexPays][itineraire[j].ordreAct[nbAct]] := true;
-
-            dureeActivites := dureeActivites + etapes[n].activite.minutes;
-            n := n + 1;
-            nbAct := nbAct + 1;
-        until (dureeActivites >= (dureePays - 180));
-    end;
-
-    genererEtapes := etapes;
-end;
-
-function genererJournees(etapes: TEtapes): TJournees;
-var
-    i, nJour, tempsAccumule, dureeEtape: Integer;
-    journee: TJournee;
-    journees: TJournees;
-begin
-    nJour := 0;
-    tempsAccumule := 0;
-    setlength(journees, 0);
-
-    setlength(journee.etapes, 0);
-
-    for i := 0 to length(etapes) - 1 do
-    begin
-        if etapes[i].estActivite then
-            dureeEtape := etapes[i].activite.minutes
-        else
-            dureeEtape := etapes[i].deplacement.minutes;
-
-        if tempsAccumule + dureeEtape <= 10 * 60 then // 10h
-        begin
-            setlength(journee.etapes, length(journee.etapes) + 1);
-            journee.etapes[length(journee.etapes) - 1] := etapes[i];
-            tempsAccumule := tempsAccumule + dureeEtape;
-        end
-        else begin
-            journee.jour := nJour + 1;
-            setlength(journees, length(journees) + 1);
-            journees[length(journees) - 1] := journee;
-
-            nJour := nJour + 1;
-            tempsAccumule := dureeEtape;
-
-            setlength(journee.etapes, 1);
-            journee.etapes[0] := etapes[i];
-        end;
-    end;
-
-    if length(journee.etapes) > 0 then
-    begin
-        journee.jour := nJour + 1;
-        setlength(journees, length(journees) + 1);
-        journees[length(journees) - 1] := journee;
-    end;
-
-    genererJournees := journees;
 end;
 
 
