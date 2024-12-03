@@ -150,8 +150,10 @@ begin
         triActPays(europe[i]);
 
         //debug
-        for j := 0 to length(europe[i].ordreAct) - 1 do
-            writeln(europe[i].activites[europe[i].ordreAct[j]].nom, ' : ', europe[i].activites[europe[i].ordreAct[j]].score);
+        if MODE_DEBUG then
+        begin
+            for j := 0 to length(europe[i].ordreAct) - 1 do
+                writeln(europe[i].activites[europe[i].ordreAct[j]].nom, ' : ', europe[i].activites[europe[i].ordreAct[j]].score);
 
         writeln('scoreAct : ', scoreActivitePays(europe[i], criteres));
         writeln('');
@@ -166,7 +168,8 @@ begin
     begin
         scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, criteres.intervalleTemperature, europe[i]);
         //debug
-        writeln(europe[i].nom, ' : ', europe[i].score);
+        if MODE_DEBUG then
+            writeln(europe[i].nom, ' : ', europe[i].score);
     end;
 
 
@@ -186,8 +189,9 @@ begin
 
     paysVisites(aller.itineraire, europe);
 
-    for i := 0 to length(europe) - 1 do
-        writeln(europe[i].nom, ' : ', europe[i].score);
+    if MODE_DEBUG then
+        for i := 0 to length(europe) - 1 do
+            writeln(europe[i].nom, ' : ', europe[i].score);
 
 
     // ** Génération itinéraire retour **

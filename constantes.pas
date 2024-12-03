@@ -2,6 +2,8 @@
 
 interface
 
+const MODE_DEBUG = false;
+
 // Scores activités
 const COEFF_PREF_MAX = 1.5;
     COEFF_PREF_MIN = 1;

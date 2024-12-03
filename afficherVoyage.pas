@@ -1,4 +1,4 @@
-﻿unit afficherVoyage;
+unit afficherVoyage;
 
 interface
 uses constantes, genererVoyage, voyageTypes;
@@ -40,7 +40,8 @@ end;
 
 { Cette procédure permet d'afficher le coût carbone du voyage dans le terminal. }
 procedure afficherImpactCarbone(voyage: TVoyage; criteres: TCriteres; europe: TEurope);
-var voyageBis: TVoyage;
+var dureeMinimale: Integer;
+    voyageBis: TVoyage;
     criteresBis: TCriteres;
 begin
     voyageBis := voyage;
@@ -53,10 +54,14 @@ begin
     end
     else begin
         criteresBis.modeTransport := TrainSeul;
+
+        // Dans le cas du train, on doit calculer la durée minimale du trajet,
+        // car un voyage en train est plus long qu'un voyage en avion
+        dureeMinimale := calculDureeMinimale(criteresBis, europe);
+        criteresBis.duree := dureeMinimale;
+
         voyageBis := generer(criteresBis, europe);
 
-        writeln(length(voyage.planning));
-        writeln(length(voyageBis.planning));
         writeln('A noter que votre voyage fait exclusivement en train rejeterait ', (voyage.carbonImpact - voyageBis.carbonImpact):4:0, ' kg de CO2 en moins par rapport à votre voyage.');
         writeln('Un autre voyage de ', length(voyageBis.planning) - length(voyage.planning), ' jours supplémentaires vous permettrait de réduire de la sorte le coût carbone de votre voyage');
     end;
