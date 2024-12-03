@@ -4,6 +4,7 @@ interface
 uses constantes, genererVoyage, sysutils, utils, voyageTypes;
 
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
+procedure modifierCriteres(var choix : TCriteres;europe : TEurope; var quitter:Boolean);
 
 implementation
 
@@ -224,7 +225,6 @@ begin
     {Affectation des préférences du menu aux critères de l'utilisateur.}
     setlength(choix.categories, length(menus[indexChoix - 1].preferences));
     choix.categories := menus[indexChoix - 1].preferences;
-    writeln(length(choix.categories));
 
 end;
 
@@ -251,7 +251,7 @@ until (p = 1) or (p = 2);
 end;
 
 
-function modifierCriteres(choix : TCriteres;europe : TEurope): Boolean;
+procedure modifierCriteres(var choix : TCriteres;europe : TEurope; var quitter:Boolean);
 var reponse : String;
 p,n : LongInt;
 begin
@@ -304,9 +304,9 @@ begin
     until (TryStrToInt(reponse, p) = True);
 
     if p=1 then 
-        modifierCriteres:=False
+        quitter:=False
     else
-        modifierCriteres:=True;    
+        quitter:=True;    
 
 end;
 
