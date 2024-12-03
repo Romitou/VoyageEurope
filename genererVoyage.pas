@@ -155,11 +155,12 @@ begin
             for j := 0 to length(europe[i].ordreAct) - 1 do
                 writeln(europe[i].activites[europe[i].ordreAct[j]].nom, ' : ', europe[i].activites[europe[i].ordreAct[j]].score);
 
-        writeln('scoreAct : ', scoreActivitePays(europe[i], criteres));
-        writeln('');
-        writeln('pays suivant');
-        writeln('');
+            writeln('scoreAct : ', scoreActivitePays(europe[i], criteres));
+            writeln('');
+            writeln('pays suivant');
+            writeln('');
 
+        end;
     end;
 
 
