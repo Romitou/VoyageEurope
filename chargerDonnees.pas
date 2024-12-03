@@ -4,7 +4,7 @@
 unit chargerDonnees;
 
 interface
-uses strutils, sysutils, utils, voyageTypes;
+uses constantes, strutils, sysutils, utils, voyageTypes;
 
 { Charge l'ensemble des pays et activités associées
     @return(Un tableau de pays complétés)
@@ -127,6 +127,7 @@ var listePays: TArrayFilePays;
     activite: TActivite;
     europe: TEurope;
     i, j, k: Integer;
+    trouve: Boolean;
 begin
     listePays := chargerPays();
     listeActivites := chargerActivites();
@@ -145,12 +146,19 @@ begin
         setlength(pays.nomAvions, 0);
 
         for j := 0 to length(listePays[i].codeFrontieres) - 1 do
+        begin
+            trouve := false;
             for k := 0 to length(listePays) - 1 do
                 if listePays[i].codeFrontieres[j] = listePays[k].code then
                 begin
                     setlength(pays.nomFrontieres, length(pays.nomFrontieres) + 1);
                     pays.nomFrontieres[length(pays.nomFrontieres) - 1] := listePays[k].nom;
+                    trouve := true;
+                    break;
                 end;
+            if MODE_DEBUG and not trouve then
+                writeln('Frontière non trouvée pour ', listePays[i].nom, ' : ', listePays[i].codeFrontieres[j]);
+        end;
 
         for j := 0 to length(listePays[i].codeAvions) - 1 do
             for k := 0 to length(listePays) - 1 do
