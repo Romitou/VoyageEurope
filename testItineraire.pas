@@ -1,16 +1,15 @@
-﻿program testCalculItineraire;
+program testCalculItineraire;
 
-uses calculItineraire, chargerDonnees, sysutils, utils, voyageTypes;
+uses calculItineraire, chargerDonnees, sysutils, strutils, utils, voyageTypes;
 
 type TTestCase = record
         input: String;
         expected: String;
         output: String;
+        modeTransport: TMode;
     end;
 
 type ArrayTestCase = array of TTestCase;
-
-type PTPays = ^TPays;
 
 function afficherItineraire(result: TItineraireResult): String;
 var i: Integer;
@@ -28,21 +27,22 @@ begin
     end;
 end;
 
-function creerTestCase(input, output: String): TTestCase;
+function creerTestCase(input, output: String; modeTransport: TMode): TTestCase;
 begin
     creerTestCase.input := input;
     creerTestCase.output := output;
+    creerTestCase.modeTransport := modeTransport;
 end;
 
-function trouverPays(nom: String; listePays: TEurope): PTPays;
+function trouverPays(nom: String; listePays: TEurope; var trouve: Boolean): TPays;
 var i: Integer;
 begin
-    trouverPays := nil;
     for i := 0 to high(listePays) do
         if listePays[i].nom = nom then
         begin
-            trouverPays := @listePays[i];
-            exit(trouverPays);
+            trouverPays := listePays[i];
+            trouve := true;
+            break;
         end;
 end;
 
@@ -52,65 +52,73 @@ var
     splitText: TStringArray;
     testCases: ArrayTestCase;
     output: String;
-    pointeurPays: PTPays;
+    trouve: Boolean;
     paysDepart, paysArrivee: TPays;
     resultat: TItineraireResult;
-
+    isFailed: Boolean;
 begin
-    setlength(testCases, 20);
-    testCases[0] := creerTestCase('France -> Allemagne', 'France -> Allemagne');
-    testCases[1] := creerTestCase('Belgique -> Italie', 'Belgique -> Allemagne -> Autriche -> Italie');
-    testCases[2] := creerTestCase('Espagne -> Suisse', 'Espagne -> France -> Suisse');
-    testCases[3] := creerTestCase('Portugal -> Pologne', 'Portugal -> Espagne -> France -> Allemagne -> Pologne');
-    testCases[4] := creerTestCase('Italie -> Autriche', 'Italie -> Autriche');
-    testCases[5] := creerTestCase('Norvège -> Suède', 'Norvège -> Suède');
-    testCases[6] := creerTestCase('Pays-Bas -> Danemark', 'Pays-Bas -> Allemagne -> Danemark');
-    testCases[7] := creerTestCase('Grèce -> Hongrie', 'Grèce -> Bulgarie -> Roumanie -> Hongrie');
-    testCases[8] := creerTestCase('Allemagne -> Espagne', 'Allemagne -> France -> Espagne');
-    testCases[9] := creerTestCase('Suisse -> Autriche', 'Suisse -> Autriche');
-    testCases[10] := creerTestCase('Irlande -> Royaume-Uni', 'Irlande -> Royaume-Uni');
-    testCases[11] := creerTestCase('Hongrie -> Russie', 'Hongrie -> Ukraine -> Russie');
-    testCases[12] := creerTestCase('Autriche -> Bulgarie', 'Autriche -> Hongrie -> Roumanie -> Bulgarie');
-    testCases[13] := creerTestCase('Espagne -> Italie', 'Espagne -> France -> Italie');
-    testCases[14] := creerTestCase('France -> Portugal', 'France -> Espagne -> Portugal');
-    testCases[15] := creerTestCase('Finlande -> Estonie', 'Finlande -> Estonie');
-    testCases[16] := creerTestCase('Russie -> Norvège', 'Russie -> Finlande -> Norvège');
-    testCases[17] := creerTestCase('Suède -> Lettonie', 'Suède -> Estonie -> Lettonie');
-    testCases[18] := creerTestCase('Grèce -> Espagne', 'Aucun chemin trouvé');
-    testCases[19] := creerTestCase('Danemark -> Portugal', 'Danemark -> Allemagne -> France -> Espagne -> Portugal');
-
-    testCases[20] := creerTestCase('Royaume-Uni -> France', 'ERREUR');
+    setlength(testCases, 21);
+    testCases[0] := creerTestCase('France -> Allemagne', 'France -> Allemagne', TrainSeul);
+    testCases[1] := creerTestCase('Belgique -> Italie', 'Belgique -> France -> Italie', TrainSeul);
+    testCases[2] := creerTestCase('Espagne -> Suisse', 'Espagne -> France -> Suisse', TrainSeul);
+    testCases[3] := creerTestCase('Portugal -> Pologne', 'Portugal -> Espagne -> France -> Allemagne -> Pologne', TrainSeul);
+    testCases[4] := creerTestCase('Italie -> Autriche', 'Italie -> Autriche', TrainSeul);
+    testCases[5] := creerTestCase('Norvège -> Suède', 'Norvège -> Suède', TrainSeul);
+    testCases[6] := creerTestCase('Pays-Bas -> Danemark', 'Pays-Bas -> Allemagne -> Danemark', TrainSeul);
+    testCases[7] := creerTestCase('Grèce -> Hongrie', 'Grèce -> Bulgarie -> Roumanie -> Hongrie', TrainSeul);
+    testCases[8] := creerTestCase('Allemagne -> Espagne', 'Allemagne -> France -> Espagne', TrainSeul);
+    testCases[9] := creerTestCase('Suisse -> Autriche', 'Suisse -> Autriche', TrainSeul);
+    testCases[10] := creerTestCase('Irlande -> Royaume-Uni', 'Irlande -> Royaume-Uni', TrainSeul);
+    testCases[11] := creerTestCase('Hongrie -> Russie', 'Hongrie -> Ukraine -> Russie', TrainSeul);
+    testCases[12] := creerTestCase('Autriche -> Bulgarie', 'Autriche -> Hongrie -> Roumanie -> Bulgarie', TrainSeul);
+    testCases[13] := creerTestCase('Espagne -> Italie', 'Espagne -> France -> Italie', TrainSeul);
+    testCases[14] := creerTestCase('France -> Portugal', 'France -> Espagne -> Portugal', TrainSeul);
+    testCases[15] := creerTestCase('Finlande -> Estonie', 'Finlande -> Russie -> Estonie', TrainSeul);
+    testCases[16] := creerTestCase('Russie -> Norvège', 'Russie -> Norvège', TrainSeul);
+    testCases[17] := creerTestCase('Suède -> Lettonie', 'Suède -> Finlande -> Russie -> Lettonie', TrainSeul);
+    testCases[18] := creerTestCase('Grèce -> Espagne', 'Grèce -> Monténégro -> Croatie -> Slovénie -> Italie -> France -> Espagne', TrainSeul);
+    testCases[19] := creerTestCase('Danemark -> Portugal', 'Danemark -> Allemagne -> France -> Espagne -> Portugal', TrainSeul);
+    testCases[20] := creerTestCase('Royaume-Uni -> France', 'Royaume-Uni -> France', TrainSeul);
 
     europe := chargerEurope();
+    isFailed := false;
 
     for i := 0 to high(testCases) do
     begin
         writeln('Exécution du test : ', testCases[i].input);
         splitText := splitString(testCases[i].input, ' -> ');
 
-        pointeurPays := trouverPays(splitText[0], europe);
-        if (pointeurPays = nil) then
+        paysDepart := trouverPays(splitText[0], europe, trouve);
+        if not trouve then
         begin
             writeln('❌ Impossible de trouver le pays : ', splitText[0]);
+            isFailed := true;
             continue;
         end;
-        paysDepart := pointeurPays^;
 
-        pointeurPays := trouverPays(splitText[1], europe);
-        if pointeurPays = nil then
+        paysArrivee := trouverPays(splitText[1], europe, trouve);
+        if not trouve then
         begin
             writeln('❌ Impossible de trouver le pays : ', splitText[0]);
+            isFailed := true;
             continue;
         end;
-        paysArrivee := pointeurPays^;
 
-        resultat := calculerItineraire(europe, paysDepart, paysArrivee);
+        resultat := calculerItineraire(europe, paysDepart, paysArrivee, testCases[i].modeTransport);
         output := afficherItineraire(resultat);
         writeln('  Sortie attendue : ', testCases[i].output);
         writeln('   Sortie du test : ', output);
-        if output = testCases[i].output then writeln('✅ Test validé') else writeln('❌ Test non réussi');
+        if output = testCases[i].output then writeln('✅ Test validé') else begin
+            isFailed := true;
+            writeln('❌ Test non réussi');
+        end;
         writeln();
     end;
+
+    if isFailed then
+        writeln('❌ Tests non réussis')
+    else
+        writeln('✅ Tous les tests ont été réussis');
 
     // // Cas de test 1 : Itinéraire de la France à l'Allemagne
     // Writeln('Cas de test 1 : France -> Allemagne');
