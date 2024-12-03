@@ -80,9 +80,14 @@ end;
 
 {L'utilisateur renseigne ici la durée de son voyage.}
 procedure choixDuree(var choix: TCriteres; listePays: TEurope);
+var dureeMinimale: Integer;
 begin
-    writeln('Quelle durée souhaitez-vous pour votre voyage ?');
-    choix.duree := demanderEntier();
+    dureeMinimale := calculDureeMinimale(choix, listePays);
+    writeln('La durée minimale de votre voyage est de ', dureeMinimale, ' jours.');
+    repeat
+        writeln('Quelle durée souhaitez-vous pour votre voyage ?');
+        choix.duree := demanderEntier();
+    until (choix.duree >= dureeMinimale);
 end;
 
 {L'utilisateur renseigne ici la température qu'il souhaiterait avoir lors de son voyage.}
@@ -322,9 +327,8 @@ begin
     choixPeriode(choix);
     choixBudget(choix);
     choixExperience(choix);
-    choixNbVoyageurs(choix);
     choixDuree(choix, listePays);
-
+    choixNbVoyageurs(choix);
 end;
 
 end.

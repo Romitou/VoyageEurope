@@ -20,7 +20,7 @@ begin
         voyage := generer(criteres, europe);
 
         // Affichage du voyage généré (afficherVoyage)
-        afficher(voyage, criteres);
+        afficher(voyage, criteres, europe);
 
         // Demande à l'utilisateur s'il souhaite modifier les critères (choixCriteres)
         // Si l'utilisateur ne souhaite pas modifier les critères, on sort de la boucle (=> quitter = true)

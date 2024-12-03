@@ -4,6 +4,7 @@ interface
 uses calculCout, calculItineraire, score, voyageTypes, constantes, utils;
 
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
+function calculDureeMinimale(criteres: TCriteres; europe: TEurope): Integer;
 
 implementation
 
@@ -210,18 +211,51 @@ begin
     //on peut faire ca en modifiant les indices en dessous et en réduisant la taille de itineraire de 1
     for i := 0 to length(retour.itineraire) - 1 do
         voyage.itineraire[length(aller.itineraire) + i] := retour.itineraire[i];
-    //ajouter champ message dans TVoyage et l'afficher plus tard
-    if length(voyage.itineraire) > criteres.duree then
-    begin
-        voyage.erreur := true;
-        voyage.message := 'Il n''est pas possible de trouver un voyage en considérant à la fois les types d''activités choisies et la durée trop faible de votre séjour. Essayez, sans modifier vos préférences d''augmenter la durée du voyage.';
-        exit(voyage);
-    end;
+
     voyage.etapes := genererEtapes(voyage.itineraire, criteres);
     voyage.planning := genererJournees(voyage.etapes);
+
     calculDistanceTotal(voyage);
+
     coutTotal(voyage);
+
     coutCarbone(voyage);
+
     generer := voyage;
 end;
+
+
+function calculDureeMinimale(criteres: TCriteres; europe: TEurope): Integer;
+var aller, retour: TItineraireResult;
+    i, j: Integer;
+begin
+    for i := 0 to length(europe) - 1 do
+    begin
+        for j := 0 to length(europe[i].activites) - 1 do
+            scoreActivite(criteres.categories, criteres.coeffCout, europe[i].activites[j]);
+        triActPays(europe[i]);
+    end;
+
+    for i := 0 to length(europe) - 1 do
+        scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, 3, criteres.intervalleTemperature, europe[i]);
+
+    aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee, criteres.modeTransport);
+    if aller.erreur then
+    begin
+        calculDureeMinimale := -1;
+        exit(calculDureeMinimale);
+    end;
+
+    paysVisites(aller.itineraire, europe);
+
+    retour := calculerItineraire(europe, criteres.paysArrivee, criteres.paysDepart, criteres.modeTransport);
+    if retour.erreur then
+    begin
+        calculDureeMinimale := -1;
+        exit(calculDureeMinimale);
+    end;
+
+    calculDureeMinimale := length(aller.itineraire) + length(retour.itineraire);
+end;
+
 end.

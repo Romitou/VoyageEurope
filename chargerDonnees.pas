@@ -19,10 +19,8 @@ implementation
 }
 function deserialiserPays(valeur: String): TFilePays;
 var split, latlngString: TStringArray;
-var i: Integer;
 begin
     split := splitLigneCsv(valeur, ',');
-    for i := 0 to length(split) - 1 do writeln(split[i]);
 
     deserialiserPays.nom := split[0];
     deserialiserPays.capitale := split[1];
