@@ -1,50 +1,56 @@
-unit score;
+﻿unit score;
 
 interface
-uses voyageTypes, calculCout, utils;
+uses calculCout, constantes, utils, voyageTypes;
 
-function scoreActivite(activite:TActivite;pref:Array of TPref;coeffCout:Real):Real;
-procedure triActPays(criteres:TCriteres;var pays:TPays);
-function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
-function scoreActivitePays(pays:TPays;criteres:TCriteres; nbActParJour:Integer):Real;
-procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
-function poidsChemin(pays1:TPays;pays2:TPays):Real;
-procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
-function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour:Integer): TEtapes;
+procedure scoreActivite(pref: array of TPref; coeffCout: Real; var activite: TActivite);
+procedure triActPays(criteres: TCriteres; var pays: TPays);
+function scoreClimat(climat: Real; periode: TMois; pays: Tpays; fourchette: Real): Real;
+function scoreActivitePays(pays: TPays; criteres: TCriteres; nbActParJour: Integer): Real;
+procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; nbActParJour: Integer; intervalleTemp: Real; var pays: TPays);
+function poidsChemin(pays1: TPays; pays2: TPays): Real;
+procedure paysVisites(inputPays: TEurope; var europe: TEurope);
+
+function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
 function genererJournees(etapes: TEtapes): TJournees;
 
 implementation
 
-function scoreActivite(activite:TActivite;pref:Array of TPref;coeffCout:Real):Real;
-var i,j,nbPrefVerifiee:Integer;
-scorePref, scoreCout, coutMax :Real;
-trouve:Boolean;
+procedure scoreActivite(pref: array of TPref; coeffCout: Real; var activite: TActivite);
+var i, j: Integer;
+    scorePref, scoreCout, pasCoeff, somme, sommeCoeff: Real;
+    trouve: Boolean;
 begin
-    //score en fonction du nombre de critères respectés sur le nombre de critères choisis
-    nbPrefVerifiee:=0;
-    for i:=0 to length(pref)-1 do
-        begin
-        trouve:=False;
-        for j:=0 to length(activite.categories)-1 do
-            if (pref[i]=activite.categories[j]) and not(trouve) then
-                begin
-                nbPrefVerifiee:=nbPrefVerifiee+1;
-                trouve:=True;
-                end;
-        end;
 
-    scorePref:=nbPrefVerifiee/length(pref);
+    somme := 0;
+    sommeCoeff := 0;
+
+    pasCoeff := (COEFF_PREF_MAX - COEFF_PREF_MIN) / (length(pref) - 1);
+
+    for i := 0 to length(pref) - 1 do
+    begin
+        trouve := False;
+        for j := 0 to length(activite.categories) - 1 do
+            if (pref[i] = activite.categories[j]) and not (trouve) then
+            begin
+                somme := somme + COEFF_PREF_MAX - pasCoeff * (i);
+                trouve := True;
+            end;
+        sommeCoeff := sommeCoeff + COEFF_PREF_MAX - pasCoeff * (i);
+    end;
+
+    scorePref := somme / sommeCoeff;
+
 
     {score en fonction du coût, dans le cas où l'utilisateur a sélectionné l'option budget
     comme pour le score du climat, on utilise une parabole, cette fois plus simple car pas de modification de paramètres
     f(cout)=1-(cout/100)² donc le score est nul pour les activités dont le couût est > à 100€}
-    coutMax:=50;
-    scoreCout:=1-(activite.cout/coutMax)*(activite.cout/coutMax);
-    if scoreCout<0 then
-        scoreCout:=0;
+    scoreCout := 1 - (activite.cout / COUT_MAX) * (activite.cout / COUT_MAX);
+    if scoreCout < 0 then
+        scoreCout := 0;
 
     //moyenne pondérée pour le score total de l'activité (coeff fixe de 1 pour scorePref)
-    scoreActivite:=(scorePref+coeffCout*scoreCout)/(1+coeffCout);
+    activite.score := (scorePref + coeffCout * scoreCout) / (1 + coeffCout);
 
 end;
 
@@ -55,100 +61,94 @@ x correspond au climat du pays, donc pays.climat[periode] ici.
 a=-4/F² avec F la fourchette (la distance entre les deux racines) des valeurs qu'on veut regarder
 on trouve cela en calculant les racines du polynome}
 
-function scoreClimat(climat:Real;periode:TMois;pays:Tpays;fourchette:Real):Real;
-var a:Real;
+function scoreClimat(climat: Real; periode: TMois; pays: Tpays; fourchette: Real): Real;
+var a: Real;
 begin
-    a:=-4/(fourchette*fourchette);
-    scoreClimat:=a*(pays.climat[periode]-climat)*(pays.climat[periode]-climat)+1;
+    a := -4 / (fourchette * fourchette);
+    scoreClimat := a * (pays.climat[periode] - climat) * (pays.climat[periode] - climat) + 1;
     //cas où la température du pays sort de la fourchette, donc quand la fonction renvoit
     //une valeur négative
-    if scoreClimat<0 then
-        scoreClimat:=0;
+    if scoreClimat < 0 then
+        scoreClimat := 0;
 end;
 
-procedure triActPays(criteres:TCriteres;var pays:TPays);
+procedure triActPays(criteres: TCriteres; var pays: TPays);
 var
-tabIndice: Array of Integer;
-indiceMax:Integer;
-scoreMax: Real;
-i,j,k:Integer;
+    tabIndice: array of Integer;
+    indiceMax: Integer;
+    scoreMax: Real;
+    i, j, k: Integer;
 begin
     //initialisation du tableau pour stocker les indices des meilleures activités
-    setlength(tabIndice,length(pays.activites));
-    setlength(pays.ordreAct,length(pays.activites));
+    setlength(tabIndice, length(pays.activites));
+    setlength(pays.ordreAct, length(pays.activites));
 
-    for i:=0 to length(pays.activites)-1 do
-            tabIndice[i]:=i;
+    for i := 0 to length(pays.activites) - 1 do
+        tabIndice[i] := i;
 
     //on attibue à la i ème case l'indice de l'activité avec le meilleur score du tableau
-    for i:=0 to length(pays.activites)-1 do
+    for i := 0 to length(pays.activites) - 1 do
     begin
 
         //pas de scores négatifs donc -1 est la plus petite valeur
-        scoreMax:=-1;
+        scoreMax := -1;
         //cas où on ne trouve pas de score supérieur : il ne se passe rien
-        indiceMax:=i;
+        indiceMax := i;
 
         //on cherche l'indice du meilleur score du tableau après les ièmes cases déjà triées
-        for j:=i to length(pays.activites)-1 do
-        begin
-            if scoreActivite(pays.activites[tabIndice[j]],criteres.categories,criteres.coeffCout)>scoreMax then
+        for j := i to length(pays.activites) - 1 do
+            if pays.activites[tabIndice[j]].score > scoreMax then
             begin
-                scoreMax:=scoreActivite(pays.activites[tabIndice[j]],criteres.categories,criteres.coeffCout);
-                indiceMax:=j;
+                scoreMax := pays.activites[tabIndice[j]].score;
+                indiceMax := j;
             end;
-
-        end;
 
         //on remplace l'indce max par le ième
         k := tabIndice[i];
         tabIndice[i] := tabIndice[indiceMax];
         tabIndice[indiceMax] := k;
 
-
     end;
 
-    pays.ordreAct:=tabIndice;
+    pays.ordreAct := tabIndice;
 
 end;
 
 
-function scoreActivitePays(pays:TPays;criteres:TCriteres; nbActParJour:Integer):Real;
+function scoreActivitePays(pays: TPays; criteres: TCriteres; nbActParJour: Integer): Real;
 var
-somme:Real;
-i:Integer;
+    somme: Real;
+    i: Integer;
 begin
-    somme:=0;
-    for i:=0 to nbActParJour-1 do
-        begin
-        somme:=somme + scoreActivite(pays.activites[pays.ordreAct[i]],criteres.categories,criteres.coeffCout);
-        end;
-    scoreActivitePays:=somme/nbActParJour;
+    somme := 0;
+    for i := 0 to nbActParJour - 1 do
+        somme := somme + pays.activites[pays.ordreAct[i]].score;
+    scoreActivitePays := somme / nbActParJour;
 end;
 
-procedure paysVisites(coeff:Real; inputPays:TEurope;var europe: TEurope);
+procedure paysVisites(inputPays: TEurope; var europe: TEurope);
 var
-    i,j: Integer;
+    i, j: Integer;
 begin
 
     for i := 0 to length(inputPays) - 1 do
-        for j:=0 to length(europe)-1 do
-            if inputPays[i].nom=europe[j].nom then
-                europe[j].score:=europe[j].score/coeff;
+        for j := 0 to length(europe) - 1 do
+            if inputPays[i].nom = europe[j].nom then
+                europe[j].score := europe[j].score / DIVISION_SCORE;
 end;
 
-procedure scorePays (coeffAct:Real;coeffClim:Real;criteres:TCriteres;nbActParJour:Integer;intervalleTemp:Real; var pays:TPays);
+procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; nbActParJour: Integer; intervalleTemp: Real; var pays: TPays);
 begin
-    pays.score:=(scoreActivitePays(pays,criteres,nbActParJour)*coeffAct+scoreClimat(criteres.climat,criteres.periode,pays,intervalleTemp)*coeffClim)/(coeffAct+coeffClim);
+    pays.score := (scoreActivitePays(pays, criteres, nbActParJour) * coeffAct + scoreClimat(criteres.climat, criteres.periode, pays, intervalleTemp) * coeffClim) / (coeffAct + coeffClim);
 end;
 
 
 {pour l'instant, on prend la moyenne comme fonction, mais quand on changera de fonction math, poidsChemin aura plus d'intérêt}
-function poidsChemin(pays1:TPays;pays2:TPays):Real;
-var poids:Real;
+function poidsChemin(pays1: TPays; pays2: TPays): Real;
+var poids: Real;
 begin
-    poids:=(pays1.score+pays2.score)/2;
-    poidsChemin:=poids;
+    poids := (pays1.score + pays2.score) / 2;
+    poidsChemin := poids;
     //idee de fonction:2xy/(x+y)
     //poids:=(pays1.score*pays2.score*2)/(pays1.score+pays2.score);
     //poidsChemin:=poids;
@@ -158,16 +158,16 @@ end;
 // L'idée ici serait de calculer le temps total pouvant être alloué aux transports et aux activités en fonction de la durée du voyage des critères
 // Notons dureeTotale cette durée. Afin d'augmenter la quantité d'activités "préférées" (= meilleur score), il faudrait attribuer une durée dans
 // chaque pays proportionnelle au score. CàD : dureePays = (scorePays/totalScores) * dureeTotale
-function genererEtapes(itineraire: TEurope; criteres: TCriteres; nbActParJour: Integer): TEtapes;
+function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
 var
     dureePays, dureeTotale, dureeActivites: Integer;
     totalScores: Real;
-    i, j, nbAct, n: Integer;
+    i, j, k, nbAct, n: Integer;
     etapes: TEtapes;
     activitesUtilisees: array of array of Boolean;
     indexPays: Integer;
 begin
-    dureeTotale := criteres.duree * 10 * 60; // 10h, à modifier
+    dureeTotale := criteres.duree * HEURES_PAR_JOUR * 60;
 
     totalScores := 0;
     for i := 1 to length(itineraire) - 1 do
@@ -195,7 +195,17 @@ begin
         etapes[n].deplacement.paysDepart := itineraire[j - 1];
         etapes[n].deplacement.paysEtape := itineraire[j];
         etapes[n].deplacement.distance := calculDuneDistance(itineraire[j - 1].latitude, itineraire[j - 1].longitude, itineraire[j].latitude, itineraire[j].longitude);
-        etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, criteres.transport);
+
+        etapes[n].deplacement.transport := Train;
+        if criteres.modeTransport = TrainEtAvion then
+            for k := 0 to length(etapes[n].deplacement.paysDepart.nomAvions) - 1 do
+                if etapes[n].deplacement.paysDepart.nomAvions[k] = etapes[n].deplacement.paysEtape.nom then
+                begin
+                    etapes[n].deplacement.transport := Avion;
+                    break;
+                end;
+
+        etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, etapes[n].deplacement.transport);
         dureeActivites := dureeActivites + etapes[n].deplacement.minutes;
         n := n + 1;
 
@@ -232,7 +242,7 @@ begin
     setlength(journees, 0);
 
     setlength(journee.etapes, 0);
-    
+
     for i := 0 to length(etapes) - 1 do
     begin
         if etapes[i].estActivite then
@@ -246,8 +256,7 @@ begin
             journee.etapes[length(journee.etapes) - 1] := etapes[i];
             tempsAccumule := tempsAccumule + dureeEtape;
         end
-        else
-        begin
+        else begin
             journee.jour := nJour + 1;
             setlength(journees, length(journees) + 1);
             journees[length(journees) - 1] := journee;
@@ -271,10 +280,7 @@ begin
 end;
 
 
-
-
 end.
-
 
 {function scoreClimat(climat:Real;periode:TMois;unPays:Tpays):Real;
 var scoreClim:Real;

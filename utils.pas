@@ -1,84 +1,61 @@
+﻿{$H+}
+
+{ Fonctions utilitaires utilisées par plusieurs autres unités }
 unit utils;
 
 interface
-uses voyageTypes, sysutils;
+uses sysutils, voyageTypes;
 
+{ Permet de trouver l'index d'un pays dans un tableau de pays
+    @param(nom Le nom du pays à chercher)
+    @param(europe Le tableau de pays dans lequel chercher)
+    @return(L'index du pays dans le tableau, ou -1 si le pays n'a pas été trouvé)
+}
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
-function splitStringQuotes(value: string; delimiter: string): TStringArray;
-function splitString(value: string; delimiter: string): TStringArray;
+
+{ Permet de séparer une ligne CSV en un tableau de chaînes de caractères. Exemple : splitLigneCsv('France,Paris,"FR,DE,IT"', ',') renvoie ['France', 'Paris', 'FR,DE,IT']
+    @param(ligne La ligne CSV à séparer)
+    @param(delimiteur Le délimiteur utilisé pour séparer les valeurs)
+    @return(Un tableau de chaînes de caractères)
+}
+function splitLigneCsv(ligne: string; delimiteur: char): TStringArray;
+
+{ Permet de demander un entier à l'utilisateur, et de répéter la demande tant que l'utilisateur n'entre pas un entier
+    @return(L'entier entré par l'utilisateur)
+}
+function demanderEntier(): Integer;
 
 implementation
 
-function splitStringQuotes(value: string; delimiter: string): TStringArray;
+
+function splitLigneCsv(ligne: string; delimiteur: char): TStringArray;
 var
-    resultArray: TStringArray;
-    i, startPos, delimLength: Integer;
-    inQuotes: Boolean;
-    currentSegment: string;
+  i: integer;
+  valeur: string;
+  interieurGuillemets: boolean;
+  resultat: TStringArray;
 begin
-    i := 0;
-    startPos := 1;
-    delimLength := Length(delimiter);
-    SetLength(resultArray, 0);
-    inQuotes := False;
-    currentSegment := '';
+  valeur := '';
+  interieurGuillemets := false;
+  setlength(resultat, 0);
 
-    while startPos <= Length(value) do
+  for i := 1 to length(ligne) - 1 do
+  begin
+    if ligne[i] = '"' then
+      interieurGuillemets := not interieurGuillemets
+    else if (ligne[i] = delimiteur) and not interieurGuillemets then
     begin
-        if value[startPos] = '"' then
-        begin
-            inQuotes := not inQuotes;
-        end
-        else if (not inQuotes) and (Copy(value, startPos, delimLength) = delimiter) then
-        begin
-            SetLength(resultArray, i + 1);
-            resultArray[i] := currentSegment;
-            Inc(i);
-            currentSegment := '';
-            Inc(startPos, delimLength - 1);
-        end
-        else
-        begin
-            currentSegment := currentSegment + value[startPos];
-        end;
+      setlength(resultat, length(resultat) + 1);
+      resultat[high(resultat)] := trim(valeur);
+      valeur := '';
+    end
+    else
+      valeur := valeur + ligne[i];
+  end;
+  setlength(resultat, length(resultat) + 1);
+  resultat[high(resultat)] := trim(valeur);
 
-        Inc(startPos);
-    end;
-
-    SetLength(resultArray, i + 1);
-    resultArray[i] := currentSegment;
-
-    splitStringQuotes := resultArray;
-end;
-
-function splitString(value: string; delimiter: string): TStringArray;
-var resultArray: TStringArray;
-    i, startPos, delimLength: Integer;
-    foundPos: Integer;
-begin
-    i := 0;
-    startPos := 1;
-    delimLength := length(delimiter);
-    setlength(resultArray, 0);
-
-    repeat
-        foundPos := pos(delimiter, value);
-        setlength(resultArray, i + 1);
-
-        if foundPos > 0 then
-        begin
-            resultArray[i] := copy(value, startPos, foundPos - startPos);
-            value := copy(value, foundPos + delimLength, Length(value) - foundPos - delimLength + 1);
-        end
-        else
-        begin
-            resultArray[i] := value;
-        end;
-
-        i := i + 1;
-    until foundPos = 0;
-
-    splitString := resultArray;
+  splitLigneCsv := resultat;
 end;
 
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
@@ -91,5 +68,19 @@ begin
     Exit(-1);
 end;
 
+function demanderEntier(): Integer;
+var
+    input: string;
+    value: LongInt;
+    success: Boolean;
+begin
+    repeat
+        readln(input);
+        success := TryStrToInt(input, value);
+        if not success then
+            writeln('Veuillez entrer un nombre entier.');
+    until success;
+    demanderEntier := value;
+end;
 
 end.

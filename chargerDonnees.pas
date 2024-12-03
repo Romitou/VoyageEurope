@@ -1,106 +1,29 @@
-{$H+}
+﻿{$H+}
 
+{ Chargement et traitement des données depuis les fichiers CSV }
 unit chargerDonnees;
 
 interface
-uses voyageTypes, sysutils;
+uses strutils, sysutils, utils, voyageTypes;
 
+{ Charge l'ensemble des pays et activités associées
+    @return(Un tableau de pays complétés)
+}
 function chargerEurope(): TEurope;
-// procedure sauvegarderPays(europe: TEurope);
 
 implementation
 
-function splitStringQuotes(value: string; delimiter: string): TStringArray;
-var
-    resultArray: TStringArray;
-    i, startPos, delimLength: Integer;
-    inQuotes: Boolean;
-    currentSegment: string;
-begin
-    i := 0;
-    startPos := 1;
-    delimLength := Length(delimiter);
-    SetLength(resultArray, 0);
-    inQuotes := False;
-    currentSegment := '';
-
-    while startPos <= Length(value) do
-    begin
-        if value[startPos] = '"' then
-        begin
-            inQuotes := not inQuotes;
-        end
-        else if (not inQuotes) and (Copy(value, startPos, delimLength) = delimiter) then
-        begin
-            SetLength(resultArray, i + 1);
-            resultArray[i] := currentSegment;
-            Inc(i);
-            currentSegment := '';
-            Inc(startPos, delimLength - 1);
-        end
-        else
-        begin
-            currentSegment := currentSegment + value[startPos];
-        end;
-
-        Inc(startPos);
-    end;
-
-    SetLength(resultArray, i + 1);
-    resultArray[i] := currentSegment;
-
-    splitStringQuotes := resultArray;
-end;
-
-function splitString(value: string; delimiter: string): TStringArray;
-var resultArray: TStringArray;
-    i, startPos, delimLength: Integer;
-    foundPos: Integer;
-begin
-    i := 0;
-    startPos := 1;
-    delimLength := length(delimiter);
-    setlength(resultArray, 0);
-
-    repeat
-        foundPos := pos(delimiter, value);
-        setlength(resultArray, i + 1);
-
-        if foundPos > 0 then
-        begin
-            resultArray[i] := copy(value, startPos, foundPos - startPos);
-            value := copy(value, foundPos + delimLength, Length(value) - foundPos - delimLength + 1);
-        end
-        else
-        begin
-            resultArray[i] := value;
-        end;
-
-        i := i + 1;
-    until foundPos = 0;
-
-    splitString := resultArray;
-end;
-
-
-// function serialiserPays(pays: TPays): string;
-// var i: Integer;
-// begin
-//     serialiserPays := '';
-//     serialiserPays += pays.nom + ',' + pays.capitale + ',';
-//     for i := 0 to length(pays.nomFrontieres) - 1 do
-//     begin
-//         serialiserPays += pays.nomFrontieres[i];
-//         if (i <> length(pays.nomFrontieres) - 1) then
-//             serialiserPays += '|';
-//     end;
-//     writeln('done');
-// end;
-
+{ Désérialise une ligne CSV en un objet TFilePays
+    @param(valeur La ligne CSV à désérialiser)
+    @return(Un objet TFilePays)
+}
 function deserialiserPays(valeur: String): TFilePays;
 var split, latlngString: TStringArray;
+var i: Integer;
 begin
-    split := splitStringQuotes(valeur, ',');
+    split := splitLigneCsv(valeur, ',');
+    for i := 0 to length(split) - 1 do writeln(split[i]);
+
     deserialiserPays.nom := split[0];
     deserialiserPays.capitale := split[1];
     deserialiserPays.code := split[2];
@@ -118,7 +41,7 @@ var split: TStringArray;
 var categories: TStringArray;
 var i: Integer;
 begin
-    split := splitStringQuotes(valeur, ',');
+    split := splitLigneCsv(valeur, ',');
     deserialiserActivite.nom := split[0];
     deserialiserActivite.pays := split[1];
     DecimalSeparator := '.';
@@ -127,9 +50,7 @@ begin
     categories := splitString(split[6], ',');
     setlength(deserialiserActivite.categories, length(categories));
     for i := 0 to length(categories) - 1 do
-    begin
-        readStr(categories[i], deserialiserActivite.categories[i])
-    end;
+        readStr(categories[i], deserialiserActivite.categories[i]);
 end;
 
 
@@ -226,32 +147,23 @@ begin
         setlength(pays.nomAvions, 0);
 
         for j := 0 to length(listePays[i].codeFrontieres) - 1 do
-        begin
             for k := 0 to length(listePays) - 1 do
-            begin
                 if listePays[i].codeFrontieres[j] = listePays[k].code then
                 begin
                     setlength(pays.nomFrontieres, length(pays.nomFrontieres) + 1);
                     pays.nomFrontieres[length(pays.nomFrontieres) - 1] := listePays[k].nom;
                 end;
-            end;
-        end;
 
         for j := 0 to length(listePays[i].codeAvions) - 1 do
-        begin
             for k := 0 to length(listePays) - 1 do
-            begin
                 if listePays[i].codeAvions[j] = listePays[k].code then
                 begin
                     setlength(pays.nomAvions, length(pays.nomAvions) + 1);
                     pays.nomAvions[length(pays.nomAvions) - 1] := listePays[k].nom;
                 end;
-            end;
-        end;
 
         setlength(pays.activites, 0);
         for j := 0 to length(listeActivites) - 1 do
-        begin
             if listeActivites[j].pays = pays.nom then
             begin
                 activite.nom := listeActivites[j].nom;
@@ -262,12 +174,9 @@ begin
                 setlength(pays.activites, length(pays.activites) + 1);
                 pays.activites[length(pays.activites) - 1] := activite;
             end;
-        end;
 
         for j := 0 to length(listePays[i].climatString) - 1 do
-        begin
             pays.climat[TMois(j)] := round(StrToFloat(listePays[i].climatString[j]));
-        end;
 
         europe[i] := pays;
     end;
@@ -284,24 +193,5 @@ begin
     chargerEurope := europe;
 
 end;
-
-
-// procedure sauvegarderPays(europe: TEurope);
-// var
-//   fichierPays: Text;
-//   i: Integer;
-// begin
-//   assign(fichierPays, 'data/pays.csv');
-//   rewrite(fichierPays);
-  
-//   writeln(length(europe));
-//   for i := 0 to length(europe) - 1 do
-//   begin
-//     writeln(fichierPays, serialiserPays(europe[i]));
-//     writeln('ok ', i);
-//   end;
-  
-//   close(fichierPays);
-// end;
 
 end.

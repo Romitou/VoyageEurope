@@ -1,6 +1,6 @@
-program main;
+﻿program main;
 
-uses voyageTypes, chargerDonnees, choixCriteres;
+uses chargerDonnees, choixCriteres, voyageTypes;
 
 var europe: TEurope;
     pays: TPays;

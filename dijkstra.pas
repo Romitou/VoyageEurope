@@ -1,7 +1,7 @@
-unit dijkstra;
+﻿unit dijkstra;
 
 interface
-uses voyageTypes, sysutils;
+uses sysutils, voyageTypes;
 
 const
     INFINITY = MaxInt;
@@ -78,14 +78,12 @@ begin
             break;
 
         for i := 0 to high(noeudsInitial) do
-        begin
             if noeudsInitial[i] = minDistNoeud then
             begin
                 noeudsInitial[i] := noeudsInitial[high(noeudsInitial)];
                 SetLength(noeudsInitial, Length(noeudsInitial) - 1);
                 break;
             end;
-        end;
 
         if minDistNoeud = noeudFin then
             break;
@@ -118,8 +116,7 @@ begin
         chemin[high(chemin)] := noeudDepart;
         distance := distanceDepart[noeudFin];
     end
-    else
-    begin
+    else begin
         SetLength(chemin, 0);
         distance := INFINITY;
     end;

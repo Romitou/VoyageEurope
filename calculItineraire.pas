@@ -1,14 +1,14 @@
-unit calculItineraire;
+﻿unit calculItineraire;
 
 interface
-uses voyageTypes, dijkstra, sysutils, utils, score;
+uses dijkstra, score, sysutils, utils, voyageTypes;
 
-function convertirEuropeAdjacence(europe: TEurope; transport: TTransport): TAdjacenceListe;
-function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; transport: TTransport): TItineraireResult;
+function convertirEuropeAdjacence(europe: TEurope; modeTransport: TMode): TAdjacenceListe;
+function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; modeTransport: TMode): TItineraireResult;
 
 implementation
 
-function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; transport: TTransport): TItineraireResult;
+function calculerItineraire(paysValables: TEurope; paysDepart, paysArrivee: TPays; modeTransport: TMode): TItineraireResult;
 var adjacence: TAdjacenceListe;
 var chemin: TNoeudList;
 var distance: TDistance;
@@ -20,7 +20,7 @@ begin
     setlength(resultat.itineraire, 0);
     resultat.erreur := true;
 
-    adjacence := convertirEuropeAdjacence(paysValables, transport);
+    adjacence := convertirEuropeAdjacence(paysValables, modeTransport);
     if length(adjacence) < 2 then
     begin
         resultat.message := 'Pas assez d''adjacences n''ont été générées.';
@@ -41,7 +41,7 @@ begin
         exit(resultat);
     end;
 
-    writeln('length(adjacence):',length(adjacence),'noeudDepart:',noeudDepart,'noeudFin:',noeudFin);
+    writeln('length(adjacence):', length(adjacence), 'noeudDepart:', noeudDepart, 'noeudFin:', noeudFin);
     shortestPath(adjacence, length(adjacence), noeudFin, noeudDepart, chemin, distance);
 
     if distance <= 0 then
@@ -70,7 +70,7 @@ begin
     calculerItineraire := resultat;
 end;
 
-function convertirEuropeAdjacence(europe: TEurope; transport: TTransport): TAdjacenceListe;
+function convertirEuropeAdjacence(europe: TEurope; modeTransport: TMode): TAdjacenceListe;
 var
     listeAdjacence: TAdjacenceListe;
     paysVoisins: TStringArray;
@@ -81,8 +81,7 @@ begin
     begin
         SetLength(listeAdjacence[i], 0);
         paysVoisins := europe[i].nomFrontieres;
-        if transport = TrainAvion then
-        begin
+        if modeTransport = TrainEtAvion then
             for j := 0 to length(europe[i].nomAvions) - 1 do
             begin
                 for n := 0 to length(europe[i].nomFrontieres) - 1 do
@@ -91,7 +90,6 @@ begin
                 setlength(paysVoisins, length(paysVoisins) + 1);
                 paysVoisins[length(paysVoisins) - 1] := europe[i].nomAvions[j];
             end;
-        end;
 
         for j := 0 to length(paysVoisins) - 1 do
         begin
@@ -101,7 +99,7 @@ begin
                 n := length(listeAdjacence[i]);
                 SetLength(listeAdjacence[i], n + 1);
                 listeAdjacence[i][n].voisin := voisinIndex;
-                listeAdjacence[i][n].distance :=100-round(100*poidsChemin(europe[i],europe[voisinIndex]));
+                listeAdjacence[i][n].distance := 100 - round(100 * poidsChemin(europe[i], europe[voisinIndex]));
             end;
         end;
     end;

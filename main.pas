@@ -1,15 +1,13 @@
-program main;
+﻿program main;
 
-uses voyageTypes, chargerDonnees, choixCriteres, genererVoyage, afficherVoyage;
+uses afficherVoyage, chargerDonnees, choixCriteres, genererVoyage, voyageTypes;
 
 var europe: TEurope;
 var criteres: TCriteres;
 var voyage: TVoyage;
 begin
-    europe:=chargerEurope();
-    demanderCriteres(criteres,europe);
-    // en attendant que ce soit implémenté dans demanderCriteres
-    criteres.transport := TrainAvion;
-    voyage := generer(criteres,europe);
-    afficher(voyage,criteres);
+    europe := chargerEurope();
+    demanderCriteres(criteres, europe);
+    voyage := generer(criteres, europe);
+    afficher(voyage, criteres);
 end.

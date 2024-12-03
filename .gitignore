@@ -4,3 +4,5 @@
 *.ppu
 *.o
 *.exe
+pasdoc/
+doc/
