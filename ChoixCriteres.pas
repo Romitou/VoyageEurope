@@ -178,7 +178,7 @@ begin
 
     menus[2].nom := 'Menu En Famille';
     setlength(menus[2].preferences, 4);
-    menus[2].preferences := [Gastronomie, Sport, Authentique, EnFamille];
+    menus[2].preferences := [Gastronomie, Sport, Authentique, Famille];
     menus[2].description := 'Des activités pour petits et grands à partager en famille.';
 
     menus[3].nom := 'Menu Vie Nocturne';

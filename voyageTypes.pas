@@ -8,12 +8,12 @@ type TTransport = (Train, Avion);
 type TMois = (Janvier, Fevrier, Mars, Avril, Mai, Juin, Juillet, Aout, Septembre, Octobre, Novembre, Decembre);
 type TPref = (
     // Type d'activité
-    Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education,
-    BienEtre, Sport, Aquatique, FestivalsEtEvenements, Histoire, ArtisanatLocal, Photographie,
-    ObservationFaune, Mystere, CinemaEtTelevision, ReligieuxEtSpirituel, Authentique, Immersif,
+    Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education, Architecture,
+    BienEtre, Sport, Aquatique, FestivalsEtEvenements, Histoire, ArtisanatLocal, Photographie, ObservationFaune,
+    Mystere, CinemaEtTelevision, ReligieuxEtSpirituel, Authentique, Immersif,
     
     // Occasion
-    Romantique, EnFamille, EntreAmis, Solo,
+    Romantique, Famille, EntreAmis, Solo,
 
     // Type de séjour
     Luxe, EcoResponsable,
