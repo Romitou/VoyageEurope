@@ -155,11 +155,10 @@ begin
             for j := 0 to length(europe[i].ordreAct) - 1 do
                 writeln(europe[i].activites[europe[i].ordreAct[j]].nom, ' : ', europe[i].activites[europe[i].ordreAct[j]].score);
 
-            writeln('scoreAct : ', scoreActivitePays(europe[i], criteres, 3));
-            writeln('');
-            writeln('pays suivant');
-            writeln('');
-        end;
+        writeln('scoreAct : ', scoreActivitePays(europe[i], criteres));
+        writeln('');
+        writeln('pays suivant');
+        writeln('');
 
     end;
 
@@ -167,7 +166,7 @@ begin
     writeln('Calcul des scores des pays...');
     for i := 0 to length(europe) - 1 do
     begin
-        scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, 3, criteres.intervalleTemperature, europe[i]);
+        scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, criteres.intervalleTemperature, europe[i]);
         //debug
         if MODE_DEBUG then
             writeln(europe[i].nom, ' : ', europe[i].score);
@@ -242,7 +241,7 @@ begin
     end;
 
     for i := 0 to length(europe) - 1 do
-        scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, 3, criteres.intervalleTemperature, europe[i]);
+        scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, criteres.intervalleTemperature, europe[i]);
 
     aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee, criteres.modeTransport);
     if aller.erreur then

@@ -5,8 +5,8 @@ uses constantes, voyageTypes;
 
 procedure scoreActivite(pref: array of TPref; coeffCout: Real; var activite: TActivite);
 procedure triActPays(var pays: TPays);
-function scoreActivitePays(pays: TPays; criteres: TCriteres; nbActParJour: Integer): Real;
-procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; nbActParJour: Integer; intervalleTemp: Real; var pays: TPays);
+function scoreActivitePays(pays: TPays; criteres: TCriteres): Real;
+procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; intervalleTemp: Real; var pays: TPays);
 function poidsChemin(pays1: TPays; pays2: TPays): Real;
 procedure paysVisites(inputPays: TEurope; var europe: TEurope);
 
@@ -129,15 +129,15 @@ end;
     @param(nbActParJour Nombre d'activités considérées pour le calcul)
     @return(Le score en pourcentage)
 }
-function scoreActivitePays(pays: TPays; criteres: TCriteres; nbActParJour: Integer): Real;
+function scoreActivitePays(pays: TPays; criteres: TCriteres): Real;
 var
     somme: Real;
     i: Integer;
 begin
     somme := 0;
-    for i := 0 to nbActParJour - 1 do
+    for i := 0 to NB_ACT_PAR_JOUR - 1 do
         somme := somme + pays.activites[pays.ordreAct[i]].score;
-    scoreActivitePays := somme / nbActParJour;
+    scoreActivitePays := somme / NB_ACT_PAR_JOUR;
 end;
 
 { Permet de calculer le nouveau score des pays traversés à l'aller, en les divisant par DIVISION_SCORE 
@@ -163,9 +163,9 @@ end;
     @param(intervalleTemp Fourchette de températures considérées))
     @param(pays Le pays concerné)
 }
-procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; nbActParJour: Integer; intervalleTemp: Real; var pays: TPays);
+procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; intervalleTemp: Real; var pays: TPays);
 begin
-    pays.score := (scoreActivitePays(pays, criteres, nbActParJour) * coeffAct + scoreClimat(criteres.climat, criteres.periode, pays, intervalleTemp) * coeffClim) / (coeffAct + coeffClim);
+    pays.score := (scoreActivitePays(pays, criteres) * coeffAct + scoreClimat(criteres.climat, criteres.periode, pays, intervalleTemp) * coeffClim) / (coeffAct + coeffClim);
 end;
 
 
