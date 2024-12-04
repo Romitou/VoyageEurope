@@ -1,4 +1,4 @@
-nom,pays,description,duree,cout,latlng,tags
+nom,pays,description,duree,cout,latlng,preferences
 Visite de la Tour Eiffel,France,"Admirez une vue panoramique de Paris, idéale pour les amateurs de photographie ou pour un moment romantique.",180,25,"48.8584, 2.2945","Photographie,Romantique,Culture,Authentique,ObservationFaune,TouteSaison"
 Croisière sur la Seine,France,"Embarquez pour une croisière relaxante, avec des vues spectaculaires des monuments de Paris, une activité idéale pour se détendre.",120,18,"48.8566, 2.3522","Relaxation,Nature,Romantique,TouteSaison,ObservationFaune"
 Visite du Louvre,France,"Découvrez l'art et l'histoire dans l'un des musées les plus célèbres du monde, une immersion dans la culture et l'histoire de Paris.",240,17,"48.8606, 2.3376","Culture,Histoire,Art,Immersif,Education,TouteSaison"

@@ -1,4 +1,4 @@
-﻿name_fr,capital,iso3,borders,airBorders,flag,latlng,climat
+﻿nom,capitale,iso3,frontieresTrain,frontieresAvion,latlng,climat
 Albanie,Tirana,ALB,"MNE,GRC,MKD,SRB","ITA,GRC,DEU",https://upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Albania.svg,"41.0, 20.0","6,7,10,14,18,22,25,25,21,16,11,7"
 Allemagne,Berlin,DEU,"AUT,BEL,CZE,DNK,FRA,LUX,NLD,POL,CHE","FRA,ITA,ESP",https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg,"51.0, 9.0","1,2,6,11,15,18,20,19,15,10,5,2"
 Andorre,Andorre-la-Vieille,AND,"FRA,ESP","ESP,FRA,ITA",https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Andorra.svg,"42.5, 1.5","3,4,7,9,13,18,21,21,17,12,6,3"
