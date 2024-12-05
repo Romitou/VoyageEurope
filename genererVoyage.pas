@@ -173,7 +173,8 @@ begin
     end;
 
 
-    writeln('Calcul des scores des pays...');
+    if MODE_DEBUG then
+        writeln('Calcul des scores des pays...');
     for i := 0 to length(europe) - 1 do
     begin
         scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, criteres.intervalleTemperature, europe[i]);
@@ -185,7 +186,8 @@ begin
 
     // ** Génération itinéraire aller **
 
-    writeln('Calcul de l''itinéraire aller...');
+    if MODE_DEBUG then
+        writeln('Calcul de l''itinéraire aller...');
     aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee, criteres.modeTransport);
     if aller.erreur then
     begin
@@ -194,8 +196,11 @@ begin
         exit(voyage);
     end;
 
-    writeln('Itinéraire aller généré :');
-    for i := 0 to length(aller.itineraire) - 1 do writeln('- ', aller.itineraire[i].nom);
+    if MODE_DEBUG then
+    begin
+        writeln('Itinéraire aller généré :');
+        for i := 0 to length(aller.itineraire) - 1 do writeln('- ', aller.itineraire[i].nom);
+    end;
 
     paysVisites(aller.itineraire, europe);
 
@@ -215,8 +220,11 @@ begin
         exit(voyage);
     end;
 
-    writeln('Itinéraire retour généré :');
-    for i := 0 to length(retour.itineraire) - 1 do writeln('- ', retour.itineraire[i].nom);
+    if MODE_DEBUG then
+    begin
+        writeln('Itinéraire retour généré :');
+        for i := 0 to length(retour.itineraire) - 1 do writeln('- ', retour.itineraire[i].nom);
+    end;
 
     setlength(voyage.itineraire, (length(aller.itineraire) + length(retour.itineraire)));
     for i := 0 to length(aller.itineraire) - 1 do
