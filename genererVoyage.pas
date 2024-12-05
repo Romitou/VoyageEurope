@@ -51,12 +51,21 @@ begin
 
         etapes[n].deplacement.transport := Train;
         if criteres.modeTransport = TrainEtAvion then
+        begin
             for k := 0 to length(etapes[n].deplacement.paysDepart.nomAvions) - 1 do
                 if etapes[n].deplacement.paysDepart.nomAvions[k] = etapes[n].deplacement.paysEtape.nom then
                 begin
                     etapes[n].deplacement.transport := Avion;
                     break;
                 end;
+            if etapes[n].deplacement.transport = Train then
+                for k := 0 to length(etapes[n].deplacement.paysEtape.nomAvions) - 1 do
+                    if etapes[n].deplacement.paysEtape.nomAvions[k] = etapes[n].deplacement.paysDepart.nom then
+                    begin
+                        etapes[n].deplacement.transport := Avion;
+                        break;
+                    end;
+        end;
 
         etapes[n].deplacement.minutes := calculDureeTransport(etapes[n].deplacement.distance, etapes[n].deplacement.transport);
         dureeActivites := dureeActivites + etapes[n].deplacement.minutes;
