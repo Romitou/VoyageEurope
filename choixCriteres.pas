@@ -279,12 +279,13 @@ begin
             writeln('');
             writeln('[1] Préférences');
             writeln('[2] Durée');
-            writeln('[3] Période');
-            writeln('[4] Pays de départ et/ou d''arrivée');
-            writeln('[5] Budget');
-            writeln('[6] Expérience');
-            writeln('[7] Nombre de voyageurs');
-            writeln('[8] Tous');
+            writeln('[3] Climat');
+            writeln('[4] Période');
+            writeln('[5] Pays de départ et/ou d''arrivée');
+            writeln('[6] Budget');
+            writeln('[7] Expérience');
+            writeln('[8] Nombre de voyageurs');
+            writeln('[9] Tous');
             writeln('');
             readln(reponse);
             TryStrToInt(reponse, n);
@@ -293,12 +294,13 @@ begin
             case n of
             1 : choixPreferences(choix);
             2 : choixDuree(choix,europe);
-            3 : choixPeriode(choix);
-            4 : choixPays(choix,europe);
-            5 : choixBudget(choix);
-            6 : choixExperience(choix);
-            7 : choixNbVoyageurs(choix);
-            8 : demanderCriteres(choix,europe);
+            3 : choixClimat(choix);
+            4 : choixPeriode(choix);
+            5 : choixPays(choix,europe);
+            6 : choixBudget(choix);
+            7 : choixExperience(choix);
+            8 : choixNbVoyageurs(choix);
+            9 : demanderCriteres(choix,europe);
             end;
         end;
 
