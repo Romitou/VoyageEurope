@@ -1,4 +1,4 @@
-﻿unit calculCout;
+unit calculCout;
 
 interface
 uses constantes, math, voyageTypes;
