@@ -150,7 +150,8 @@ begin
     voyage.erreur := false;
     voyage.message := '';
 
-    writeln('Classement activités...');
+    if MODE_DEBUG then
+        writeln('Classement activités...');
     for i := 0 to length(europe) - 1 do
     begin
         for j := 0 to length(europe[i].activites) - 1 do
@@ -211,7 +212,8 @@ begin
 
     // ** Génération itinéraire retour **
 
-    writeln('Calcul de l''itinéraire retour...');
+    if MODE_DEBUG then
+        writeln('Calcul de l''itinéraire retour...');
     retour := calculerItineraire(europe, criteres.paysArrivee, criteres.paysDepart, criteres.modeTransport);
     if retour.erreur then
     begin
