@@ -1,4 +1,4 @@
-﻿program main;
+program main;
 
 uses afficherVoyage, chargerDonnees, choixCriteres, constantes, score, voyageTypes;
 
