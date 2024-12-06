@@ -26,33 +26,67 @@ implementation
 en début de programme, la procédure envoie un message d'alerte signalant la différence avec le budget rensigné.}
 procedure afficherInfos(voyage: TVoyage; criteres: TCriteres);
 begin
-    writeln('Détails du voyage :');
-    writeln('> Durée du séjour : ', length(voyage.planning) - 1, ' jours');
-    writeln('> Coût total : ', voyage.coutTotal:0:0, ' euros');
-    writeln('> Distance de ', voyage.kmTotal:0:1, ' km en ', voyage.modeTransport, ' à travers l''Europe, depuis ', criteres.paysDepart.nom, ' destination ', criteres.paysArrivee.nom);
     writeln();
+    writeln('------------ 📝 Détails du voyage ------------');
+    writeln('🗺️  ', criteres.paysDepart.nom, ' - ', criteres.paysArrivee.nom);
+    writeln();
+    writeln('🕒 Durée du séjour : ', length(voyage.planning) - 1, ' jours');
+    writeln('📍 Distance de ', voyage.kmTotal:0:1, ' km  (', voyage.kmTrain:0:1, ' km en train, ', voyage.kmAvion:0:1, ' km en avion)');
+    writeln('🌱 Coût carbone : ', voyage.carbonImpact:0:0, 'kg de CO2');
+    write('💰 Coût total : ', voyage.coutTotal:0:0, ' euros');
     if (voyage.coutTotal > criteres.budget) then
-        writeln('ATTENTION : Le coût du voyage proposé ci-dessous est supérieur de ', (voyage.coutTotal - criteres.budget):5:0, ' euros au coût maximal que vous avez renseigné.');
-    writeln('> Coût carbone : ', voyage.carbonImpact:4:0, 'kg de CO2 rejété dans l''atmosphère durant votre voyage');
+        writeln(' (⚠️   + ', (voyage.coutTotal - criteres.budget):0:0, ' euros)');
     writeln();
+end;
 
+procedure afficherComparaison(voyage: TVoyage; voyageBis: TVoyage);
+var premierTrajet, secondTrajet, signeTrain, signeAvion, signeCarbone, signeCout: String;
+begin
+    if voyage.modeTransport = TrainSeul then
+    begin
+        premierTrajet := 'Train uniquement : ';
+        secondTrajet := 'Train et avion :   ';
+    end else
+    begin
+        premierTrajet := 'Train et avion :   ';
+        secondTrajet := 'Train uniquement : ';
+    end;
+    writeln('---- 📊 Comparaison des modes de transport ----');
+    writeln();
+    writeln(premierTrajet, '🚆  ', voyage.kmTrain:6:1, ' km     ✈️   ', voyage.kmAvion:6:1, ' km     🌱  ', voyage.carbonImpact:5:1, ' kg CO2     💰  ', voyage.coutTotal:7:1, ' euros');
+    writeln(secondTrajet, '🚆  ', voyageBis.kmTrain:6:1, ' km     ✈️   ', voyageBis.kmAvion:6:1, ' km     🌱  ', voyageBis.carbonImpact:5:1, ' kg CO2     💰  ', voyageBis.coutTotal:7:1, ' euros');
+   
+    if voyage.kmTrain > voyageBis.kmTrain then signeTrain := '+' else signeTrain := '-';
+    if voyage.kmAvion > voyageBis.kmAvion then signeAvion := '+' else signeAvion := '-';
+    if voyage.carbonImpact > voyageBis.carbonImpact then signeCarbone := '+' else signeCarbone := '-';
+    if voyage.coutTotal > voyageBis.coutTotal then signeCout := '+' else signeCout := '-';
+
+    writeln('                     (', signeTrain, abs(voyage.kmTrain - voyageBis.kmTrain):5:1, ' km)      (', signeAvion, abs(voyage.kmAvion - voyageBis.kmAvion):5:1, ' km)      (', signeCarbone, abs(voyage.carbonImpact - voyageBis.carbonImpact):5:1, ' kg CO2)      (', signeCout, abs(voyage.coutTotal - voyageBis.coutTotal):7:1, ' euros)');
+    writeln();
+    if voyage.modeTransport = TrainEtAvion then
+        writeln('🌱 Attention : en optant pour un voyage en train uniquement, vous pourriez rejeter ', (voyage.carbonImpact - voyageBis.carbonImpact):0:1, ' kg de CO2 de moins qu''en prenant l''avion.')
+    else
+        writeln('🌱 En optant pour ce voyage en train uniquement, vous rejeterez ', (voyageBis.carbonImpact - voyage.carbonImpact):0:1, ' kg de CO2 de moins qu''en prenant l''avion ! 👍');
 end;
 
 { Cette procédure permet d'afficher le coût carbone du voyage dans le terminal. }
 procedure afficherImpactCarbone(voyage: TVoyage; criteres: TCriteres; europe: TEurope);
 var dureeMinimale: Integer;
-    voyageBis: TVoyage;
     criteresBis: TCriteres;
+    voyageTrain: TVoyage;
+    voyageAvion: TVoyage;
+    signeTrain, signeAvion, signeCarbone: String;
 begin
-    voyageBis := voyage;
     criteresBis := criteres;
     if voyage.modeTransport = TrainSeul then
     begin
+        voyageTrain := voyage;
         criteresBis.modeTransport := TrainEtAvion;
-        voyageBis := generer(criteresBis, europe);
-        writeln('Ecoresponsabilité : Sachez que votre voyage intégralement en train permet d''éviter le rejet de ', (voyageBis.carbonImpact - voyage.carbonImpact):4:0, ' kg de CO2 dans l''atmosphère par rapport à un voyage en train et avion.');
+        voyageAvion := generer(criteresBis, europe);
+        afficherComparaison(voyageTrain, voyageAvion);
     end
     else begin
+        voyageAvion := voyage;
         criteresBis.modeTransport := TrainSeul;
 
         // Dans le cas du train, on doit calculer la durée minimale du trajet,
@@ -60,11 +94,23 @@ begin
         dureeMinimale := calculDureeMinimale(criteresBis, europe);
         criteresBis.duree := dureeMinimale;
 
-        voyageBis := generer(criteresBis, europe);
+        voyageTrain := generer(criteresBis, europe);
+        afficherComparaison(voyageAvion, voyageTrain);
 
-        writeln('A noter que votre voyage fait exclusivement en train rejeterait ', (voyage.carbonImpact - voyageBis.carbonImpact):4:0, ' kg de CO2 en moins par rapport à votre voyage.');
-        writeln('Un autre voyage de ', length(voyageBis.planning) - length(voyage.planning), ' jours supplémentaires vous permettrait de réduire de la sorte le coût carbone de votre voyage');
+        // writeln('A noter que votre voyage fait exclusivement en train rejeterait ', (voyage.carbonImpact - voyageBis.carbonImpact):4:0, ' kg de CO2 en moins par rapport à votre voyage.');
+        // writeln('Un autre voyage de ', length(voyageBis.planning) - length(voyage.planning), ' jours supplémentaires vous permettrait de réduire de la sorte le coût carbone de votre voyage');
     end;
+
+
+        // if voyage.carbonImpact < voyageBis.carbonImpact then
+        // begin
+        //     writeln('🚆 Votre voyage actuel rejette ', (voyageBis.carbonImpact - voyage.carbonImpact):4:0, ' kg de CO2 en moins par rapport à votre voyage en train et avion.');
+        //     writeln('🌟 Opter pour un voyage en train seul vous permettrait de réduire de la sorte le coût carbone de votre voyage.');
+        // end
+        // else begin
+        //     writeln('🚆 Votre voyage actuel rejette ', (voyage.carbonImpact - voyageBis.carbonImpact):4:0, ' kg de CO2 en moins par rapport à votre voyage en train seul.');
+        //     writeln('🌟 Opter pour un voyage en train et avion vous permettrait de réduire de la sorte le coût carbone de votre voyage.');
+        // end;
 end;
 
 procedure afficher(voyage: TVoyage; criteres: TCriteres; europe: TEurope);
@@ -83,7 +129,6 @@ begin
         exit;
     end;
 
-    afficherInfos(voyage, criteres);
     writeln;
     writeln('===== PLANNING DU VOYAGE =====');
     writeln;
@@ -96,15 +141,15 @@ begin
             etape := voyage.planning[i].etapes[j];
 
             if etape.estActivite then
-                writeln('> Activités : ', etape.activite.nom, ' (', etape.activite.minutes, ' min - ', etape.activite.cout:0:0, ' euros)')
+                writeln('> 🚩 ', etape.activite.nom, ' (', etape.activite.minutes, ' min - ', etape.activite.cout:0:0, ' euros)')
             else begin
                 transportEmoji := '🚆';
                 if etape.deplacement.transport = Avion then
                     transportEmoji := '✈️ ';
-                writeln('   ', transportEmoji, ' Voyage depuis ', etape.deplacement.paysDepart.capitale, ' jusqu’à ', etape.deplacement.paysEtape.capitale, '.');
-                writeln('   📍 Arrivée à ', etape.deplacement.paysEtape.nom, ' (', etape.deplacement.paysEtape.capitale, ') - ', etape.deplacement.minutes, ' minutes');
+                writeln('> ', transportEmoji, ' Voyage depuis ', etape.deplacement.paysDepart.capitale, ' jusqu’à ', etape.deplacement.paysEtape.capitale, '.');
+                writeln('  📍 Arrivée à ', etape.deplacement.paysEtape.nom, ' (', etape.deplacement.paysEtape.capitale, ') - ', etape.deplacement.minutes, ' minutes');
                 if etape.deplacement.paysEtape.nom = criteres.paysArrivee.nom then
-                    writeln('   🌟 Journée dans le pays de destination : ', etape.deplacement.paysEtape.nom, '.');
+                    writeln('  🌟 Journée dans le pays de destination : ', etape.deplacement.paysEtape.nom, '.');
             end;
         end;
 
@@ -114,6 +159,7 @@ begin
             writeln('🏁 Fin de votre voyage !');
     end;
 
+    afficherInfos(voyage, criteres);
     afficherImpactCarbone(voyage, criteres, europe);
 
     writeln();
