@@ -7,7 +7,7 @@ function calculDureeTransport(distance: Real; transport: TTransport): Integer;
 function calculCoutTransport(deplacement: TDeplacement): Real;
 function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
 procedure calculDistanceTotal(var voyage: TVoyage);
-procedure coutTotal(var voyage: TVoyage);
+procedure coutTotal(var voyage: TVoyage; criteres : TCriteres);
 procedure calculDistanceTransports(var voyage: TVoyage);
 procedure coutCarbone(var voyage: TVoyage);
 
@@ -36,7 +36,7 @@ begin
     voyage.kmTotal := distance;
 end;
 
-procedure coutTotal(var voyage: TVoyage);
+procedure coutTotal(var voyage: TVoyage; criteres : TCriteres);
 {Procédure calculant le coût total du voyage, en prenant en compte le coût des transports et le coût des activités.}
 var i: Integer; cout, coutEtape: Real;
 begin
@@ -49,7 +49,13 @@ begin
             coutEtape := calculCoutTransport(voyage.etapes[i].deplacement);
         cout := cout + coutEtape;
     end;
-    voyage.coutTotal := cout;
+    //Prise en compte de l'hébergement dans le cas économique ou non
+    if criteres.coeffCout = COEFF_COUT_FINAL then
+        cout:= cout + length(voyage.planning)*HOTEL_BUDGET
+    else
+        cout:= cout + length(voyage.planning)*HOTEL_NORMAL;
+
+    voyage.coutTotal := cout*criteres.nbVoyageurs;
 end;
 
 function calculCoutTransport(deplacement: TDeplacement): Real;

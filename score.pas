@@ -6,7 +6,7 @@ uses constantes, voyageTypes;
 procedure scoreActivite(pref: array of TPref; coeffCout: Real; var activite: TActivite);
 procedure triActPays(var pays: TPays);
 function scoreActivitePays(pays: TPays; criteres: TCriteres): Real;
-procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; intervalleTemp: Real; var pays: TPays);
+procedure scorePays(criteres: TCriteres; var pays: TPays);
 function poidsChemin(pays1: TPays; pays2: TPays): Real;
 procedure paysVisites(inputPays: TEurope; var europe: TEurope);
 
@@ -163,9 +163,9 @@ end;
     @param(intervalleTemp Fourchette de températures considérées))
     @param(pays Le pays concerné)
 }
-procedure scorePays(coeffAct: Real; coeffClim: Real; criteres: TCriteres; intervalleTemp: Real; var pays: TPays);
+procedure scorePays(criteres: TCriteres; var pays: TPays);
 begin
-    pays.score := (scoreActivitePays(pays, criteres) * coeffAct + scoreClimat(criteres.climat, criteres.periode, pays, intervalleTemp) * coeffClim) / (coeffAct + coeffClim);
+    pays.score := (scoreActivitePays(pays, criteres) * criteres.coeffActivite + scoreClimat(criteres.climat, criteres.periode, pays, criteres.intervalleTemperature) * criteres.coeffClimat) / (criteres.coeffActivite + criteres.coeffClimat);
 end;
 
 
