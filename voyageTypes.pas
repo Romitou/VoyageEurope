@@ -19,10 +19,7 @@ type TPref = (
     Luxe, EcoResponsable,
 
     // Qualification de l'activité
-    Guide, Actif, Intensif, Modere, MobiliteReduite,
-    
-    // Saison
-    Hiver, Printemps, Ete, Automne, TouteSaison, SaisonFestivals);
+    Guide, Actif, Intensif, Modere);
 
 type TExperience = (Economique, Ecologique, RespectDesTemperatures, RespectDesActivites);
 

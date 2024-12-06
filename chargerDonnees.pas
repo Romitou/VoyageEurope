@@ -63,10 +63,10 @@ begin
     // Attention, on change le séparateur décimal pour éviter les erreurs de conversion car sur certaines machines : « EConvertError : "41.0" is an invalid float »
     // Permet d’écraser le séparateur décimal par défaut, probablement défini par la langue du système d’exploitation
     DefaultFormatSettings.DecimalSeparator := '.';
-    deserialiserActivite.minutes := round(StrToFloat(split[3]));
-    deserialiserActivite.cout := StrToFloat(split[4]);
+    deserialiserActivite.minutes := round(StrToFloat(split[2]));
+    deserialiserActivite.cout := StrToFloat(split[3]);
 
-    categories := splitString(split[6], ',');
+    categories := splitString(split[4], ',');
     // On connaît le nombre de catégories "splittées", on peut donc allouer la mémoire nécessaire
     setlength(deserialiserActivite.categories, length(categories));
     for i := 0 to length(categories) - 1 do
