@@ -178,7 +178,7 @@ begin
         writeln('Calcul des scores des pays...');
     for i := 0 to length(europe) - 1 do
     begin
-        scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, criteres.intervalleTemperature, europe[i]);
+        scorePays(criteres, europe[i]);
         //debug
         if MODE_DEBUG then
             writeln(europe[i].nom, ' : ', europe[i].score);
@@ -261,7 +261,7 @@ begin
     end;
 
     for i := 0 to length(europe) - 1 do
-        scorePays(criteres.coeffActivite, criteres.coeffClimat, criteres, criteres.intervalleTemperature, europe[i]);
+        scorePays(criteres, europe[i]);
 
     aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee, criteres.modeTransport);
     if aller.erreur then
