@@ -30,7 +30,7 @@ begin
     writeln('------------ 📝 Détails du voyage ------------');
     writeln('🗺️  ', criteres.paysDepart.nom, ' - ', criteres.paysArrivee.nom);
     writeln();
-    writeln('🕒 Durée du séjour : ', length(voyage.planning) - 1, ' jours');
+    writeln('🕒 Durée du séjour : ', length(voyage.planning), ' jours');
     writeln('📍 Distance de ', voyage.kmTotal:0:1, ' km  (', voyage.kmTrain:0:1, ' km en train, ', voyage.kmAvion:0:1, ' km en avion)');
     writeln('🌱 Coût carbone : ', voyage.carbonImpact:0:0, 'kg de CO2');
     write('💰 Coût total : ', voyage.coutTotal:0:0, ' euros');
