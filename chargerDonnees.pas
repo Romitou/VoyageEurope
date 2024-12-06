@@ -145,6 +145,7 @@ begin
     end;
 
     close(fichierActivites);
+
     // Affichage des activités chargées en mode debug
     if MODE_DEBUG then
     begin
@@ -189,6 +190,7 @@ begin
 
     for i := 0 to length(listePays) - 1 do
     begin
+        // On remplit les champs du pays avec les données chargées
         pays.nom := listePays[i].nom;
         pays.capitale := listePays[i].capitale;
         pays.longitude := listePays[i].longitude;
@@ -197,6 +199,7 @@ begin
         setlength(pays.nomFrontieres, 0);
         setlength(pays.nomAvions, 0);
 
+        // On cherche les noms des pays connectés en train parmi les pays chargés
         for j := 0 to length(listePays[i].codeFrontieres) - 1 do
         begin
             trouve := false;
@@ -212,6 +215,7 @@ begin
                 writeln('Frontière ferroviaire non trouvée pour ', listePays[i].nom, ' : ', listePays[i].codeFrontieres[j]);
         end;
 
+        // On cherche les noms des pays connectés en avion parmi les pays chargés
         for j := 0 to length(listePays[i].codeAvions) - 1 do
         begin
             trouve := false;
@@ -227,10 +231,12 @@ begin
                 writeln('Frontière aérienne non trouvée pour ', listePays[i].nom, ' : ', listePays[i].codeAvions[j]);
         end;
 
+        // On cherche les activités associées au pays parmi les activités chargées
         setlength(pays.activites, 0);
         for j := 0 to length(listeActivites) - 1 do
             if listeActivites[j].pays = pays.nom then
             begin
+                // On remplit les champs de l'activité avec les données chargées
                 activite.nom := listeActivites[j].nom;
                 activite.categories := listeActivites[j].categories;
                 activite.minutes := listeActivites[j].minutes;
@@ -240,23 +246,28 @@ begin
                 pays.activites[length(pays.activites) - 1] := activite;
             end;
 
+        // On remplit le climat du pays avec les données chargées
+        // StrToFloat renvoie un flottant, on doit donc le convertir en entier avec round
         for j := 0 to length(listePays[i].climatString) - 1 do
             pays.climat[TMois(j)] := round(StrToFloat(listePays[i].climatString[j]));
 
         europe[i] := pays;
     end;
 
-    // writeln(length(europe), ' pays ont été chargés : ');
-    // for i := 0 to length(europe) - 1 do
-    // begin
-    //     writeln(europe[i].nom, ' (', length(europe[i].activites), ' activités) :');
-    //     for j := 0 to length(europe[i].activites) - 1 do
-    //         writeln('- ', europe[i].activites[j].nom);
-    // end;
-    // writeln();
+    // Affichage des pays chargés en mode debug
+    if MODE_DEBUG then
+    begin
+        writeln(length(europe), ' pays ont été chargés : ');
+        for i := 0 to length(europe) - 1 do
+        begin
+            writeln(europe[i].nom, ' (', length(europe[i].activites), ' activités) :');
+            for j := 0 to length(europe[i].activites) - 1 do
+                writeln('- ', europe[i].activites[j].nom);
+        end;
+        writeln();
+    end;
 
     chargerEurope := europe;
-
 end;
 
 end.
