@@ -16,7 +16,7 @@ type TPref = (
     Romantique, Famille, EntreAmis, Solo,
 
     // Type de séjour
-    Luxe, EcoResponsable,
+    Luxe,
 
     // Qualification de l'activité
     Guide, Actif, Intensif, Modere);
