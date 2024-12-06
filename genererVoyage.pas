@@ -241,7 +241,7 @@ begin
 
     calculDistanceTotal(voyage);
 
-    coutTotal(voyage);
+    coutTotal(voyage,criteres);
 
     coutCarbone(voyage);
 

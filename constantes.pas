@@ -31,5 +31,9 @@ const COEFF_ACT_FINAL = 2;
     emissionCO2Train = 0.003;
     emissionCO2Avion = 0.152;
 
+    //hébergement
+    HOTEL_NORMAL = 70;
+    HOTEL_BUDGET = 30;
+
 implementation
 end.
