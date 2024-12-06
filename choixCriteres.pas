@@ -36,10 +36,10 @@ begin
     until (trouve);
     trouve := false;
     repeat
-        writeln('🏁 Quel pays principal souhaitez-vous absolument traverser durant votre voyage ?');
+        writeln('🏁 À quelle destination voulez-vous voyager ?');
         readln(arrivee);
         associerPays(arrivee, listePays, choix.paysArrivee, trouve)
-    until (trouve);
+    until (trouve) and (arrivee<>depart);
 end;
 
 procedure choixPreferencesIndividuelles(var choix: TCriteres);
@@ -109,7 +109,7 @@ begin
     repeat
         writeln('📅 Saisissez le numéro du mois correspondant à votre période de voyage.');
         indexChoix := demanderEntier();
-    until (0 < indexChoix) and (indexChoix < 12);
+    until (0 <= indexChoix) and (indexChoix < 12);
     choix.periode := TMois(indexChoix);
 end;
 
