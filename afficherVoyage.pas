@@ -1,3 +1,4 @@
+{ Affichage des informations relatives au voyage généré par le programme }
 unit afficherVoyage;
 
 interface
