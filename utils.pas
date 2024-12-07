@@ -1,4 +1,4 @@
-﻿{$H+}
+{$H+}
 
 { Fonctions utilitaires utilisées par plusieurs autres unités }
 unit utils;
@@ -24,32 +24,31 @@ var i: integer;
     interieurGuillemets: boolean;
     resultat: TStringArray;
 begin
-  valeur := '';
-  interieurGuillemets := false;
-  setlength(resultat, 0);
+    valeur := '';
+    interieurGuillemets := false;
+    setlength(resultat, 0);
 
-  for i := 1 to length(ligne) - 1 do
-  begin
-    // Dès qu'on trouve un guillemet, on inverse la valeur de interieurGuillemets (pour savoir si on est à l'intérieur de guillemets ou non)
-    if ligne[i] = '"' then
-      interieurGuillemets := not interieurGuillemets
-    // Si on trouve un délimiteur et qu'on n'est pas à l'intérieur de guillemets, on ajoute la valeur à la liste
-    else if (ligne[i] = delimiteur) and not interieurGuillemets then
-    begin
-      setlength(resultat, length(resultat) + 1);
-      // trim permet de supprimer les espaces en début et fin de chaîne
-      resultat[length(resultat) - 1] := trim(valeur);
-      // La valeur est réinitialisée
-      valeur := '';
-    end
-    else
-      valeur := valeur + ligne[i];
-  end;
-  setlength(resultat, length(resultat) + 1);
-  // trim permet de supprimer les espaces en début et fin de chaîne
-  resultat[length(resultat) - 1] := trim(valeur);
+    for i := 1 to length(ligne) - 1 do
+        // Dès qu'on trouve un guillemet, on inverse la valeur de interieurGuillemets (pour savoir si on est à l'intérieur de guillemets ou non)
+        if ligne[i] = '"' then
+            interieurGuillemets := not interieurGuillemets
+        // Si on trouve un délimiteur et qu'on n'est pas à l'intérieur de guillemets, on ajoute la valeur à la liste
+        else if (ligne[i] = delimiteur) and not interieurGuillemets then
+        begin
+            setlength(resultat, length(resultat) + 1);
+            // trim permet de supprimer les espaces en début et fin de chaîne
+            resultat[length(resultat) - 1] := trim(valeur);
+            // La valeur est réinitialisée
+            valeur := '';
+        end
+        else
+            valeur := valeur + ligne[i];
+    
+    setlength(resultat, length(resultat) + 1);
+    // trim permet de supprimer les espaces en début et fin de chaîne
+    resultat[length(resultat) - 1] := trim(valeur);
 
-  splitLigneCsv := resultat;
+    splitLigneCsv := resultat;
 end;
 
 { Permet de trouver l'index d'un pays dans un tableau de pays
@@ -60,7 +59,7 @@ end;
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
 var i: Integer;
 begin
-    for i := 0 to length(europe) - 1do
+    for i := 0 to length(europe) - 1 do
         if europe[i].nom = nom then
             exit(i);
     exit(-1);

@@ -1,4 +1,4 @@
-﻿{$H+}
+{$H+} // Voir rapport pour explications
 
 { Chargement et traitement des données depuis les fichiers CSV }
 unit chargerDonnees;
@@ -58,7 +58,7 @@ begin
 
     deserialiserActivite.nom := split[0];
     deserialiserActivite.pays := split[1];
-    
+
     // On convertit le temps et le coût en nombres
     // Attention, on change le séparateur décimal pour éviter les erreurs de conversion car sur certaines machines : « EConvertError : "41.0" is an invalid float »
     // Permet d’écraser le séparateur décimal par défaut, probablement défini par la langue du système d’exploitation
@@ -97,7 +97,7 @@ begin
         begin
             setlength(tempPays, length(tempPays) + 1);
             // On désérialise (on "transforme") la ligne lue (une chaîne de caractères) en un objet TFilePays
-            tempPays[length(tempPays) - 1] := deserialiserPays(ligne); 
+            tempPays[length(tempPays) - 1] := deserialiserPays(ligne);
         end;
         i := i + 1;
     end;
@@ -139,7 +139,7 @@ begin
         begin
             setlength(tempActivites, length(tempActivites) + 1);
             // On désérialise (on "transforme") la ligne lue (une chaîne de caractères) en un objet TFilePays
-            tempActivites[length(tempActivites) - 1] := deserialiserActivite(ligne); 
+            tempActivites[length(tempActivites) - 1] := deserialiserActivite(ligne);
         end;
         i := i + 1;
     end;

@@ -41,8 +41,8 @@ begin
     begin
         premierTrajet := 'Train uniquement : ';
         secondTrajet := 'Train et avion :   ';
-    end else
-    begin
+    end
+    else begin
         premierTrajet := 'Train et avion :   ';
         secondTrajet := 'Train uniquement : ';
     end;

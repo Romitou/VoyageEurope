@@ -1,4 +1,4 @@
-﻿{ Unité contenant les types de données utilisés dans le projet }
+{ Unité contenant les types de données utilisés dans le projet }
 unit voyageTypes;
 
 interface
@@ -19,7 +19,7 @@ type TPref = (
     Aventure, Culture, Gastronomie, Nature, Relaxation, VieNocturne, Shopping, Art, Education, Architecture,
     BienEtre, Sport, Aquatique, FestivalsEtEvenements, Histoire, ArtisanatLocal, Photographie, ObservationFaune,
     Mystere, CinemaEtTelevision, ReligieuxEtSpirituel, Authentique, Immersif,
-    
+
     // Occasion
     Romantique, Famille, EntreAmis, Solo,
 

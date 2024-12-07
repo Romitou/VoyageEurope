@@ -1,7 +1,7 @@
 { Programme de test de la fonction calculerItineraire }
 program testItineraire;
 
-uses calculItineraire, chargerDonnees, sysutils, strutils, utils, voyageTypes;
+uses calculItineraire, chargerDonnees, strutils, sysutils, utils, voyageTypes;
 
 // Structure de test
 type TTestCase = record

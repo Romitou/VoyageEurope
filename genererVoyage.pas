@@ -1,7 +1,7 @@
-﻿unit genererVoyage;
+unit genererVoyage;
 
 interface
-uses calculCout, calculItineraire, score, voyageTypes, constantes, utils;
+uses calculCout, calculItineraire, constantes, score, utils, voyageTypes;
 
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 function calculDureeMinimale(criteres: TCriteres; europe: TEurope): Integer;
@@ -249,7 +249,7 @@ begin
     setlength(voyage.itineraire, (length(aller.itineraire) + length(retour.itineraire)));
     for i := 0 to length(aller.itineraire) - 1 do
         voyage.itineraire[i] := aller.itineraire[i];
-   
+
     for i := 0 to length(retour.itineraire) - 1 do
         voyage.itineraire[length(aller.itineraire) + i] := retour.itineraire[i];
 
@@ -258,9 +258,9 @@ begin
 
     calculDistanceTotal(voyage);
 
-    coutTotal(voyage,criteres);
+    coutTotal(voyage, criteres);
 
-    coutCarbone(voyage,criteres);
+    coutCarbone(voyage, criteres);
 
     generer := voyage;
 end;

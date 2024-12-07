@@ -5,7 +5,7 @@ interface
 uses constantes, genererVoyage, sysutils, utils, voyageTypes;
 
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
-procedure modifierCriteres(var choix : TCriteres;europe : TEurope; var quitter:Boolean);
+procedure modifierCriteres(var choix: TCriteres; europe: TEurope; var quitter: Boolean);
 
 implementation
 
@@ -40,7 +40,7 @@ begin
         writeln('🏁 À quelle destination voulez-vous voyager ?');
         readln(arrivee);
         associerPays(arrivee, listePays, choix.paysArrivee, trouve)
-    until (trouve) and (arrivee<>depart);
+    until (trouve) and (arrivee <> depart);
 end;
 
 procedure choixPreferencesIndividuelles(var choix: TCriteres);
@@ -84,7 +84,7 @@ procedure choixDuree(var choix: TCriteres; listePays: TEurope);
 var dureeMinimale: Integer;
 begin
     dureeMinimale := calculDureeMinimale(choix, listePays);
-    if dureeMinimale = -1 then 
+    if dureeMinimale = -1 then
     begin
         writeln('⚠️  Attention : aucun itinéraire n''a été trouvé pour les critères renseignés.');
         if choix.modeTransport = TrainSeul then
@@ -248,7 +248,7 @@ begin
     choix.nbVoyageurs := demanderEntier();
 end;
 
-procedure choixPreferences(var choix : TCriteres);
+procedure choixPreferences(var choix: TCriteres);
 var indexChoix: Integer;
 begin
     writeln('📋 [1] Des menus prédéfinis existent afin de générer rapidement un voyage correspondant à certains profils.');
@@ -266,68 +266,66 @@ begin
 end;
 
 
-procedure modifierCriteres(var choix : TCriteres;europe : TEurope; var quitter:Boolean);
-var reponse : String;
-p,n : LongInt;
+procedure modifierCriteres(var choix: TCriteres; europe: TEurope; var quitter: Boolean);
+var reponse: String;
+    p, n: LongInt;
 begin
 
     //cette boucle permet de demander autant de fois que veut l'utilisateur de modifier ses critères
     repeat
 
-    repeat
-        writeln('Voulez-vous modifier l''un / un autre de vos critères ? oui(1) / non(2)');
-        readln(reponse);
-        TryStrToInt(reponse, p);
-    until (TryStrToInt(reponse, p) = True);
+        repeat
+            writeln('Voulez-vous modifier l''un / un autre de vos critères ? oui(1) / non(2)');
+            readln(reponse);
+            TryStrToInt(reponse, p);
+        until (TryStrToInt(reponse, p) = True);
 
-    if p=1 then
+        if p = 1 then
         begin
             repeat
-            writeln('Lequel voulez-vous modifier ?');
-            writeln('');
-            writeln('[1] Préférences');
-            writeln('[2] Durée');
-            writeln('[3] Climat');
-            writeln('[4] Période');
-            writeln('[5] Pays de départ et/ou d''arrivée');
-            writeln('[6] Budget');
-            writeln('[7] Expérience');
-            writeln('[8] Nombre de voyageurs');
-            writeln('[9] Tous');
-            writeln('');
-            readln(reponse);
-            TryStrToInt(reponse, n);
+                writeln('Lequel voulez-vous modifier ?');
+                writeln('');
+                writeln('[1] Préférences');
+                writeln('[2] Durée');
+                writeln('[3] Climat');
+                writeln('[4] Période');
+                writeln('[5] Pays de départ et/ou d''arrivée');
+                writeln('[6] Budget');
+                writeln('[7] Expérience');
+                writeln('[8] Nombre de voyageurs');
+                writeln('[9] Tous');
+                writeln('');
+                readln(reponse);
+                TryStrToInt(reponse, n);
             until (TryStrToInt(reponse, n) = True);
 
             case n of
-            1 : choixPreferences(choix);
-            2 : choixDuree(choix,europe);
-            3 : choixClimat(choix);
-            4 : choixPeriode(choix);
-            5 : choixPays(choix,europe);
-            6 : choixBudget(choix);
-            7 : choixExperience(choix);
-            8 : choixNbVoyageurs(choix);
-            9 : demanderCriteres(choix,europe);
+            1: choixPreferences(choix);
+            2: choixDuree(choix, europe);
+            3: choixClimat(choix);
+            4: choixPeriode(choix);
+            5: choixPays(choix, europe);
+            6: choixBudget(choix);
+            7: choixExperience(choix);
+            8: choixNbVoyageurs(choix);
+            9: demanderCriteres(choix, europe);
             end;
         end;
 
-    until p=2;    
-    
+    until p = 2;
+
     repeat
         writeln('Voulez-vous générer de nouveau le voyage ? oui(1) / non(2)');
         readln(reponse);
         TryStrToInt(reponse, p);
     until (TryStrToInt(reponse, p) = True);
 
-    if p=1 then 
-        quitter:=False
+    if p = 1 then
+        quitter := False
     else
-        quitter:=True;    
+        quitter := True;
 
 end;
-
-
 
 
 {Procédure globale regroupant l'ensemble des sous-procédures décrites précédemment.}

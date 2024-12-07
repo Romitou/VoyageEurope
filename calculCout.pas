@@ -8,9 +8,9 @@ function calculDureeTransport(distance: Real; transport: TTransport): Integer;
 function calculCoutTransport(deplacement: TDeplacement): Real;
 function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
 procedure calculDistanceTotal(var voyage: TVoyage);
-procedure coutTotal(var voyage: TVoyage; criteres : TCriteres);
+procedure coutTotal(var voyage: TVoyage; criteres: TCriteres);
 procedure calculDistanceTransports(var voyage: TVoyage);
-procedure coutCarbone(var voyage: TVoyage; criteres : TCriteres);
+procedure coutCarbone(var voyage: TVoyage; criteres: TCriteres);
 
 implementation
 
@@ -58,7 +58,7 @@ end;
     @param(voyage Voyage généré par le programme)
     @param(criteres Critères de recherche du voyage)
 }
-procedure coutTotal(var voyage: TVoyage; criteres : TCriteres);
+procedure coutTotal(var voyage: TVoyage; criteres: TCriteres);
 var i: Integer;
     cout, coutEtape: Real;
 begin
@@ -74,11 +74,11 @@ begin
 
     // Prise en compte de l'hébergement dans le cas économique ou non
     if criteres.coeffCout = COEFF_COUT_FINAL then
-        cout:= cout + length(voyage.planning)*HOTEL_BUDGET
+        cout := cout + length(voyage.planning) * HOTEL_BUDGET
     else
-        cout:= cout + length(voyage.planning)*HOTEL_NORMAL;
+        cout := cout + length(voyage.planning) * HOTEL_NORMAL;
 
-    voyage.coutTotal := cout*criteres.nbVoyageurs;
+    voyage.coutTotal := cout * criteres.nbVoyageurs;
 end;
 
 { Cette fonction calcule le coût total des déplacements effectués durant le voyage, selon les transports utilsées (train, ou bien train et avion).
