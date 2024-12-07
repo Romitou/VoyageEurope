@@ -116,7 +116,7 @@ begin
     // Il est possible que la génération du voyage ait échoué
     if voyage.erreur then
     begin
-        writeln('⚠️ Une erreur est survenue lors de la génération du voyage :');
+        writeln('⚠️  Une erreur est survenue lors de la génération du voyage :');
         writeln(voyage.message);
         exit;
     end;

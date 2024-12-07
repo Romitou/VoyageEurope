@@ -84,6 +84,13 @@ procedure choixDuree(var choix: TCriteres; listePays: TEurope);
 var dureeMinimale: Integer;
 begin
     dureeMinimale := calculDureeMinimale(choix, listePays);
+    if dureeMinimale = -1 then 
+    begin
+        writeln('⚠️  Attention : aucun itinéraire n''a été trouvé pour les critères renseignés.');
+        if choix.modeTransport = TrainSeul then
+            writeln('> Si vous voyagez en train, essayez de sélectionner un transport en avion.');
+        writeln();
+    end;
     repeat
         writeln('🛏️ Combien de jours souhaitez-vous voyager (au maximum) ?');
         writeln('👉 La durée minimale de votre voyage est de ', dureeMinimale, ' jours.');
