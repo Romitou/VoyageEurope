@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>All Identifiers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="PasDoc 0.16.0-snapshot">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<div class="container"><div class="navigation">
+<ul><li><a href="AllUnits.html">Units</a></li><li><a href="ClassHierarchy.html">Class Hierarchy</a></li><li><a href="AllClasses.html">Classes, Interfaces, Objects and Records</a></li><li><a href="AllTypes.html">Types</a></li><li><a href="AllVariables.html">Variables</a></li><li><a href="AllConstants.html">Constants</a></li><li><a href="AllFunctions.html">Functions and Procedures</a></li><li><a href="AllIdentifiers.html">Identifiers</a></li></ul></div><div class="content">
+<h1 class="allitems">All Identifiers</h1>
+<table class="itemstable wide_list">
+<tr class="listheader">
+<th class="itemname">Name</th>
+<th class="itemunit">Unit</th>
+<th class="itemdesc">Description</th>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="afficherVoyage.html#afficher-TVoyage-TCriteres-TEurope-">afficher</a></td>
+<td class="itemunit"><a class="bold" href="afficherVoyage.html">afficherVoyage</a></td>
+<td class="itemdesc"><p>Procédure permettant l'affichage de l'intégralité du voyage, avec pour chaque journée le trajet effectué et sa durée, la ville d'arrivée, puis une liste d'activités suggérées à l'utilisateur relativement à ses attentes avec le prix et la durée de chaque activité. La procédure affiche également un message d'alerte en cas d'erreur.   </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="afficherVoyage.html#afficherInfos-TVoyage-TCriteres-">afficherInfos</a></td>
+<td class="itemunit"><a class="bold" href="afficherVoyage.html">afficherVoyage</a></td>
+<td class="itemdesc"><p>Cette procédure permet d'afficher dans le terminal les informations relatives au voyage proposé par le programme (durée du séjour, coût total et distance total parcourue). En cas de dépassement du coût maximal rentré par l'utilisateur en début de programme, la procédure envoie un message d'alerte signalant la différence avec le budget rensigné.  </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="calculCout.html#calculCoutTransport-TDeplacement-">calculCoutTransport</a></td>
+<td class="itemunit"><a class="bold" href="calculCout.html">calculCout</a></td>
+<td class="itemdesc"><p>Cette fonction calcule le coût total des déplacements effectués durant le voyage, selon les transports utilsées (train, ou bien train et avion). Les détails des coefficients utilisés pour le calcul du coût sont disponibles en commentaire.  </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="calculCout.html#calculDistanceTotal-TVoyage-">calculDistanceTotal</a></td>
+<td class="itemunit"><a class="bold" href="calculCout.html">calculCout</a></td>
+<td class="itemdesc"><p>Cette procédure calcule la distance totale parcourue durant le voyage proposé à l'utilisateur </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="calculCout.html#calculDistanceTransports-TVoyage-">calculDistanceTransports</a></td>
+<td class="itemunit"><a class="bold" href="calculCout.html">calculCout</a></td>
+<td class="itemdesc"><p>Procédure permettant de calculer à la fois la dicstanec parcourue en train et la distance parcourue en avion au cours du voyage, utile pour le calcul du coût carbone du voyage. </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="calculCout.html#calculDuneDistance-Real-Real-Real-Real-">calculDuneDistance</a></td>
+<td class="itemunit"><a class="bold" href="calculCout.html">calculCout</a></td>
+<td class="itemdesc"><p>Fonction permettant de calculer la distance séparant deux points de latitude et longitude connues. Source : <a href="https://stackoverflow.com/a/21623206/14141878">https://stackoverflow.com/a/21623206/14141878</a>     </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="genererVoyage.html#calculDureeMinimale-TCriteres-TEurope-">calculDureeMinimale</a></td>
+<td class="itemunit"><a class="bold" href="genererVoyage.html">genererVoyage</a></td>
+<td class="itemdesc"><p>Permet de calculer la durée minimale du voyage avec les critères renseignés, qui correspond à 1 jour pour 1 pays   </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="calculCout.html#calculDureeTransport-Real-TTransport-">calculDureeTransport</a></td>
+<td class="itemunit"><a class="bold" href="calculCout.html">calculCout</a></td>
+<td class="itemdesc"><p>Cette fonction calcule la durée d'un déplacement. Cette dernière sera alors utilisée dans le terminal avec son déplacement associé.   </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="calculItineraire.html#calculerItineraire-TEurope-TPays-TPays-TMode-">calculerItineraire</a></td>
+<td class="itemunit"><a class="bold" href="calculItineraire.html">calculItineraire</a></td>
+<td class="itemdesc"><p>Permet de calculer un itinéraire entre deux pays avec l'algorithme de Dijkstra     </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="chargerDonnees.html#chargerEurope">chargerEurope</a></td>
+<td class="itemunit"><a class="bold" href="chargerDonnees.html">chargerDonnees</a></td>
+<td class="itemdesc"><p>Charge l'ensemble des pays et activités associées </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#COEFF_ACT_FINAL">COEFF_ACT_FINAL</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coefficient final pour les préférences</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="constantes.html#COEFF_ACT_INITIAL">COEFF_ACT_INITIAL</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coefficient initial pour les préférences</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#COEFF_CLIMAT_FINAL">COEFF_CLIMAT_FINAL</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coefficient final pour le climat</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="constantes.html#COEFF_CLIMAT_INITIAL">COEFF_CLIMAT_INITIAL</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coefficient initial pour le climat</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#COEFF_COUT_FINAL">COEFF_COUT_FINAL</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coefficient final pour le coût</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="constantes.html#COEFF_COUT_INITIAL">COEFF_COUT_INITIAL</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coefficient initial pour le coût</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#COEFF_PREF_MAX">COEFF_PREF_MAX</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coefficient maximum pour la pondération des préférences</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="constantes.html#COEFF_PREF_MIN">COEFF_PREF_MIN</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coefficient minimum pour la pondération des préférences</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="calculItineraire.html#convertirEuropeAdjacence-TEurope-TMode-">convertirEuropeAdjacence</a></td>
+<td class="itemunit"><a class="bold" href="calculItineraire.html">calculItineraire</a></td>
+<td class="itemdesc"><p>Permet de convertir une liste de pays en une liste d'adjacence pour l'algorithme de Dijkstra. Deux modes de transport sont possibles : Train seul ou Train et Avion. Dans le second cas, les pays reliés par un vol direct sont également reliés directement.   </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="calculCout.html#coutCarbone-TVoyage-TCriteres-">coutCarbone</a></td>
+<td class="itemunit"><a class="bold" href="calculCout.html">calculCout</a></td>
+<td class="itemdesc"><p>Cette procédure calcul le coût carbone du voyage (kg de CO2 émis). Celui-ci sera affiché dans le terminal en fin de programme. </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="calculCout.html#coutTotal-TVoyage-TCriteres-">coutTotal</a></td>
+<td class="itemunit"><a class="bold" href="calculCout.html">calculCout</a></td>
+<td class="itemdesc"><p>Procédure calculant le coût total du voyage, en prenant en compte le coût des transports et le coût des activités.  </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="constantes.html#COUT_MAX">COUT_MAX</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Utilisé dans la parabole de calcul du score en fonction du coût</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="choixCriteres.html#demanderCriteres-TCriteres-TEurope-">demanderCriteres</a></td>
+<td class="itemunit"><a class="bold" href="choixCriteres.html">choixCriteres</a></td>
+<td class="itemdesc"><p>Procédure globale regroupant l'ensemble des sous-procédures décrites précédemment.  </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="utils.html#demanderEntier">demanderEntier</a></td>
+<td class="itemunit"><a class="bold" href="utils.html">utils</a></td>
+<td class="itemdesc"><p>Permet de demander un entier à l'utilisateur, et de répéter la demande tant que l'utilisateur n'entre pas un entier </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#DIVISION_SCORE">DIVISION_SCORE</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coefficient de division du score des pays visités</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="constantes.html#EMISSION_CO2_AVION">EMISSION_CO2_AVION</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Emission de CO2 par km en avion</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#EMISSION_CO2_TRAIN">EMISSION_CO2_TRAIN</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Emission de CO2 par km en train</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="genererVoyage.html#generer-TCriteres-TEurope-">generer</a></td>
+<td class="itemunit"><a class="bold" href="genererVoyage.html">genererVoyage</a></td>
+<td class="itemdesc"><p>Permet de remplir tous les champs de voyage, prêt à être affiché   </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#HEURES_PAR_JOUR">HEURES_PAR_JOUR</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Nombre d'heures par jour dédiées aux activités</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="constantes.html#HOTEL_BUDGET">HOTEL_BUDGET</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coût d'une nuit d'hôtel dans un hôtel économique</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#HOTEL_NORMAL">HOTEL_NORMAL</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Coût d'une nuit d'hôtel dans un hôtel normal</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="dijkstra.html#INFINITY">INFINITY</a></td>
+<td class="itemunit"><a class="bold" href="dijkstra.html">dijkstra</a></td>
+<td class="itemdesc"><p>L'infini est la valeur maximale d'un entier (pour les distances infinies)</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#INTERVALLE_TEMP_FINAL">INTERVALLE_TEMP_FINAL</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Intervalle de température final</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="constantes.html#INTERVALLE_TEMP_INITIAL">INTERVALLE_TEMP_INITIAL</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Intervalle de température initial</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#MODE_DEBUG">MODE_DEBUG</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Si vrai, des messages de debug seront affichés dans la console</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="choixCriteres.html#modifierCriteres-TCriteres-TEurope-Boolean-">modifierCriteres</a></td>
+<td class="itemunit"><a class="bold" href="choixCriteres.html">choixCriteres</a></td>
+<td class="itemdesc"><p>Permet à l'utilisateur de modifier ses critères de voyage.   </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="constantes.html#NB_ACT_PAR_JOUR">NB_ACT_PAR_JOUR</a></td>
+<td class="itemunit"><a class="bold" href="constantes.html">constantes</a></td>
+<td class="itemdesc"><p>Nombre d'activités par jour</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="score.html#paysVisites-TEurope-TEurope-">paysVisites</a></td>
+<td class="itemunit"><a class="bold" href="score.html">score</a></td>
+<td class="itemdesc"><p>Permet de calculer le nouveau score des pays traversés à l'aller, en les divisant par DIVISION_SCORE  </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="score.html#poidsChemin-TPays-TPays-">poidsChemin</a></td>
+<td class="itemunit"><a class="bold" href="score.html">score</a></td>
+<td class="itemdesc"><p>Permet de calculer le poids du chemin entre deux pays, en pourcentage, basé sur la moyenne des scores des deux pays   </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="score.html#scoreActivite-arrayofTPref-Real-TActivite-">scoreActivite</a></td>
+<td class="itemunit"><a class="bold" href="score.html">score</a></td>
+<td class="itemdesc"><p>Permet de calculer le score d'une activité en pourcentage, basé sur le respect des préférences et éventuellement du coût de l'activité   </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="score.html#scoreActivitePays-TPays-TCriteres-">scoreActivitePays</a></td>
+<td class="itemunit"><a class="bold" href="score.html">score</a></td>
+<td class="itemdesc"><p>Permet de calculer le score lié aux activités du pays, en pourcentage, basé sur la moyenne des scores des nbActParJour meilleures activités    </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="score.html#scorePays-TCriteres-TPays-">scorePays</a></td>
+<td class="itemunit"><a class="bold" href="score.html">score</a></td>
+<td class="itemdesc"><p>Permet de calculer le score d'un pays, en pourcentage, basé sur la moyenne pondérée entre le score des activités du pays et le score du climat     ) </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="dijkstra.html#shortestPath-TAdjacenceListe-TNoeud-TNoeud-TNoeudList-TDistance-">shortestPath</a></td>
+<td class="itemunit"><a class="bold" href="dijkstra.html">dijkstra</a></td>
+<td class="itemdesc"><p>Calcule le chemin le plus court entre deux noeuds d'un graphe pondéré par des distances positives avec l'algorithme de Dijkstra Source : <a href="https://github.com/dmahugh/dijkstra-algorithm/blob/master/dijkstra_algorithm.py">https://github.com/dmahugh/dijkstra-algorithm/blob/master/dijkstra_algorithm.py</a>     </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="utils.html#splitLigneCsv-string-char-">splitLigneCsv</a></td>
+<td class="itemunit"><a class="bold" href="utils.html">utils</a></td>
+<td class="itemdesc"><p>Permet de séparer une ligne CSV en un tableau de chaînes de caractères. Exemple : splitLigneCsv('France,Paris,&quot;FR,DE,IT&quot;', ',') renvoie ['France', 'Paris', 'FR,DE,IT']   </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.TActivite.html">TActivite</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Activité touristique</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TActivites">TActivites</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Liste d'activités</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="dijkstra.html#TAdjacenceListe">TAdjacenceListe</a></td>
+<td class="itemunit"><a class="bold" href="dijkstra.html">dijkstra</a></td>
+<td class="itemdesc"><p>Liste d'adjacence d'un graphe pondéré (liste des voisins et des distances)</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TArrayFileActivite">TArrayFileActivite</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Liste d'activités dans un fichier</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TArrayFilePays">TArrayFilePays</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Liste de pays dans un fichier</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.TCriteres.html">TCriteres</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Critères de recherche du voyage</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.TDeplacement.html">TDeplacement</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Déplacement entre deux pays</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="dijkstra.html#TDistance">TDistance</a></td>
+<td class="itemunit"><a class="bold" href="dijkstra.html">dijkstra</a></td>
+<td class="itemdesc"><p>La distance entre deux noeuds (peut servir pour les poids des arêtes)</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="dijkstra.html#TDistanceDict">TDistanceDict</a></td>
+<td class="itemunit"><a class="bold" href="dijkstra.html">dijkstra</a></td>
+<td class="itemdesc"><p>Liste des distances entre les noeuds</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.TEtape.html">TEtape</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Étape du voyage</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TEtapes">TEtapes</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Liste d'étapes</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TEurope">TEurope</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Liste de pays européens</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TExperience">TExperience</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Expérience de voyage (économique, écologique, respect des températures, respect des activités)</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.TFileActivite.html">TFileActivite</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Représentation d'une activité dans un fichier</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.TFilePays.html">TFilePays</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Représentation d'un pays dans un fichier</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.TItineraireResult.html">TItineraireResult</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Résultat de la recherche d'itinéraire avec Dijsktra</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.TJournee.html">TJournee</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Journée du voyage</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TJournees">TJournees</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Liste de journées</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.TMenu.html">TMenu</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Type de menu</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TMenus">TMenus</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Liste de menus</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TMode">TMode</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Mode de transport (train seul ou train et avion)</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TMois">TMois</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Mois de l'année</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="dijkstra.html#TNoeud">TNoeud</a></td>
+<td class="itemunit"><a class="bold" href="dijkstra.html">dijkstra</a></td>
+<td class="itemdesc"><p>Un noeud est représenté par un entier (son identifiant)</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="dijkstra.html#TNoeudList">TNoeudList</a></td>
+<td class="itemunit"><a class="bold" href="dijkstra.html">dijkstra</a></td>
+<td class="itemdesc"><p>Liste des noeuds d'un graphe</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.TPays.html">TPays</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Pays européen</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="dijkstra.html#TPrecedentDict">TPrecedentDict</a></td>
+<td class="itemunit"><a class="bold" href="dijkstra.html">dijkstra</a></td>
+<td class="itemdesc"><p>Liste des noeuds précédents (pour retrouver le chemin)</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TPref">TPref</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Préférences de l'utilisateur pour les activités</p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="score.html#triActPays-TPays-">triActPays</a></td>
+<td class="itemunit"><a class="bold" href="score.html">score</a></td>
+<td class="itemdesc"><p>Permet de remplir le champ ordreAct dans un pays, qui stocke les indices des activités du pays dans l'ordre du meilleur score au moins bon </p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="utils.html#trouverIndexPays-String-TEurope-">trouverIndexPays</a></td>
+<td class="itemunit"><a class="bold" href="utils.html">utils</a></td>
+<td class="itemdesc"><p>Permet de trouver l'index d'un pays dans un tableau de pays   </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="voyageTypes.html#TTransport">TTransport</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Type de transport (train ou avion)</p></td>
+</tr>
+<tr class="list">
+<td class="itemname"><a class="bold" href="voyageTypes.TVoyage.html">TVoyage</a></td>
+<td class="itemunit"><a class="bold" href="voyageTypes.html">voyageTypes</a></td>
+<td class="itemdesc"><p>Voyage généré par le programme</p></td>
+</tr>
+</table>
+<hr><span class="appinfo"><em>Generated by <a href="https://pasdoc.github.io/">PasDoc 0.16.0-snapshot</a>. </em>
+</span>
+</div></div></body></html>

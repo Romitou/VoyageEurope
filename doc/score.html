@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>score</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="PasDoc 0.16.0-snapshot">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<div class="container"><div class="navigation">
+<ul><li><a href="AllUnits.html">Units</a></li><li><a href="ClassHierarchy.html">Class Hierarchy</a></li><li><a href="AllClasses.html">Classes, Interfaces, Objects and Records</a></li><li><a href="AllTypes.html">Types</a></li><li><a href="AllVariables.html">Variables</a></li><li><a href="AllConstants.html">Constants</a></li><li><a href="AllFunctions.html">Functions and Procedures</a></li><li><a href="AllIdentifiers.html">Identifiers</a></li></ul></div><div class="content">
+<h1 class="unit">Unit score</h1>
+<div class="sections">
+<div class="one_section"><a class="section" href="#PasDoc-Description">Description</a></div><div class="one_section">Uses</div><div class="one_section">Classes, Interfaces, Objects and Records</div><div class="one_section"><a class="section" href="#PasDoc-FuncsProcs">Functions and Procedures</a></div><div class="one_section">Types</div><div class="one_section">Constants</div><div class="one_section">Variables</div></div>
+<span id="PasDoc-Description"></span><h2 class="description">Description</h2>
+<p>
+Permet de calculer les scores des activités, des pays et des chemins, en fonction des préférences de l'utilisateur</p>
+<span id="PasDoc-Uses"></span><h2 class="overview">Overview</h2>
+<span id="PasDoc-FuncsProcs"></span><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>procedure <strong><a href="score.html#scoreActivite-arrayofTPref-Real-TActivite-">scoreActivite</a></strong>(pref: array of <a href="voyageTypes.html#TPref">TPref</a>; coeffCout: Real; var activite: <a href="voyageTypes.TActivite.html">TActivite</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <strong><a href="score.html#triActPays-TPays-">triActPays</a></strong>(var pays: <a href="voyageTypes.TPays.html">TPays</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <strong><a href="score.html#scoreActivitePays-TPays-TCriteres-">scoreActivitePays</a></strong>(pays: <a href="voyageTypes.TPays.html">TPays</a>; criteres: <a href="voyageTypes.TCriteres.html">TCriteres</a>): Real;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <strong><a href="score.html#scorePays-TCriteres-TPays-">scorePays</a></strong>(criteres: <a href="voyageTypes.TCriteres.html">TCriteres</a>; var pays: <a href="voyageTypes.TPays.html">TPays</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <strong><a href="score.html#poidsChemin-TPays-TPays-">poidsChemin</a></strong>(pays1: <a href="voyageTypes.TPays.html">TPays</a>; pays2: <a href="voyageTypes.TPays.html">TPays</a>): Real;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <strong><a href="score.html#paysVisites-TEurope-TEurope-">paysVisites</a></strong>(inputPays: <a href="voyageTypes.html#TEurope">TEurope</a>; var europe: <a href="voyageTypes.html#TEurope">TEurope</a>);</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="scoreActivite-arrayofTPref-Real-TActivite-"></span><code>procedure <strong>scoreActivite</strong>(pref: array of <a href="voyageTypes.html#TPref">TPref</a>; coeffCout: Real; var activite: <a href="voyageTypes.TActivite.html">TActivite</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Permet de calculer le score d'une activité en pourcentage, basé sur le respect des préférences et éventuellement du coût de l'activité   </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>pref</dt>
+<dd>Le tableau des préférences choisies</dd>
+<dt>coeffCout</dt>
+<dd>Le coefficient qui permet de calculer la moyenne pondérée entre le scorePref et le scoreCout</dd>
+<dt>europe</dt>
+<dd>Le tableau de pays dans lequel chercher</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="triActPays-TPays-"></span><code>procedure <strong>triActPays</strong>(var pays: <a href="voyageTypes.TPays.html">TPays</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Permet de remplir le champ ordreAct dans un pays, qui stocke les indices des activités du pays dans l'ordre du meilleur score au moins bon </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>pays</dt>
+<dd>Le pays concerné</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="scoreActivitePays-TPays-TCriteres-"></span><code>function <strong>scoreActivitePays</strong>(pays: <a href="voyageTypes.TPays.html">TPays</a>; criteres: <a href="voyageTypes.TCriteres.html">TCriteres</a>): Real;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Permet de calculer le score lié aux activités du pays, en pourcentage, basé sur la moyenne des scores des nbActParJour meilleures activités    </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>pays</dt>
+<dd>Le pays concerné</dd>
+<dt>criteres</dt>
+<dd>Les choix de l'utilisateur</dd>
+<dt>nbActParJour</dt>
+<dd>Nombre d'activités considérées pour le calcul</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">Le score en pourcentage</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="scorePays-TCriteres-TPays-"></span><code>procedure <strong>scorePays</strong>(criteres: <a href="voyageTypes.TCriteres.html">TCriteres</a>; var pays: <a href="voyageTypes.TPays.html">TPays</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Permet de calculer le score d'un pays, en pourcentage, basé sur la moyenne pondérée entre le score des activités du pays et le score du climat     ) </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>coeffAct</dt>
+<dd>Le pays concerné</dd>
+<dt>coeffClim</dt>
+<dd>Les choix de l'utilisateur</dd>
+<dt>criteres</dt>
+<dd>Les choix de l'utilisateur</dd>
+<dt>nbActParJour</dt>
+<dd>Nombre d'activités considérées pour le calcul</dd>
+<dt>intervalleTemp</dt>
+<dd>Fourchette de températures considérées</dd>
+<dt>pays</dt>
+<dd>Le pays concerné</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="poidsChemin-TPays-TPays-"></span><code>function <strong>poidsChemin</strong>(pays1: <a href="voyageTypes.TPays.html">TPays</a>; pays2: <a href="voyageTypes.TPays.html">TPays</a>): Real;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Permet de calculer le poids du chemin entre deux pays, en pourcentage, basé sur la moyenne des scores des deux pays   </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>pays1</dt>
+<dd>Permier pays</dd>
+<dt>pays2</dt>
+<dd>Deuxième pays</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">Le score en pourcentage</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="paysVisites-TEurope-TEurope-"></span><code>procedure <strong>paysVisites</strong>(inputPays: <a href="voyageTypes.html#TEurope">TEurope</a>; var europe: <a href="voyageTypes.html#TEurope">TEurope</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Permet de calculer le nouveau score des pays traversés à l'aller, en les divisant par DIVISION_SCORE  </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>inputPays</dt>
+<dd>Les pays traversés pendant le trajet aller</dd>
+<dt>europe</dt>
+<dd>Tous les pays</dd>
+</dl>
+</td></tr>
+</table>
+<hr><span class="appinfo"><em>Generated by <a href="https://pasdoc.github.io/">PasDoc 0.16.0-snapshot</a>. </em>
+</span>
+</div></div></body></html>

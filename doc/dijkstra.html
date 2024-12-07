@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>dijkstra</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="PasDoc 0.16.0-snapshot">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<div class="container"><div class="navigation">
+<ul><li><a href="AllUnits.html">Units</a></li><li><a href="ClassHierarchy.html">Class Hierarchy</a></li><li><a href="AllClasses.html">Classes, Interfaces, Objects and Records</a></li><li><a href="AllTypes.html">Types</a></li><li><a href="AllVariables.html">Variables</a></li><li><a href="AllConstants.html">Constants</a></li><li><a href="AllFunctions.html">Functions and Procedures</a></li><li><a href="AllIdentifiers.html">Identifiers</a></li></ul></div><div class="content">
+<h1 class="unit">Unit dijkstra</h1>
+<div class="sections">
+<div class="one_section"><a class="section" href="#PasDoc-Description">Description</a></div><div class="one_section">Uses</div><div class="one_section">Classes, Interfaces, Objects and Records</div><div class="one_section"><a class="section" href="#PasDoc-FuncsProcs">Functions and Procedures</a></div><div class="one_section"><a class="section" href="#PasDoc-Types">Types</a></div><div class="one_section"><a class="section" href="#PasDoc-Constants">Constants</a></div><div class="one_section">Variables</div></div>
+<span id="PasDoc-Description"></span><h2 class="description">Description</h2>
+<p>
+Implémentation de l'algorithme de Dijkstra</p>
+<span id="PasDoc-Uses"></span><h2 class="overview">Overview</h2>
+<span id="PasDoc-FuncsProcs"></span><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>procedure <strong><a href="dijkstra.html#shortestPath-TAdjacenceListe-TNoeud-TNoeud-TNoeudList-TDistance-">shortestPath</a></strong>(listeAdjacence: <a href="dijkstra.html#TAdjacenceListe">TAdjacenceListe</a>; noeudDepart, noeudFin: <a href="dijkstra.html#TNoeud">TNoeud</a>; var chemin: <a href="dijkstra.html#TNoeudList">TNoeudList</a>; var distance: <a href="dijkstra.html#TDistance">TDistance</a>);</code></td>
+</tr>
+</table>
+<span id="PasDoc-Types"></span><h3 class="summary">Types</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><strong><a href="dijkstra.html#TNoeud">TNoeud</a></strong> = Integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><strong><a href="dijkstra.html#TDistance">TDistance</a></strong> = Integer;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><strong><a href="dijkstra.html#TAdjacenceListe">TAdjacenceListe</a></strong> = array of array of record
+        voisin: <a href="dijkstra.html#TNoeud">TNoeud</a>;
+        distance: <a href="dijkstra.html#TDistance">TDistance</a>;
+    end;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><strong><a href="dijkstra.html#TNoeudList">TNoeudList</a></strong> = array of <a href="dijkstra.html#TNoeud">TNoeud</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><strong><a href="dijkstra.html#TDistanceDict">TDistanceDict</a></strong> = array of <a href="dijkstra.html#TDistance">TDistance</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><strong><a href="dijkstra.html#TPrecedentDict">TPrecedentDict</a></strong> = array of <a href="dijkstra.html#TNoeud">TNoeud</a>;</code></td>
+</tr>
+</table>
+<span id="PasDoc-Constants"></span><h3 class="summary">Constants</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><strong><a href="dijkstra.html#INFINITY">INFINITY</a></strong> = MaxInt;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="shortestPath-TAdjacenceListe-TNoeud-TNoeud-TNoeudList-TDistance-"></span><code>procedure <strong>shortestPath</strong>(listeAdjacence: <a href="dijkstra.html#TAdjacenceListe">TAdjacenceListe</a>; noeudDepart, noeudFin: <a href="dijkstra.html#TNoeud">TNoeud</a>; var chemin: <a href="dijkstra.html#TNoeudList">TNoeudList</a>; var distance: <a href="dijkstra.html#TDistance">TDistance</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Calcule le chemin le plus court entre deux noeuds d'un graphe pondéré par des distances positives avec l'algorithme de Dijkstra Source : <a href="https://github.com/dmahugh/dijkstra-algorithm/blob/master/dijkstra_algorithm.py">https://github.com/dmahugh/dijkstra-algorithm/blob/master/dijkstra_algorithm.py</a>     </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>listeAdjacence</dt>
+<dd>Liste d'adjacence du graphe</dd>
+<dt>noeudDepart</dt>
+<dd>Noeud de départ</dd>
+<dt>noeudFin</dt>
+<dd>Noeud de fin</dd>
+<dt>chemin</dt>
+<dd>Chemin le plus court</dd>
+<dt>distance</dt>
+<dd>Distance du chemin le plus court</dd>
+</dl>
+</td></tr>
+</table>
+<h3 class="detail">Types</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="TNoeud"></span><code><strong>TNoeud</strong> = Integer;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Un noeud est représenté par un entier (son identifiant)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="TDistance"></span><code><strong>TDistance</strong> = Integer;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+La distance entre deux noeuds (peut servir pour les poids des arêtes)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="TAdjacenceListe"></span><code><strong>TAdjacenceListe</strong> = array of array of record
+        voisin: <a href="dijkstra.html#TNoeud">TNoeud</a>;
+        distance: <a href="dijkstra.html#TDistance">TDistance</a>;
+    end;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Liste d'adjacence d'un graphe pondéré (liste des voisins et des distances)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="TNoeudList"></span><code><strong>TNoeudList</strong> = array of <a href="dijkstra.html#TNoeud">TNoeud</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Liste des noeuds d'un graphe</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="TDistanceDict"></span><code><strong>TDistanceDict</strong> = array of <a href="dijkstra.html#TDistance">TDistance</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Liste des distances entre les noeuds</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="TPrecedentDict"></span><code><strong>TPrecedentDict</strong> = array of <a href="dijkstra.html#TNoeud">TNoeud</a>;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Liste des noeuds précédents (pour retrouver le chemin)</p>
+</td></tr>
+</table>
+<h3 class="detail">Constants</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="INFINITY"></span><code><strong>INFINITY</strong> = MaxInt;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+L'infini est la valeur maximale d'un entier (pour les distances infinies)</p>
+</td></tr>
+</table>
+<hr><span class="appinfo"><em>Generated by <a href="https://pasdoc.github.io/">PasDoc 0.16.0-snapshot</a>. </em>
+</span>
+</div></div></body></html>

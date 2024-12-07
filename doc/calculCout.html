@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>calculCout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="PasDoc 0.16.0-snapshot">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<div class="container"><div class="navigation">
+<ul><li><a href="AllUnits.html">Units</a></li><li><a href="ClassHierarchy.html">Class Hierarchy</a></li><li><a href="AllClasses.html">Classes, Interfaces, Objects and Records</a></li><li><a href="AllTypes.html">Types</a></li><li><a href="AllVariables.html">Variables</a></li><li><a href="AllConstants.html">Constants</a></li><li><a href="AllFunctions.html">Functions and Procedures</a></li><li><a href="AllIdentifiers.html">Identifiers</a></li></ul></div><div class="content">
+<h1 class="unit">Unit calculCout</h1>
+<div class="sections">
+<div class="one_section"><a class="section" href="#PasDoc-Description">Description</a></div><div class="one_section">Uses</div><div class="one_section">Classes, Interfaces, Objects and Records</div><div class="one_section"><a class="section" href="#PasDoc-FuncsProcs">Functions and Procedures</a></div><div class="one_section">Types</div><div class="one_section">Constants</div><div class="one_section">Variables</div></div>
+<span id="PasDoc-Description"></span><h2 class="description">Description</h2>
+<p>
+Calcul des différents coûts (carbone, monétaire, durée) des déplacements effectués durant le voyage</p>
+<span id="PasDoc-Uses"></span><h2 class="overview">Overview</h2>
+<span id="PasDoc-FuncsProcs"></span><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>function <strong><a href="calculCout.html#calculDureeTransport-Real-TTransport-">calculDureeTransport</a></strong>(distance: Real; transport: <a href="voyageTypes.html#TTransport">TTransport</a>): Integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <strong><a href="calculCout.html#calculCoutTransport-TDeplacement-">calculCoutTransport</a></strong>(deplacement: <a href="voyageTypes.TDeplacement.html">TDeplacement</a>): Real;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <strong><a href="calculCout.html#calculDuneDistance-Real-Real-Real-Real-">calculDuneDistance</a></strong>(lat1, lon1, lat2, lon2: Real): Real;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <strong><a href="calculCout.html#calculDistanceTotal-TVoyage-">calculDistanceTotal</a></strong>(var voyage: <a href="voyageTypes.TVoyage.html">TVoyage</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <strong><a href="calculCout.html#coutTotal-TVoyage-TCriteres-">coutTotal</a></strong>(var voyage: <a href="voyageTypes.TVoyage.html">TVoyage</a>; criteres: <a href="voyageTypes.TCriteres.html">TCriteres</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>procedure <strong><a href="calculCout.html#calculDistanceTransports-TVoyage-">calculDistanceTransports</a></strong>(var voyage: <a href="voyageTypes.TVoyage.html">TVoyage</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <strong><a href="calculCout.html#coutCarbone-TVoyage-TCriteres-">coutCarbone</a></strong>(var voyage: <a href="voyageTypes.TVoyage.html">TVoyage</a>; criteres: <a href="voyageTypes.TCriteres.html">TCriteres</a>);</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="calculDureeTransport-Real-TTransport-"></span><code>function <strong>calculDureeTransport</strong>(distance: Real; transport: <a href="voyageTypes.html#TTransport">TTransport</a>): Integer;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Cette fonction calcule la durée d'un déplacement. Cette dernière sera alors utilisée dans le terminal avec son déplacement associé.   </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>distance</dt>
+<dd>Distance du déplacement</dd>
+<dt>transport</dt>
+<dd>Moyen de transport utilisé</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">Durée du déplacement</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="calculCoutTransport-TDeplacement-"></span><code>function <strong>calculCoutTransport</strong>(deplacement: <a href="voyageTypes.TDeplacement.html">TDeplacement</a>): Real;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Cette fonction calcule le coût total des déplacements effectués durant le voyage, selon les transports utilsées (train, ou bien train et avion). Les détails des coefficients utilisés pour le calcul du coût sont disponibles en commentaire.  </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>deplacement</dt>
+<dd>Déplacement effectué</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">Coût du déplacement</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="calculDuneDistance-Real-Real-Real-Real-"></span><code>function <strong>calculDuneDistance</strong>(lat1, lon1, lat2, lon2: Real): Real;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Fonction permettant de calculer la distance séparant deux points de latitude et longitude connues. Source : <a href="https://stackoverflow.com/a/21623206/14141878">https://stackoverflow.com/a/21623206/14141878</a>     </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>lat1</dt>
+<dd>Latitude du premier point</dd>
+<dt>lon1</dt>
+<dd>Longitude du premier point</dd>
+<dt>lat2</dt>
+<dd>Latitude du second point</dd>
+<dt>lon2</dt>
+<dd>Longitude du second point</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">Distance en kilomètres entre les deux points</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="calculDistanceTotal-TVoyage-"></span><code>procedure <strong>calculDistanceTotal</strong>(var voyage: <a href="voyageTypes.TVoyage.html">TVoyage</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Cette procédure calcule la distance totale parcourue durant le voyage proposé à l'utilisateur </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>voyage</dt>
+<dd>Voyage généré par le programme</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="coutTotal-TVoyage-TCriteres-"></span><code>procedure <strong>coutTotal</strong>(var voyage: <a href="voyageTypes.TVoyage.html">TVoyage</a>; criteres: <a href="voyageTypes.TCriteres.html">TCriteres</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Procédure calculant le coût total du voyage, en prenant en compte le coût des transports et le coût des activités.  </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>voyage</dt>
+<dd>Voyage généré par le programme</dd>
+<dt>criteres</dt>
+<dd>Critères de recherche du voyage</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="calculDistanceTransports-TVoyage-"></span><code>procedure <strong>calculDistanceTransports</strong>(var voyage: <a href="voyageTypes.TVoyage.html">TVoyage</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Procédure permettant de calculer à la fois la dicstanec parcourue en train et la distance parcourue en avion au cours du voyage, utile pour le calcul du coût carbone du voyage. </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>voyage</dt>
+<dd>Voyage généré par le programme</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="coutCarbone-TVoyage-TCriteres-"></span><code>procedure <strong>coutCarbone</strong>(var voyage: <a href="voyageTypes.TVoyage.html">TVoyage</a>; criteres: <a href="voyageTypes.TCriteres.html">TCriteres</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Cette procédure calcul le coût carbone du voyage (kg de CO2 émis). Celui-ci sera affiché dans le terminal en fin de programme. </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>voyage</dt>
+<dd>Voyage généré par le programme</dd>
+</dl>
+</td></tr>
+</table>
+<hr><span class="appinfo"><em>Generated by <a href="https://pasdoc.github.io/">PasDoc 0.16.0-snapshot</a>. </em>
+</span>
+</div></div></body></html>
