@@ -1,16 +1,20 @@
+{ Programme de test de la fonction calculerItineraire }
 program testItineraire;
 
 uses calculItineraire, chargerDonnees, sysutils, strutils, utils, voyageTypes;
 
+// Structure de test
 type TTestCase = record
-        input: String;
-        expected: String;
-        output: String;
-        modeTransport: TMode;
+        input: String; // Entrée
+        expected: String; // Sortie attendue
+        output: String; // Sortie du programme
+        modeTransport: TMode; // Mode de transport
     end;
 
+// Tableau de tests
 type ArrayTestCase = array of TTestCase;
 
+// Affichage de l'itinéraire
 function afficherItineraire(result: TItineraireResult): String;
 var i: Integer;
 begin
@@ -18,15 +22,16 @@ begin
         afficherItineraire := ('Erreur : ' + result.message)
     else begin
         afficherItineraire := ('');
-        for i := 0 to High(result.itineraire) do
+        for i := 0 to length(result.itineraire) - 1 do
         begin
             afficherItineraire := afficherItineraire + (result.itineraire[i].nom);
-            if i < High(result.itineraire) then
+            if i < length(result.itineraire) - 1 then
                 afficherItineraire := afficherItineraire + (' -> ');
         end;
     end;
 end;
 
+// Création d'un test
 function creerTestCase(input, output: String; modeTransport: TMode): TTestCase;
 begin
     creerTestCase.input := input;
@@ -34,10 +39,11 @@ begin
     creerTestCase.modeTransport := modeTransport;
 end;
 
+// Recherche d'un pays dans la liste
 function trouverPays(nom: String; listePays: TEurope; var trouve: Boolean): TPays;
 var i: Integer;
 begin
-    for i := 0 to high(listePays) do
+    for i := 0 to length(listePays) - 1 do
         if listePays[i].nom = nom then
         begin
             trouverPays := listePays[i];
@@ -80,10 +86,13 @@ begin
     testCases[19] := creerTestCase('Danemark -> Portugal', 'Danemark -> Allemagne -> France -> Espagne -> Portugal', TrainSeul);
     testCases[20] := creerTestCase('Royaume-Uni -> France', 'Royaume-Uni -> France', TrainSeul);
 
+    // Chargement des données
     europe := chargerEurope();
+
+    // On dit que tous les tests ont réussi
     isFailed := false;
 
-    for i := 0 to high(testCases) do
+    for i := 0 to length(testCases) - 1 do
     begin
         writeln('Exécution du test : ', testCases[i].input);
         splitText := splitString(testCases[i].input, ' -> ');
@@ -104,11 +113,17 @@ begin
             continue;
         end;
 
+        // Calcul de l'itinéraire
         resultat := calculerItineraire(europe, paysDepart, paysArrivee, testCases[i].modeTransport);
         output := afficherItineraire(resultat);
+
         writeln('  Sortie attendue : ', testCases[i].output);
         writeln('   Sortie du test : ', output);
-        if output = testCases[i].output then writeln('✅ Test validé') else begin
+
+        // Comparaison des résultats
+        if output = testCases[i].output then
+            writeln('✅ Test validé')
+        else begin
             isFailed := true;
             writeln('❌ Test non réussi');
         end;
@@ -119,34 +134,4 @@ begin
         writeln('❌ Tests non réussis')
     else
         writeln('✅ Tous les tests ont été réussis');
-
-    // // Cas de test 1 : Itinéraire de la France à l'Allemagne
-    // Writeln('Cas de test 1 : France -> Allemagne');
-
-
-    // resultat := calculerItineraire(europe, paysDepart, paysArrivee);
-    // afficherItineraire(resultat);
-
-    // // Cas de test 2 : Itinéraire de la Belgique à l'Italie (chemin indirect)
-    // Writeln('Cas de test 2 : Belgique -> Italie');
-    // paysDepart := europe[1]; // Belgique
-    // paysArrivee.nom := 'Italie'; // Italie (non défini dans initialisation, pour test d'absence)
-    // resultat := calculerItineraire(europe, paysDepart, paysArrivee);
-    // afficherItineraire(resultat);
-
-    // // Cas de test 3 : Itinéraire de l'Espagne à la Suisse (chemin avec plusieurs étapes)
-    // Writeln('Cas de test 3 : Espagne -> Suisse');
-    // paysDepart := europe[4]; // Espagne
-    // paysArrivee := europe[3]; // Suisse
-    // resultat := calculerItineraire(europe, paysDepart, paysArrivee);
-    // afficherItineraire(resultat);
-
-    // // Cas de test 4 : Itinéraire où aucun chemin n'est possible
-    // Writeln('Cas de test 4 : Espagne -> Italie (non connectée)');
-    // paysDepart := europe[4]; // Espagne
-    // paysArrivee.nom := 'Italie'; // Italie (non connectée)
-    // resultat := calculerItineraire(europe, paysDepart, paysArrivee);
-    // afficherItineraire(resultat);
-
-    // Writeln('Tests terminés.');
 end.
