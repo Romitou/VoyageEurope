@@ -8,22 +8,12 @@ procedure afficherInfos(voyage: TVoyage; criteres: TCriteres);
 
 implementation
 
-// procedure debug(etapes: TEtapes);
-// var i,j:Integer;
-// begin
-//   for i := 0 to length(etapes) - 1 do
-//   begin
-//     writeln('Jour ', etapes[i].jour, ' :');
-//     for j := 0 to length(etapes[i].activite) - 1 do
-//     begin
-//       writeln(' - ', etapes[i].activite[j].nom);
-//     end;
-//   end;
-// end;
-
-{Cette procédure permet d'afficher dans le terminal les informations relatives au voyage proposé par le programme 
+{ Cette procédure permet d'afficher dans le terminal les informations relatives au voyage proposé par le programme 
 (durée du séjour, coût total et distance total parcourue). En cas de dépassement du coût maximal rentré par l'utilisateur 
-en début de programme, la procédure envoie un message d'alerte signalant la différence avec le budget rensigné.}
+en début de programme, la procédure envoie un message d'alerte signalant la différence avec le budget rensigné.
+    @param(voyage Voyage généré par le programme)
+    @param(criteres Critères de recherche du voyage)
+}
 procedure afficherInfos(voyage: TVoyage; criteres: TCriteres);
 begin
     writeln();
@@ -39,6 +29,10 @@ begin
     writeln();
 end;
 
+{ Une fois le voyage alternatif généré, cette procédure permet d'afficher dans le terminal les différences entre les deux voyages
+    @param(voyage Voyage généré par le programme)
+    @param(voyageBis Voyage alternatif à comparer)
+}
 procedure afficherComparaison(voyage: TVoyage; voyageBis: TVoyage);
 var premierTrajet, secondTrajet, signeTrain, signeAvion, signeCarbone, signeCout: String;
 begin
@@ -63,14 +57,20 @@ begin
 
     writeln('                     (', signeTrain, abs(voyage.kmTrain - voyageBis.kmTrain):5:1, ' km)      (', signeAvion, abs(voyage.kmAvion - voyageBis.kmAvion):5:1, ' km)      (', signeCarbone, abs(voyage.carbonImpact - voyageBis.carbonImpact):5:1, ' kg CO2)      (', signeCout, abs(voyage.coutTotal - voyageBis.coutTotal):7:1, ' euros)');
     writeln();
+
+    // Affichage de recommandations en fonction des différences entre les deux voyages
     if voyage.modeTransport = TrainEtAvion then
         writeln('🌱 Attention : en optant pour un voyage en train uniquement, vous pourriez rejeter ', (voyage.carbonImpact - voyageBis.carbonImpact):0:1, ' kg de CO2 de moins qu''en prenant l''avion.')
     else
         writeln('🌱 En optant pour ce voyage en train uniquement, vous rejeterez ', (voyageBis.carbonImpact - voyage.carbonImpact):0:1, ' kg de CO2 de moins qu''en prenant l''avion ! 👍');
 end;
 
-{ Cette procédure permet d'afficher le coût carbone du voyage dans le terminal. }
-procedure afficherImpactCarbone(voyage: TVoyage; criteres: TCriteres; europe: TEurope);
+{ Cette procédure permet d'afficher dans le terminal une comparaison entre deux voyages, l'un en train et l'autre en avion.
+    @param(voyage Voyage généré par le programme)
+    @param(criteres Critères de recherche du voyage)
+    @param(europe Liste des pays européens)
+}
+procedure afficherVoyageAlternatif(voyage: TVoyage; criteres: TCriteres; europe: TEurope);
 var dureeMinimale: Integer;
     criteresBis: TCriteres;
     voyageTrain: TVoyage;
@@ -82,6 +82,7 @@ begin
     begin
         voyageTrain := voyage;
         criteresBis.modeTransport := TrainEtAvion;
+
         voyageAvion := generer(criteresBis, europe);
         afficherComparaison(voyageTrain, voyageAvion);
     end
@@ -96,32 +97,23 @@ begin
 
         voyageTrain := generer(criteresBis, europe);
         afficherComparaison(voyageAvion, voyageTrain);
-
-        // writeln('A noter que votre voyage fait exclusivement en train rejeterait ', (voyage.carbonImpact - voyageBis.carbonImpact):4:0, ' kg de CO2 en moins par rapport à votre voyage.');
-        // writeln('Un autre voyage de ', length(voyageBis.planning) - length(voyage.planning), ' jours supplémentaires vous permettrait de réduire de la sorte le coût carbone de votre voyage');
     end;
-
-
-        // if voyage.carbonImpact < voyageBis.carbonImpact then
-        // begin
-        //     writeln('🚆 Votre voyage actuel rejette ', (voyageBis.carbonImpact - voyage.carbonImpact):4:0, ' kg de CO2 en moins par rapport à votre voyage en train et avion.');
-        //     writeln('🌟 Opter pour un voyage en train seul vous permettrait de réduire de la sorte le coût carbone de votre voyage.');
-        // end
-        // else begin
-        //     writeln('🚆 Votre voyage actuel rejette ', (voyage.carbonImpact - voyageBis.carbonImpact):4:0, ' kg de CO2 en moins par rapport à votre voyage en train seul.');
-        //     writeln('🌟 Opter pour un voyage en train et avion vous permettrait de réduire de la sorte le coût carbone de votre voyage.');
-        // end;
 end;
 
-procedure afficher(voyage: TVoyage; criteres: TCriteres; europe: TEurope);
-{Procédure permettant l'affichage de l'intégralité du voyage, avec pour chaque journée le trajet effectué et sa durée, 
+{ Procédure permettant l'affichage de l'intégralité du voyage, avec pour chaque journée le trajet effectué et sa durée, 
 la ville d'arrivée, puis une liste d'activités suggérées à l'utilisateur relativement à ses attentes avec le prix et 
-la durée de chaque activité. La procédure affiche également un message d'alerte en cas d'erreur.}
+la durée de chaque activité. La procédure affiche également un message d'alerte en cas d'erreur.
+    @param(voyage Voyage généré par le programme)
+    @param(criteres Critères de recherche du voyage)
+    @param(europe Liste des pays européens)
+}
+procedure afficher(voyage: TVoyage; criteres: TCriteres; europe: TEurope);
 var
     transportEmoji: String;
     i, j: Integer;
     etape: TEtape;
 begin
+    // Il est possible que la génération du voyage ait échoué
     if voyage.erreur then
     begin
         writeln('⚠️ Une erreur est survenue lors de la génération du voyage :');
@@ -133,13 +125,16 @@ begin
     writeln('===== PLANNING DU VOYAGE =====');
     writeln;
 
+    // On affiche le planning du voyage jour par jour
     for i := 0 to length(voyage.planning) - 1 do
     begin
         writeln('🗓️  Jour ', i + 1);
+        // On affiche les étapes de la journée
         for j := 0 to length(voyage.planning[i].etapes) - 1 do
         begin
             etape := voyage.planning[i].etapes[j];
 
+            // On affiche l'activité ou le déplacement
             if etape.estActivite then
                 writeln('> 🚩 ', etape.activite.nom, ' (', etape.activite.minutes, ' min - ', etape.activite.cout:0:0, ' euros)')
             else begin
@@ -148,6 +143,7 @@ begin
                     transportEmoji := '✈️ ';
                 writeln('> ', transportEmoji, ' Voyage depuis ', etape.deplacement.paysDepart.capitale, ' jusqu’à ', etape.deplacement.paysEtape.capitale, '.');
                 writeln('  📍 Arrivée à ', etape.deplacement.paysEtape.nom, ' (', etape.deplacement.paysEtape.capitale, ') - ', etape.deplacement.minutes, ' minutes');
+                // On précise si la journée est passée dans le pays de destination
                 if etape.deplacement.paysEtape.nom = criteres.paysArrivee.nom then
                     writeln('  🌟 Journée dans le pays de destination : ', etape.deplacement.paysEtape.nom, '.');
             end;
@@ -159,8 +155,9 @@ begin
             writeln('🏁 Fin de votre voyage !');
     end;
 
+    // Affichage des informations relatives au voyage
     afficherInfos(voyage, criteres);
-    afficherImpactCarbone(voyage, criteres, europe);
+    afficherVoyageAlternatif(voyage, criteres, europe);
 
     writeln();
 end;
