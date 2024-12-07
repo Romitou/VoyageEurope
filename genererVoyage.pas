@@ -96,7 +96,9 @@ begin
         if itineraire[indexPays - 1].nom = itineraire[indexPays].nom then
             continue;
 
-        // On détermine le temps maximal à passer dans le pays
+        // L'idée ici est de calculer le temps total pouvant être alloué aux transports et aux activités en fonction de la durée du voyage des critères
+        // Notons dureeTotale cette durée. Afin d'augmenter la quantité d'activités "préférées" (= meilleur score), il faudrait attribuer une durée dans
+        // chaque pays proportionnelle au score. CàD : dureePays = (scorePays/totalScores) * dureeTotale
         dureePays := round((itineraire[indexPays].score / totalScores) * dureeTotale);
         dureeActivites := 0;
 
