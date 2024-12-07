@@ -8,9 +8,12 @@ function calculDureeMinimale(criteres: TCriteres; europe: TEurope): Integer;
 
 implementation
 
-// L'idée ici serait de calculer le temps total pouvant être alloué aux transports et aux activités en fonction de la durée du voyage des critères
-// Notons dureeTotale cette durée. Afin d'augmenter la quantité d'activités "préférées" (= meilleur score), il faudrait attribuer une durée dans
-// chaque pays proportionnelle au score. CàD : dureePays = (scorePays/totalScores) * dureeTotale
+
+{ Permet de générer toutes les étapes du voyage, basé sur un calcul de durée totale dans un pays. Puis on attribue les meilleures activités dans le temps disponible
+    @param(itineraire Tous les pays traversés)
+    @param(criteres Les choix de l'utilisateur)
+    @return(Le tableau de toutes les étapes)
+}
 function genererEtapes(itineraire: TEurope; criteres: TCriteres): TEtapes;
 var
     dureePays, dureeTotale, dureeActivites: Integer;
@@ -35,6 +38,9 @@ begin
     for j := 1 to length(itineraire) - 1 do
     begin
         indexPays := trouverIndexPays(itineraire[j].nom, itineraire);
+        // L'idée ici serait de calculer le temps total pouvant être alloué aux transports et aux activités en fonction de la durée du voyage des critères
+        // Notons dureeTotale cette durée. Afin d'augmenter la quantité d'activités "préférées" (= meilleur score), il faudrait attribuer une durée dans
+        // chaque pays proportionnelle au score. CàD : dureePays = (scorePays/totalScores) * dureeTotale
         dureePays := round((itineraire[j].score / totalScores) * dureeTotale);
 
         dureeActivites := 0;
@@ -71,6 +77,7 @@ begin
         dureeActivites := dureeActivites + etapes[n].deplacement.minutes;
         n := n + 1;
 
+        //on ne choisit pas des activités déjà séléctionnées dans un pays où on serait déjà passé
         repeat
             while (nbAct < length(itineraire[j].activites)) and (activitesUtilisees[indexPays][itineraire[j].ordreAct[nbAct]]) do
                 nbAct := nbAct + 1;
@@ -93,6 +100,10 @@ begin
     genererEtapes := etapes;
 end;
 
+{ Permet de générer les journées à partir des étapes, utiliées pour afficher le voyage
+    @param(etapes Le tableau de toutes les étapes du voyage)
+    @return(Le tableau de toutes les journées du voyage)
+}
 function genererJournees(etapes: TEtapes): TJournees;
 var
     i, nJour, tempsAccumule, dureeEtape: Integer;
@@ -112,7 +123,8 @@ begin
         else
             dureeEtape := etapes[i].deplacement.minutes;
 
-        if tempsAccumule + dureeEtape <= 10 * 60 then // 10h
+        //Détermination des journées en fonction de la durée des étapes (déplacement et activités)
+        if tempsAccumule + dureeEtape <= HEURES_PAR_JOUR * 60 then
         begin
             setlength(journee.etapes, length(journee.etapes) + 1);
             journee.etapes[length(journee.etapes) - 1] := etapes[i];
@@ -141,6 +153,11 @@ begin
     genererJournees := journees;
 end;
 
+{ Permet de remplir tous les champs de voyage, prêt à être affiché 
+    @param(critères Les choix de l'utilisateur)
+    @param(europe Tous les pays)
+    @return(Le voyage complet)
+}
 function generer(criteres: TCriteres; europe: TEurope): TVoyage;
 var aller, retour: TItineraireResult;
     voyage: TVoyage;
@@ -159,7 +176,7 @@ begin
 
         triActPays(europe[i]);
 
-        //debug
+
         if MODE_DEBUG then
         begin
             for j := 0 to length(europe[i].ordreAct) - 1 do
@@ -179,7 +196,7 @@ begin
     for i := 0 to length(europe) - 1 do
     begin
         scorePays(criteres, europe[i]);
-        //debug
+
         if MODE_DEBUG then
             writeln(europe[i].nom, ' : ', europe[i].score);
     end;
@@ -203,6 +220,7 @@ begin
         for i := 0 to length(aller.itineraire) - 1 do writeln('- ', aller.itineraire[i].nom);
     end;
 
+    //On divise le score des pays dans lesquel on est déjà passé
     paysVisites(aller.itineraire, europe);
 
     if MODE_DEBUG then
@@ -231,8 +249,7 @@ begin
     setlength(voyage.itineraire, (length(aller.itineraire) + length(retour.itineraire)));
     for i := 0 to length(aller.itineraire) - 1 do
         voyage.itineraire[i] := aller.itineraire[i];
-    //il faudrait probablement retirer le premier pays de retour si on ne veut pas qu'il y ait deux fois le pays d'arrivée
-    //on peut faire ca en modifiant les indices en dessous et en réduisant la taille de itineraire de 1
+   
     for i := 0 to length(retour.itineraire) - 1 do
         voyage.itineraire[length(aller.itineraire) + i] := retour.itineraire[i];
 
@@ -249,6 +266,11 @@ begin
 end;
 
 
+{ Permet de calculer la durée minimale du voyage avec les critères renseignés, qui correspond à 1 jour pour 1 pays
+    @param(criteres Les choix de l'utilisateur)
+    @param(europe Tous les pays)
+    @return(La durée minimale)
+}
 function calculDureeMinimale(criteres: TCriteres; europe: TEurope): Integer;
 var aller, retour: TItineraireResult;
     i, j: Integer;
