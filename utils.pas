@@ -6,12 +6,12 @@ unit utils;
 interface
 uses sysutils, voyageTypes;
 
-{ Permet de trouver l'index d'un pays dans un tableau de pays
-    @param(nom Le nom du pays à chercher)
-    @param(europe Le tableau de pays dans lequel chercher)
-    @return(L'index du pays dans le tableau, ou -1 si le pays n'a pas été trouvé)
-}
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
+function splitLigneCsv(ligne: string; delimiteur: char): TStringArray;
+function demanderEntier(): Integer;
+
+implementation
+
 
 { Permet de séparer une ligne CSV en un tableau de chaînes de caractères. Exemple : splitLigneCsv('France,Paris,"FR,DE,IT"', ',') renvoie ['France', 'Paris', 'FR,DE,IT']
     @param(ligne La ligne CSV à séparer)
@@ -19,21 +19,10 @@ function trouverIndexPays(nom: String; europe: TEurope): Integer;
     @return(Un tableau de chaînes de caractères)
 }
 function splitLigneCsv(ligne: string; delimiteur: char): TStringArray;
-
-{ Permet de demander un entier à l'utilisateur, et de répéter la demande tant que l'utilisateur n'entre pas un entier
-    @return(L'entier entré par l'utilisateur)
-}
-function demanderEntier(): Integer;
-
-implementation
-
-
-function splitLigneCsv(ligne: string; delimiteur: char): TStringArray;
-var
-  i: integer;
-  valeur: string;
-  interieurGuillemets: boolean;
-  resultat: TStringArray;
+var i: integer;
+    valeur: string;
+    interieurGuillemets: boolean;
+    resultat: TStringArray;
 begin
   valeur := '';
   interieurGuillemets := false;
@@ -41,41 +30,53 @@ begin
 
   for i := 1 to length(ligne) - 1 do
   begin
+    // Dès qu'on trouve un guillemet, on inverse la valeur de interieurGuillemets (pour savoir si on est à l'intérieur de guillemets ou non)
     if ligne[i] = '"' then
       interieurGuillemets := not interieurGuillemets
+    // Si on trouve un délimiteur et qu'on n'est pas à l'intérieur de guillemets, on ajoute la valeur à la liste
     else if (ligne[i] = delimiteur) and not interieurGuillemets then
     begin
       setlength(resultat, length(resultat) + 1);
-      resultat[high(resultat)] := trim(valeur);
+      // trim permet de supprimer les espaces en début et fin de chaîne
+      resultat[length(resultat) - 1] := trim(valeur);
+      // La valeur est réinitialisée
       valeur := '';
     end
     else
       valeur := valeur + ligne[i];
   end;
   setlength(resultat, length(resultat) + 1);
-  resultat[high(resultat)] := trim(valeur);
+  // trim permet de supprimer les espaces en début et fin de chaîne
+  resultat[length(resultat) - 1] := trim(valeur);
 
   splitLigneCsv := resultat;
 end;
 
+{ Permet de trouver l'index d'un pays dans un tableau de pays
+    @param(nom Le nom du pays à chercher)
+    @param(europe Le tableau de pays dans lequel chercher)
+    @return(L'index du pays dans le tableau, ou -1 si le pays n'a pas été trouvé)
+}
 function trouverIndexPays(nom: String; europe: TEurope): Integer;
-var
-    i: Integer;
+var i: Integer;
 begin
-    for i := 0 to high(europe) do
+    for i := 0 to length(europe) - 1do
         if europe[i].nom = nom then
-            Exit(i);
-    Exit(-1);
+            exit(i);
+    exit(-1);
 end;
 
+{ Permet de demander un entier à l'utilisateur, et de répéter la demande tant que l'utilisateur n'entre pas un entier
+    @return(L'entier entré par l'utilisateur)
+}
 function demanderEntier(): Integer;
-var
-    input: string;
+var input: string;
     value: LongInt;
     success: Boolean;
 begin
     repeat
         readln(input);
+        // TryStrToInt renvoie true si la conversion a réussi, et false sinon
         success := TryStrToInt(input, value);
         if not success then
             writeln('Veuillez entrer un nombre entier.');

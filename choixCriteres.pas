@@ -1,3 +1,4 @@
+{ Interface IHM permettant à l'utilisateur de renseigner ses critères de voyage }
 unit choixCriteres;
 
 interface

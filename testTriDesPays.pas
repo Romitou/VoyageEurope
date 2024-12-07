@@ -1,4 +1,4 @@
-program main;
+program testTriDesPays;
 
 uses afficherVoyage, chargerDonnees, choixCriteres, constantes, score, voyageTypes;
 

@@ -1,4 +1,4 @@
-﻿program main;
+﻿program testAfficherDonnees;
 
 uses afficherVoyage, chargerDonnees, choixCriteres, triDesPays, voyageTypes;
 
