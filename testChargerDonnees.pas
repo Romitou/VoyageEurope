@@ -1,24 +1,24 @@
-﻿program testChargerDonnees;
+﻿{ Programme de test de l'unité chargerDonnees }
+program testChargerDonnees;
 
 uses chargerDonnees, choixCriteres, voyageTypes;
 
 var europe: TEurope;
-    pays: TPays;
-    i: Integer;
+    i, j: Integer;
 
 begin
-    europe := chargerPays();
+    // Charger les données
+    europe := chargerEurope();
+
+    // Afficher les données
+    writeln(length(europe), ' pays ont été chargés : ');
     for i := 0 to length(europe) - 1 do
-        writeln(europe[i].nom);
+    begin
+        writeln(europe[i].nom, ' (', length(europe[i].activites), ' activités) :');
+        for j := 0 to length(europe[i].activites) - 1 do
+            writeln('- ', europe[i].activites[j].nom);
+    end;
+    writeln();
 
-    pays.nom := 'France';
-    pays.capitale := 'Paris';
-    setlength(pays.nomFrontieres, 2);
-    pays.nomFrontieres[0] := 'test1';
-    pays.nomFrontieres[1] := 'test2';
-
-    setlength(europe, length(europe) + 1);
-    europe[length(europe) - 1] := pays;
-
-    sauvegarderPays(europe);
+    // On vérifie qu'il n'existe pas d'incohérences dans les données dans le terminal
 end.
