@@ -1,4 +1,5 @@
-﻿unit score;
+﻿{ Permet de calculer les scores des activités, des pays et des chemins, en fonction des préférences de l'utilisateur }
+unit score;
 
 interface
 uses constantes, voyageTypes;
@@ -182,84 +183,7 @@ begin
     //idee de fonction:2xy/(x+y)
     //poids:=(pays1.score*pays2.score*2)/(pays1.score+pays2.score);
     //poidsChemin:=poids;
-
 end;
 
 
 end.
-
-{function scoreClimat(climat:Real;periode:TMois;unPays:Tpays):Real;
-var scoreClim:Real;
-begin
-    if unPays.climat[periode]>=climat then
-        scoreClim:=1
-    else
-        //écart relatif pour le calcul du score dans le cas où le climat ne corrspond pas
-        scoreClim:=1-Abs(climat-unPays.climat[periode])/climat;
-
-    scoreClimat:=scoreClim;
-end;}
-
-{function scoreActivitePays(pays:TPays; pref:Array of TPref; nbActParJour:Integer):Real;
-var
-tabScore: Array of Real;
-tabIndice: Array of Integer;
-trouve: Boolean;
-somme, scoreMin: Real;
-i,j,k,indiceMin:Integer;
-begin
-    //initialisation du tableau pour stocker les meilleurs scores (pas de score négatif, donc 0 est la plus petite valeur)
-    setlength(tabScore,nbActParJour);
-    for i:=0 to nbActParJour-1 do
-        tabScore[i]:=0;
-
-    //initialisation du tableau pour stocker les indices des meilleures activités (-1 pour dire qu'il n'y a pas encore d'indice)
-    setlength(tabIndice,nbActParJour);
-    for i:=0 to nbActParJour-1 do
-        tabIndice[i]:=-1;
-
-    if length(pays.activites) > nbActParJour then
-    begin
-        for j:=0 to length(pays.activites)-1 do
-        begin
-            //recherche de la position du plus petit score dans le tableau score, qui sera remplacée par un meilleur score
-            scoreMin:=tabScore[0];
-            indiceMin:=0;
-            //on commence à i=0 pour éviter une boucle inutile (l'indice min est intialisé à 0)
-            for i:=1 to nbActParJour-1 do
-            begin
-                if tabScore[i] < scoreMin then
-                begin
-                    scoreMin:=tabScore[i];
-                    indiceMin:=i;
-                end;
-            end;
-
-            //vérification si l'activité étudiée a un score plus élevé que le plus petit score du tableau et qu'elle n'a pas déjà été sélectionnée
-            if scoreActivite(pays.activites[j], pref) > scoreMin then
-            begin
-                trouve:=False;
-                for k:=0 to nbActParJour - 1 do
-                    if tabIndice[k] = j then
-                        trouve:=True;
-                if not(trouve) then
-                begin
-                    tabScore[indiceMin]:=scoreActivite(pays.activites[j], pref);
-                    tabIndice[indiceMin]:=j;
-                end;
-            end;
-        end;
-    end
-    else
-        //cas où il y a moins d'activités que nbActParJour, c'est moyen et pas utile en pratique donc probablement à enlever
-        for i := 0 to length(pays.activites) - 1 do
-            tabScore[i] := scoreActivite(pays.activites[i], pref);
-
-
-    //calcul de la moyenne des meilleurs scores
-    somme := 0;
-    for i := 0 to nbActParJour - 1 do
-        somme := somme + tabScore[i];
-
-    scoreActivitePays:=somme/nbActParJour;
-end;}

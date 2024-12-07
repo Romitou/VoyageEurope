@@ -9,14 +9,19 @@ procedure modifierCriteres(var choix: TCriteres; europe: TEurope; var quitter: B
 
 implementation
 
-{Permet au programme de se référer à la base de données, afin d'associer la réponse de l'utilisateur
-à un pays si celle-ci correspond au nom d'un pays figurant dans la base de données.}
+{ Permet au programme de se référer à la base de données, afin d'associer la réponse de l'utilisateur
+à un pays si celle-ci correspond au nom d'un pays figurant dans la base de données.
+    @param(nomPays Le nom du pays renseigné par l'utilisateur)
+    @param(listePays La liste des pays de la base de données)
+    @param(pays Le pays associé à la réponse de l'utilisateur)
+    @param(trouve Un booléen indiquant si le pays a été trouvé dans la base de données)
+}
 procedure associerPays(nomPays: String; listePays: TEurope; var pays: TPays; var trouve: Boolean);
 var i: Integer;
 begin
     trouve := false;
     for i := 1 to (length(listePays)) do
-        if CompareText(nomPays, listePays[i].nom) = 0 then
+        if CompareText(nomPays, listePays[i].nom) = 0 then // CompareText permet de comparer sans tenir compte de la casse
         begin
             pays := listePays[i];
             trouve := true;
@@ -24,10 +29,13 @@ begin
         end;
 end;
 
-{Sélection de pays de départ et de la destination du voyage}
+{ Sélection de pays de départ et de la destination du voyage
+    @param(choix Les critères de recherche du voyage)
+    @param(listePays La liste des pays de la base de données)
+}
 procedure choixPays(var choix: TCriteres; listePays: TEurope);
 var depart, arrivee: String;
-var trouve: Boolean;
+    trouve: Boolean;
 begin
     trouve := false;
     repeat
@@ -43,10 +51,11 @@ begin
     until (trouve) and (arrivee <> depart);
 end;
 
+{ Permet à l'utilisateur de sélectionner manuellement ses préférences pour son voyage (sélection personnalisée).
+    @param(choix Les critères de recherche du voyage)
+}
 procedure choixPreferencesIndividuelles(var choix: TCriteres);
-{Permet à l'utilisateur de sélectionner manuellement ses préférences pour son voyage (sélection personnalisée).}
-var
-    prefUser: array of TPref;
+var prefUser: array of TPref;
     prefLength, i, n, indexChoix: Integer;
 begin
     setlength(prefUser, 0);
@@ -79,7 +88,10 @@ begin
         choix.categories[i] := prefUser[i];
 end;
 
-{L'utilisateur renseigne ici la durée de son voyage.}
+{ L'utilisateur renseigne ici la durée de son voyage.
+    @param(choix Les critères de recherche du voyage)
+    @param(listePays La liste des pays de la base de données)
+}
 procedure choixDuree(var choix: TCriteres; listePays: TEurope);
 var dureeMinimale: Integer;
 begin
@@ -98,15 +110,19 @@ begin
     until (choix.duree >= dureeMinimale);
 end;
 
-{L'utilisateur renseigne ici la température qu'il souhaiterait avoir lors de son voyage.}
+{ L'utilisateur renseigne ici la température qu'il souhaiterait avoir lors de son voyage.
+    @param(choix Les critères de recherche du voyage)
+}
 procedure choixClimat(var choix: TCriteres);
 begin
     writeln('🌡️  Quelle serait votre température ambiante idéale (en °C) ?');
     choix.climat := demanderEntier();
 end;
 
-{En affichant les températures moyennes de chaque mois de l'année dans le pays de destination rensignée précédemment,
-cette procédure permet à l'utilisateur d'indiquer le mois de l'année où il souhaite effectuer son voyage.}
+{ En affichant les températures moyennes de chaque mois de l'année dans le pays de destination rensignée précédemment,
+cette procédure permet à l'utilisateur d'indiquer le mois de l'année où il souhaite effectuer son voyage. 
+    @param(choix Les critères de recherche du voyage)
+}
 procedure choixPeriode(var choix: TCriteres);
 var i, indexChoix: LongInt;
 begin
@@ -121,17 +137,20 @@ begin
     choix.periode := TMois(indexChoix);
 end;
 
-{L'utilisateur renseigne ici son budget pour le voyage.}
+{ L'utilisateur renseigne ici son budget pour le voyage. 
+    @param(choix Les critères de recherche du voyage)
+}
 procedure choixBudget(var choix: TCriteres);
 begin
     writeln('💲 Quel est votre budget pour ce voyage ?');
     choix.budget := demanderEntier();
 end;
 
-{Cette procédure permet à l'utilisateur d'influencer le calcul des scores qui aura lieu plus tard lors de la génération du voyage.
+{ Cette procédure permet à l'utilisateur d'influencer le calcul des scores qui aura lieu plus tard lors de la génération du voyage.
 En effet, en choisissant une des propositions affichées ici, il peut alors faire savoir au programme l'importance qu'il accorde
-aux activités, au coût, à la température, ou bien à l'aspect écologique de son voyage}
-
+aux activités, au coût, à la température, ou bien à l'aspect écologique de son voyage
+    @param(choix Les critères de recherche du voyage)
+}
 procedure choixExperience(var choix: TCriteres);
 var expLength, i, indexChoix: Integer;
 begin
@@ -167,8 +186,10 @@ begin
 
 end;
 
-{Définitions des menus caractéristiques du prgramme; un menu étant en quelque sorte un package
-contenant des préférences pré-sélectionnées et correspondant chacun à un profil de voyages.}
+{ Définitions des menus caractéristiques du prgramme; un menu étant en quelque sorte un package
+contenant des préférences pré-sélectionnées et correspondant chacun à un profil de voyages.
+    @return(Le tableau de menus)
+}
 function chargerMenus(): TMenus;
 var menus: TMenus;
 begin
@@ -202,11 +223,12 @@ begin
     chargerMenus := menus;
 end;
 
-
+{ Cette procédure permet à l'utilisateur de sélectionner directement un profil de voyages susceptible de correspondre à ses attentes.
+Ce dernier aura le choix entre cette procédure et la procédure choixPreferences, étant ainsi libre de personnaliser ses attentes
+ou bien de choisir un profil pré-programmé.
+    @param(choix Les critères de recherche du voyage)
+}
 procedure choixMenu(var choix: TCriteres);
-{Cette procédure permet à l'utilisateur de sélectionner directement un profil de voyages susceptible de correspondre à ses attentes.
- Ce dernier aura le choix entre cette procédure et la procédure choixPreferences, étant ainsi libre de personnaliser ses attentes
- ou bien de choisir un profil pré-programmé.}
 var i, j: Integer;
     indexChoix: LongInt;
     menus: TMenus;
@@ -241,13 +263,18 @@ begin
 
 end;
 
-{L'utilisateur renseigne ici le nombre de personnes participant au voyage.}
+{ L'utilisateur renseigne ici le nombre de personnes participant au voyage.
+    @param(choix Les critères de recherche du voyage)
+}
 procedure choixNbVoyageurs(var choix: TCriteres);
 begin
     writeln('👥 Combien de personnes feront parties du voyage ?');
     choix.nbVoyageurs := demanderEntier();
 end;
 
+{ L'utilisateur renseigne ici ses préférences pour le voyage, en choisissant entre les menus prédéfinis ou bien en les personnalisant.
+    @param(choix Les critères de recherche du voyage)
+}
 procedure choixPreferences(var choix: TCriteres);
 var indexChoix: Integer;
 begin
@@ -265,7 +292,11 @@ begin
         choixPreferencesIndividuelles(choix);
 end;
 
-
+{ Permet à l'utilisateur de modifier ses critères de voyage.
+    @param(choix Les critères de recherche du voyage)
+    @param(europe La liste des pays de la base de données)
+    @param(quitter Un booléen indiquant si l'utilisateur souhaite quitter le programme)
+}
 procedure modifierCriteres(var choix: TCriteres; europe: TEurope; var quitter: Boolean);
 var reponse: String;
     p, n: LongInt;
@@ -328,7 +359,10 @@ begin
 end;
 
 
-{Procédure globale regroupant l'ensemble des sous-procédures décrites précédemment.}
+{ Procédure globale regroupant l'ensemble des sous-procédures décrites précédemment.
+    @param(choix Les critères de recherche du voyage)
+    @param(listePays La liste des pays de la base de données)
+}
 procedure demanderCriteres(var choix: TCriteres; listePays: TEurope);
 begin
     choixPays(choix, listePays);
