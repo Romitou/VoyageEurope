@@ -28,8 +28,8 @@ const COEFF_ACT_FINAL = 2;
     COEFF_COUT_FINAL = 1;
 
     //cout carbone 
-    emissionCO2Train = 0.003;
-    emissionCO2Avion = 0.152;
+    EMISSION_CO2_TRAIN = 0.003;
+    EMISSION_CO2_AVION = 0.152;
 
     //hébergement
     HOTEL_NORMAL = 70;
