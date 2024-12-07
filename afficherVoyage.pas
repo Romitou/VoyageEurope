@@ -75,7 +75,6 @@ var dureeMinimale: Integer;
     criteresBis: TCriteres;
     voyageTrain: TVoyage;
     voyageAvion: TVoyage;
-    signeTrain, signeAvion, signeCarbone: String;
 begin
     criteresBis := criteres;
     if voyage.modeTransport = TrainSeul then
