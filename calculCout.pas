@@ -1,3 +1,4 @@
+{ Calcul des différents coûts (carbone, monétaire, durée) des déplacements effectués durant le voyage }
 unit calculCout;
 
 interface

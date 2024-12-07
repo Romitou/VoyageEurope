@@ -1,4 +1,5 @@
-﻿unit constantes;
+﻿{ Unité contenant les constantes du programme }
+unit constantes;
 
 interface
 
