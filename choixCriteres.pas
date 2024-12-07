@@ -197,27 +197,27 @@ begin
 
     menus[0].nom := 'Menu Nature et Photographie';
     setlength(menus[0].preferences, 3);
-    menus[0].preferences := [Photographie, Relaxation, Nature];
+    menus[0].preferences := [Photographie, Nature, Actif, ObservationFaune, Relaxation, BienEtre];
     menus[0].description := 'Explorez les merveilles de la nature avec des aventures passionnantes.';
 
     menus[1].nom := 'Menu Aventure Culturelle';
     setlength(menus[1].preferences, 3);
-    menus[1].preferences := [Culture, Histoire, Art];
+    menus[1].preferences := [Culture, Histoire, Education, Art, Architecture, Authentique, Immersif, Modere];
     menus[1].description := 'Plongez dans l''histoire et le patrimoine culturel unique.';
 
     menus[2].nom := 'Menu En Famille';
     setlength(menus[2].preferences, 4);
-    menus[2].preferences := [Gastronomie, Sport, Authentique, Famille];
+    menus[2].preferences := [Gastronomie, Sport, Authentique, Famille, Modere, Shopping, Sport, Aquatique, Actif];
     menus[2].description := 'Des activités pour petits et grands à partager en famille.';
 
     menus[3].nom := 'Menu Vie Nocturne';
     setlength(menus[3].preferences, 3);
-    menus[3].preferences := [VieNocturne, FestivalsEtEvenements, Luxe];
+    menus[3].preferences := [VieNocturne, FestivalsEtEvenements, Luxe, Actif, Intensif, Immersif];
     menus[3].description := 'Vivez des soirées inoubliables et profitez d''expériences exclusives';
 
-    menus[4].nom := 'Menu Culture et Relaxation Spirituelle';
+    menus[4].nom := 'Menu Relaxation Spirituelle';
     setlength(menus[4].preferences, 3);
-    menus[4].preferences := [Culture, ReligieuxEtSpirituel, Relaxation];
+    menus[4].preferences := [ReligieuxEtSpirituel, BienEtre, Relaxation, Culture, Modere, Education];
     menus[4].description := 'Alliez découvertes culturelles et moments de paix intérieure';
 
     chargerMenus := menus;
