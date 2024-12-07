@@ -260,7 +260,7 @@ begin
 
     coutTotal(voyage,criteres);
 
-    coutCarbone(voyage);
+    coutCarbone(voyage,criteres);
 
     generer := voyage;
 end;

@@ -10,7 +10,7 @@ function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
 procedure calculDistanceTotal(var voyage: TVoyage);
 procedure coutTotal(var voyage: TVoyage; criteres : TCriteres);
 procedure calculDistanceTransports(var voyage: TVoyage);
-procedure coutCarbone(var voyage: TVoyage);
+procedure coutCarbone(var voyage: TVoyage; criteres : TCriteres);
 
 implementation
 
@@ -145,9 +145,9 @@ end;
 { Cette procédure calcul le coût carbone du voyage (kg de CO2 émis). Celui-ci sera affiché dans le terminal en fin de programme. 
     @param(voyage Voyage généré par le programme)
 }
-procedure coutCarbone(var voyage: TVoyage);
+procedure coutCarbone(var voyage: TVoyage; criteres : TCriteres);
 begin
     calculDistanceTransports(voyage);
-    voyage.carbonImpact := EMISSION_CO2_AVION * voyage.kmAvion + EMISSION_CO2_TRAIN * voyage.kmTrain;
+    voyage.carbonImpact := criteres.nbVoyageurs * (EMISSION_CO2_AVION * voyage.kmAvion + EMISSION_CO2_TRAIN * voyage.kmTrain);
 end;
 end.
