@@ -200,8 +200,6 @@ begin
     voyage.erreur := false;
     voyage.message := '';
 
-    if MODE_DEBUG then
-        writeln('Classement activités...');
     for i := 0 to length(europe) - 1 do
     begin
         // Calcul des scores des activités
@@ -210,35 +208,13 @@ begin
 
         // Tri des activités par score
         triActPays(europe[i]);
-
-        if MODE_DEBUG then
-        begin
-            for j := 0 to length(europe[i].ordreAct) - 1 do
-                writeln(europe[i].activites[europe[i].ordreAct[j]].nom, ' : ', europe[i].activites[europe[i].ordreAct[j]].score);
-            writeln('scoreAct : ', scoreActivitePays(europe[i], criteres));
-            writeln('');
-            writeln('pays suivant');
-            writeln('');
-        end;
-    end;
-
-
-    if MODE_DEBUG then
-        writeln('Calcul des scores des pays...');
-    for i := 0 to length(europe) - 1 do
-    begin
+        
         // Calcul du score du pays
         scorePays(criteres, europe[i]);
-
-        if MODE_DEBUG then
-            writeln(europe[i].nom, ' : ', europe[i].score);
     end;
 
 
     // ** Génération itinéraire aller **
-
-    if MODE_DEBUG then
-        writeln('Calcul de l''itinéraire aller...');
     aller := calculerItineraire(europe, criteres.paysDepart, criteres.paysArrivee, criteres.modeTransport);
     if aller.erreur then
     begin
@@ -247,36 +223,16 @@ begin
         exit(voyage);
     end;
 
-    if MODE_DEBUG then
-    begin
-        writeln('Itinéraire aller généré :');
-        for i := 0 to length(aller.itineraire) - 1 do writeln('- ', aller.itineraire[i].nom);
-    end;
-
     //On divise le score des pays dans lesquels on est déjà passé
     paysVisites(aller.itineraire, europe);
 
-    if MODE_DEBUG then
-        for i := 0 to length(europe) - 1 do
-            writeln(europe[i].nom, ' : ', europe[i].score);
-
-
     // ** Génération itinéraire retour **
-
-    if MODE_DEBUG then
-        writeln('Calcul de l''itinéraire retour...');
     retour := calculerItineraire(europe, criteres.paysArrivee, criteres.paysDepart, criteres.modeTransport);
     if retour.erreur then
     begin
         voyage.erreur := true;
         voyage.message := string('Une erreur est survenue lors de la génération de l''itinéraire : ') + retour.message;
         exit(voyage);
-    end;
-
-    if MODE_DEBUG then
-    begin
-        writeln('Itinéraire retour généré :');
-        for i := 0 to length(retour.itineraire) - 1 do writeln('- ', retour.itineraire[i].nom);
     end;
 
     // On construit l'itinéraire complet

@@ -105,14 +105,6 @@ begin
     // On ferme le fichier
     close(fichierPays);
 
-    // Affichage des pays chargés en mode debug
-    if MODE_DEBUG then
-    begin
-        write('Les ', length(tempPays), ' pays suivants ont été chargés : ');
-        for i := 0 to length(tempPays) - 1 do write(tempPays[i].nom, ', ');
-        writeln();
-    end;
-
     chargerPays := tempPays;
 end;
 
@@ -145,14 +137,6 @@ begin
     end;
 
     close(fichierActivites);
-
-    // Affichage des activités chargées en mode debug
-    if MODE_DEBUG then
-    begin
-        write('Les ', length(tempActivites), ' activités suivantes ont été chargées : ');
-        for i := 0 to length(tempActivites) - 1 do write(tempActivites[i].nom, ', ');
-        writeln();
-    end;
 
     chargerActivites := tempActivites;
 end;
@@ -200,20 +184,21 @@ begin
         setlength(pays.nomAvions, 0);
 
         // On cherche les noms des pays connectés en train parmi les pays chargés
-        for j := 0 to length(listePays[i].codeFrontieres) - 1 do
-        begin
-            trouve := false;
-            for k := 0 to length(listePays) - 1 do
-                if listePays[i].codeFrontieres[j] = listePays[k].code then
-                begin
-                    setlength(pays.nomFrontieres, length(pays.nomFrontieres) + 1);
-                    pays.nomFrontieres[length(pays.nomFrontieres) - 1] := listePays[k].nom;
-                    trouve := true;
-                    break;
-                end;
-            if MODE_DEBUG and not trouve then
-                writeln('Frontière ferroviaire non trouvée pour ', listePays[i].nom, ' : ', listePays[i].codeFrontieres[j]);
-        end;
+        if length(listePays[i].codeFrontieres) - 1 <> 0 then
+            for j := 0 to length(listePays[i].codeFrontieres) - 1 do
+            begin
+                trouve := false;
+                for k := 0 to length(listePays) - 1 do
+                    if listePays[i].codeFrontieres[j] = listePays[k].code then
+                    begin
+                        setlength(pays.nomFrontieres, length(pays.nomFrontieres) + 1);
+                        pays.nomFrontieres[length(pays.nomFrontieres) - 1] := listePays[k].nom;
+                        trouve := true;
+                        break;
+                    end;
+                if not trouve then
+                    writeln('Frontière ferroviaire non trouvée pour ', listePays[i].nom, ' : ', listePays[i].codeFrontieres[j]);
+            end;
 
         // On cherche les noms des pays connectés en avion parmi les pays chargés
         for j := 0 to length(listePays[i].codeAvions) - 1 do
@@ -227,7 +212,7 @@ begin
                     trouve := true;
                     break;
                 end;
-            if MODE_DEBUG and not trouve then
+            if not trouve then
                 writeln('Frontière aérienne non trouvée pour ', listePays[i].nom, ' : ', listePays[i].codeAvions[j]);
         end;
 
@@ -252,19 +237,6 @@ begin
             pays.climat[TMois(j)] := round(StrToFloat(listePays[i].climatString[j]));
 
         europe[i] := pays;
-    end;
-
-    // Affichage des pays chargés en mode debug
-    if MODE_DEBUG then
-    begin
-        writeln(length(europe), ' pays ont été chargés : ');
-        for i := 0 to length(europe) - 1 do
-        begin
-            writeln(europe[i].nom, ' (', length(europe[i].activites), ' activités) :');
-            for j := 0 to length(europe[i].activites) - 1 do
-                writeln('- ', europe[i].activites[j].nom);
-        end;
-        writeln();
     end;
 
     chargerEurope := europe;

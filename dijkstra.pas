@@ -29,7 +29,7 @@ procedure shortestPath(listeAdjacence: TAdjacenceListe; noeudDepart, noeudFin: T
 
 implementation
 
-{ Affiche la liste d'adjacence d'un graphe pondéré
+{ Affiche la liste d'adjacence d'un graphe pondéré (debug)
     @param(listeAdjacence Liste d'adjacence du graphe)
 }
 procedure afficherAdjacence(listeAdjacence: TAdjacenceListe);
@@ -61,9 +61,6 @@ var noeudsInitial: TNoeudList;
     noeudActuel, voisin, i, j, minDistNoeud: TNoeud;
     nouveauChemin, minDist: TDistance;
 begin
-    if MODE_DEBUG then
-        afficherAdjacence(listeAdjacence);
-
     setlength(noeudsInitial, length(listeAdjacence));
     setlength(distanceDepart, length(listeAdjacence));
     setlength(noeudPrecedent, length(listeAdjacence));
