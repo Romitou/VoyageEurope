@@ -1,20 +1,27 @@
-﻿unit dijkstra;
+﻿{ Implémentation de l'algorithme de Dijkstra }
+unit dijkstra;
 
 interface
 uses constantes, sysutils, voyageTypes;
 
-const
-    INFINITY = MaxInt;
+// L'infini est la valeur maximale d'un entier (pour les distances infinies)
+const INFINITY = MaxInt;
 
 type
+    // Un noeud est représenté par un entier (son identifiant)
     TNoeud = Integer;
+    // La distance entre deux noeuds (peut servir pour les poids des arêtes)
     TDistance = Integer;
+    // Liste d'adjacence d'un graphe pondéré (liste des voisins et des distances)
     TAdjacenceListe = array of array of record
         voisin: TNoeud;
         distance: TDistance;
     end;
+    // Liste des noeuds d'un graphe
     TNoeudList = array of TNoeud;
+    // Liste des distances entre les noeuds
     TDistanceDict = array of TDistance;
+    // Liste des noeuds précédents (pour retrouver le chemin)
     TPrecedentDict = array of TNoeud;
 
 
@@ -100,7 +107,7 @@ begin
         if minDistNoeud = noeudFin then
             break;
 
-        for j := 0 to high(listeAdjacence[minDistNoeud]) do
+        for j := 0 to length(listeAdjacence[minDistNoeud]) - 1 do
         begin
             voisin := listeAdjacence[minDistNoeud][j].voisin;
             nouveauChemin := distanceDepart[minDistNoeud] + listeAdjacence[minDistNoeud][j].distance;
@@ -118,14 +125,14 @@ begin
     while (noeudActuel <> noeudDepart) and (noeudPrecedent[noeudActuel] <> -1) do
     begin
         setlength(chemin, length(chemin) + 1);
-        chemin[high(chemin)] := noeudActuel;
+        chemin[length(chemin) - 1] := noeudActuel;
         noeudActuel := noeudPrecedent[noeudActuel];
     end;
 
     if noeudActuel = noeudDepart then
     begin
         setlength(chemin, length(chemin) + 1);
-        chemin[high(chemin)] := noeudDepart;
+        chemin[length(chemin) - 1] := noeudDepart;
         distance := distanceDepart[noeudFin];
     end
     else begin
