@@ -248,7 +248,7 @@ begin
     voyage.planning := genererJournees(voyage.etapes);
 
     // Calcul des différents coûts
-    calculDistanceTotal(voyage);
+    calculDistanceTransports(voyage);
     coutTotal(voyage, criteres);
     coutCarbone(voyage, criteres);
 

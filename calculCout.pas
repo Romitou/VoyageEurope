@@ -7,7 +7,6 @@ uses constantes, math, voyageTypes;
 function calculDureeTransport(distance: Real; transport: TTransport): Integer;
 function calculCoutTransport(deplacement: TDeplacement): Real;
 function calculDuneDistance(lat1, lon1, lat2, lon2: Real): Real;
-procedure calculDistanceTotal(var voyage: TVoyage);
 procedure coutTotal(var voyage: TVoyage; criteres: TCriteres);
 procedure calculDistanceTransports(var voyage: TVoyage);
 procedure coutCarbone(var voyage: TVoyage; criteres: TCriteres);
@@ -28,30 +27,6 @@ var a: Real;
 begin
     a := (1 / 2) - ((Cos((lat2 - lat1) * p)) / 2) + Cos(lat1 * p) * Cos(lat2 * p) * ((1 - Cos((lon2 - lon1) * p)) / 2);
     calculDuneDistance := 2 * RAYON_TERRE * ArcSin(Sqrt(a));
-end;
-
-{ Cette procédure calcule la distance totale parcourue durant le voyage proposé à l'utilisateur
-    @param(voyage Voyage généré par le programme)
-}
-
-procedure calculDistanceTotal(var voyage: TVoyage);
-var i: Integer;
-    j, distance: Real;
-begin
-    distance := 0;
-
-    // On s'arrête à l'avant-dernier point pour ne pas dépasser le tableau (i + 1)
-    for i := 0 to length(voyage.itineraire) - 2 do
-    begin
-        j := calculDuneDistance(
-            voyage.itineraire[i].latitude,
-            voyage.itineraire[i].longitude,
-            voyage.itineraire[i + 1].latitude,
-            voyage.itineraire[i + 1].longitude);
-        // DEBUG : writeln(j)
-        distance := distance + j;
-    end;
-    voyage.kmTotal := distance;
 end;
 
 { Procédure calculant le coût total du voyage, en prenant en compte le coût des transports et le coût des activités. 
@@ -140,6 +115,7 @@ begin
 
     voyage.kmTrain := distanceTrain;
     voyage.kmAvion := distanceAvion;
+    voyage.kmTotal := distanceTrain + distanceAvion;
 end;
 
 { Cette procédure calcul le coût carbone du voyage (kg de CO2 émis). Celui-ci sera affiché dans le terminal en fin de programme. 
@@ -147,7 +123,6 @@ end;
 }
 procedure coutCarbone(var voyage: TVoyage; criteres : TCriteres);
 begin
-    calculDistanceTransports(voyage);
     voyage.carbonImpact := criteres.nbVoyageurs * (EMISSION_CO2_AVION * voyage.kmAvion + EMISSION_CO2_TRAIN * voyage.kmTrain);
 end;
 end.
