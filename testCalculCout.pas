@@ -1,4 +1,5 @@
-﻿program testCalculCout;
+﻿{ Test du calcul du coût total du voyage }
+program testCalculCout;
 
 uses calculCout, chargerDonnees, choixCriteres, voyageTypes;
 
@@ -159,7 +160,7 @@ begin
     voyage.etapes[5].activite.nom := 'Act6';
     voyage.etapes[5].activite.cout := 60;
 
-    calculDistanceTotal(voyage);
     coutTotal(voyage, criteres);
-    writeln(voyage.coutTotal);
+
+    writeln(voyage.coutTotal); // 210
 end.
