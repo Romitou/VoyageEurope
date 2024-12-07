@@ -1,6 +1,6 @@
 ﻿program testCalculCout;
 
-uses calculCout, chargerDonnees, choixCriteres, triDesPays, voyageTypes;
+uses calculCout, chargerDonnees, choixCriteres, voyageTypes;
 
 var criteres: TCriteres;
     voyage: TVoyage;
@@ -25,12 +25,10 @@ begin
     setlength(europe[0].activites[1].categories, 3);
     europe[0].activites[1].categories[0] := Culture;
     europe[0].activites[1].categories[1] := Histoire;
-    europe[0].activites[1].categories[2] := JourneeComplete;
 
     europe[0].activites[2].nom := 'Arc de Trimphe';
     setlength(europe[0].activites[2].categories, 3);
     europe[0].activites[2].categories[0] := Culture;
-    europe[0].activites[2].categories[1] := EnFamille;
     europe[0].activites[2].categories[2] := Histoire;
 
 
@@ -71,8 +69,6 @@ begin
     europe[1].activites[2].nom := 'Forêt-Noire';
     setlength(europe[1].activites[2].categories, 3);
     europe[1].activites[2].categories[0] := Nature;
-    europe[1].activites[2].categories[1] := EnFamille;
-    europe[1].activites[2].categories[2] := RoadTrip;
 
     europe[1].climat[Janvier] := 1;
     europe[1].climat[Fevrier] := 2;
@@ -110,9 +106,7 @@ begin
 
     europe[2].activites[2].nom := 'Plage de Barceloneta';
     setlength(europe[2].activites[2].categories, 3);
-    europe[2].activites[2].categories[0] := AventureAquatique;
     europe[2].activites[2].categories[1] := Relaxation;
-    europe[2].activites[2].categories[2] := EnFamille;
 
     europe[2].climat[Janvier] := 10;
     europe[2].climat[Fevrier] := 11;
@@ -128,43 +122,44 @@ begin
     europe[2].climat[Decembre] := 10;
 
     //Critères
-    setlength(criteres.categorie, 2);
-    criteres.categorie[0] := Histoire;
-    criteres.categorie[1] := Culture;
+    setlength(criteres.categories, 2);
+    criteres.categories[0] := Histoire;
+    criteres.categories[1] := Culture;
     criteres.periode := Octobre;
     criteres.climat := 10;
     criteres.duree := 1;
     criteres.paysArrivee := europe[0];
     criteres.paysDepart := europe[1];
+    criteres.nbVoyageurs := 1;
 
     //voyage
-    setlength(voyage.itineraire, 3);
-    setlength(voyage.planning, 3);
+    setlength(voyage.etapes, 6);
 
-    voyage.itineraire[0] := europe[0];
-    voyage.planning[0].jour := 1;
-    setlength(voyage.planning[0].activite, 2);
-    voyage.planning[0].activite[0].nom := 'Act1';
-    voyage.planning[0].activite[0].cout := 10;
-    voyage.planning[0].activite[1].nom := 'Act2';
-    voyage.planning[0].activite[1].cout := 20;
+    voyage.etapes[0].estActivite := true;
+    voyage.etapes[0].activite.nom := 'Act1';
+    voyage.etapes[0].activite.cout := 10;
 
-    voyage.itineraire[1] := europe[1];
-    voyage.planning[1].jour := 2;
-    setlength(voyage.planning[1].activite, 2);
-    voyage.planning[1].activite[0].nom := 'Act3';
-    voyage.planning[1].activite[0].cout := 30;
-    voyage.planning[1].activite[1].nom := 'Act4';
-    voyage.planning[1].activite[1].cout := 40;
+    voyage.etapes[1].estActivite := true;
+    voyage.etapes[1].activite.nom := 'Act2';
+    voyage.etapes[1].activite.cout := 20;
 
-    voyage.itineraire[2] := europe[2];
-    voyage.planning[2].jour := 3;
-    setlength(voyage.planning[2].activite, 2);
-    voyage.planning[2].activite[0].nom := 'Act5';
-    voyage.planning[2].activite[0].cout := 50;
-    voyage.planning[2].activite[1].nom := 'Act6';
-    voyage.planning[2].activite[1].cout := 60;
+    voyage.etapes[2].estActivite := true;
+    voyage.etapes[2].activite.nom := 'Act3';
+    voyage.etapes[2].activite.cout := 30;
+
+    voyage.etapes[3].estActivite := true;
+    voyage.etapes[3].activite.nom := 'Act4';
+    voyage.etapes[3].activite.cout := 40;
+
+    voyage.etapes[4].estActivite := true;
+    voyage.etapes[4].activite.nom := 'Act5';
+    voyage.etapes[4].activite.cout := 50;
+
+    voyage.etapes[5].estActivite := true;
+    voyage.etapes[5].activite.nom := 'Act6';
+    voyage.etapes[5].activite.cout := 60;
 
     calculDistanceTotal(voyage);
-    coutTotal(voyage);
+    coutTotal(voyage, criteres);
+    writeln(voyage.coutTotal);
 end.
