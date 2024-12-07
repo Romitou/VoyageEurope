@@ -48,15 +48,15 @@ begin
     end;
     writeln('---- 📊 Comparaison des modes de transport ----');
     writeln();
-    writeln(premierTrajet, '🚆  ', voyage.kmTrain:6:1, ' km     ✈️   ', voyage.kmAvion:6:1, ' km     🌱  ', voyage.carbonImpact:5:1, ' kg CO2     💰  ', voyage.coutTotal:7:1, ' euros');
-    writeln(secondTrajet, '🚆  ', voyageBis.kmTrain:6:1, ' km     ✈️   ', voyageBis.kmAvion:6:1, ' km     🌱  ', voyageBis.carbonImpact:5:1, ' kg CO2     💰  ', voyageBis.coutTotal:7:1, ' euros');
+    writeln(premierTrajet, '🚆  ', voyage.kmTrain:6:1, ' km     ✈️   ', voyage.kmAvion:6:1, ' km     🌱  ', voyage.carbonImpact:6:1, ' kg CO2     💰  ', voyage.coutTotal:7:1, ' euros');
+    writeln(secondTrajet, '🚆  ', voyageBis.kmTrain:6:1, ' km     ✈️   ', voyageBis.kmAvion:6:1, ' km     🌱  ', voyageBis.carbonImpact:6:1, ' kg CO2     💰  ', voyageBis.coutTotal:7:1, ' euros');
    
     if voyage.kmTrain > voyageBis.kmTrain then signeTrain := '+' else signeTrain := '-';
     if voyage.kmAvion > voyageBis.kmAvion then signeAvion := '+' else signeAvion := '-';
     if voyage.carbonImpact > voyageBis.carbonImpact then signeCarbone := '+' else signeCarbone := '-';
     if voyage.coutTotal > voyageBis.coutTotal then signeCout := '+' else signeCout := '-';
 
-    writeln('                     (', signeTrain, abs(voyage.kmTrain - voyageBis.kmTrain):5:1, ' km)      (', signeAvion, abs(voyage.kmAvion - voyageBis.kmAvion):5:1, ' km)      (', signeCarbone, abs(voyage.carbonImpact - voyageBis.carbonImpact):5:1, ' kg CO2)      (', signeCout, abs(voyage.coutTotal - voyageBis.coutTotal):7:1, ' euros)');
+    writeln('                     (', signeTrain, abs(voyage.kmTrain - voyageBis.kmTrain):6:1, ' km)      (', signeAvion, abs(voyage.kmAvion - voyageBis.kmAvion):6:1, ' km)      (', signeCarbone, abs(voyage.carbonImpact - voyageBis.carbonImpact):6:1, ' kg CO2)      (', signeCout, abs(voyage.coutTotal - voyageBis.coutTotal):7:1, ' euros)');
     writeln();
 
     // Affichage de recommandations en fonction des différences entre les deux voyages
