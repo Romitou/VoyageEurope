@@ -1,4 +1,4 @@
-program testCalculItineraire;
+program testItineraire;
 
 uses calculItineraire, chargerDonnees, sysutils, strutils, utils, voyageTypes;
 

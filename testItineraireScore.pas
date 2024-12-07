@@ -1,4 +1,4 @@
-﻿program main;
+﻿program testItineraireScore;
 
 uses calculItineraire, chargerDonnees, choixCriteres, score, voyageTypes;
 

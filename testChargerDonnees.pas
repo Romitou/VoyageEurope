@@ -1,4 +1,4 @@
-﻿program main;
+﻿program testChargerDonnees;
 
 uses chargerDonnees, choixCriteres, voyageTypes;
 
