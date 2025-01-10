@@ -27,7 +27,7 @@ const
     // Coefficient initial pour le climat
     COEFF_CLIMAT_INITIAL = 1;
     // Intervalle de température initial
-    INTERVALLE_TEMP_INI2TIAL = 20;
+    INTERVALLE_TEMP_INITIAL = 20;
     // Coefficient initial pour le coût
     COEFF_COUT_INITIAL = 0;
 
