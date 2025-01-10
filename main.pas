@@ -1,4 +1,4 @@
-﻿{ Programme principal du projet }
+{ Programme principal du projet }
 program main;
 
 uses afficherVoyage, chargerDonnees, choixCriteres, genererVoyage, voyageTypes;

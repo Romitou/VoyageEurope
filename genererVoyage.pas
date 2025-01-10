@@ -118,7 +118,7 @@ begin
                 continue;
             end;
 
-            ajouterEtapeActivite(etapes, compteurEtapes, itineraire[indexPays].activites[nbAct]);
+            ajouterEtapeActivite(etapes, compteurEtapes, itineraire[indexPays].activites[itineraire[indexPays].ordreAct[nbAct]]);
             dureeActivites := dureeActivites + etapes[compteurEtapes].activite.minutes;
 
             // On marque l'activité comme utilisée
